@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Server.Models.Admin;
+using Server.Models.Analyse;
 using Server.Models.CabinetMedicals;
 using Server.Models.ChronicDiseases;
 using Server.Models.Doctor;
@@ -11,6 +12,15 @@ using Server.Models.MedicalPlannings;
 using Server.Models.Pharmacist;
 using Server.Models.PrescriptionLine;
 using Server.Models.Prescriptions;
+using Server.Models.Radiologys;
+using Server.Models.RadioMedical;
+using Server.Models.ResultAnalyses;
+using Server.Models.ResultsRadio;
+using Server.Models.secretary;
+using Server.Models.Specialites;
+using Server.Models.SpecialtieDoctor;
+using Server.Models.UserAccount;
+using Server.Models.WorkDoctor;
 
 namespace Server.Data
 {
@@ -21,6 +31,7 @@ namespace Server.Data
 
         }
         public DbSet<Admins> admins { get; set; }
+        public DbSet<Analyses> Analyses { get; set; }
         public DbSet<CabinetMedical> cabinetMedicals { get; set; }
         public DbSet<ChronicDisease> chronicDiseases { get; set; }
         public DbSet<Doctors> Doctors { get; set; }
@@ -32,6 +43,15 @@ namespace Server.Data
         public DbSet<Pharmacists> Pharmacists { get; set; }
         public DbSet<PrescriptionLines> PrescriptionLines { get; set; }
         public DbSet<Prescription> prescriptions { get; set; }
+        public DbSet<Radiology> radiologies { get; set; }
+        public DbSet<Radio> Radio { get; set; }
+        public DbSet<ResultAnalyse> resultAnalyses { get; set; }
+        public DbSet<ResultRadio> RadioResult { get; set; }
+        public DbSet<Secretarys> Secretarys { get; set; }
+        public DbSet<Specialite> specialites { get; set; }
+        public DbSet<SpecialtiesDoctor> specialtiesDoctors { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<WorkDoctors> WorkDoctors { get; set; }
 
     }
 }
