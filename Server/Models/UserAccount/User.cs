@@ -7,6 +7,7 @@ using Server.Models.MedicalAnalysis;
 using Server.Models.MedicalPlannings;
 using Server.Models.Pharmacist;
 using Server.Models.secretary;
+using Server.Models.UserRoles;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -49,6 +50,9 @@ namespace Server.Models.UserAccount
         public IEnumerable<MedicalPlanning> MedicalPlanning { get; set; }
         [JsonIgnore]
         public IEnumerable<fileMedicals> fileMedical { get; set; }
+        [JsonIgnore]
+        public IEnumerable<UserRole> usersRoles { get; set; }
+
 
 
     }

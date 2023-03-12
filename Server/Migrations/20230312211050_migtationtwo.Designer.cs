@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    partial class ServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230312211050_migtationtwo")]
+    partial class migtationtwo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,53 +149,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("chronicDiseases");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NameChronicDiseases = "DIABÈTE"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NameChronicDiseases = "HYPERTENSION-ARTÉRIELLE"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NameChronicDiseases = "MALADIES-RESPIRATOIRES"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            NameChronicDiseases = "MALADIES RÉNALES"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            NameChronicDiseases = "MALADIES ARTICULAIRES"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            NameChronicDiseases = "MALADIES DU FOIE"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            NameChronicDiseases = "MALADIES NEUROLOGIQUES"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            NameChronicDiseases = "CANCER"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            NameChronicDiseases = "MALADIES-CARDIOVASCULAIRES"
-                        });
                 });
 
             modelBuilder.Entity("Server.Models.Doctor.Doctors", b =>
@@ -585,128 +541,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("specialites");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NameSpecialite = "ANESTHÉSIOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NameSpecialite = "CARDIOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NameSpecialite = "CHIRURGIE"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            NameSpecialite = "DERMATOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            NameSpecialite = "ENDOCRINOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            NameSpecialite = "GASTRO ENTÉROLOGIE"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            NameSpecialite = "GYNÉCOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            NameSpecialite = "HÉMATOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            NameSpecialite = "INFECTIOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            NameSpecialite = "MÉDECINE DU TRAVAIL"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            NameSpecialite = "MÉDECINE INTERNE"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            NameSpecialite = "NÉPHROLOGIE"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            NameSpecialite = "NEUROLOGIE"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            NameSpecialite = "OBSTÉTRIQUE"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            NameSpecialite = "ONCOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            NameSpecialite = "OPHTALMOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            NameSpecialite = "ORTHOPÉDIE"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            NameSpecialite = "OTO-RHINO-LARYNGOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            NameSpecialite = "PÉDIATRIE"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            NameSpecialite = "PNEUMOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            NameSpecialite = "PSYCHIATRIE"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            NameSpecialite = "RADIOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            NameSpecialite = "RHUMATOLOGIE"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            NameSpecialite = "URGENTISTE"
-                        });
                 });
 
             modelBuilder.Entity("Server.Models.SpecialtieDoctor.SpecialtiesDoctor", b =>
@@ -753,50 +587,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("roles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("ec9cab11-8d63-4b08-a57c-e37af41e7214"),
-                            ConcurrencyStamp = "7d2b6dad-e23b-409c-91e5-21ea831c26d9",
-                            Name = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("60f2a2e4-636d-4161-8e97-0d609583292d"),
-                            ConcurrencyStamp = "980628dd-cac5-425d-af00-e55df6c3ecc1",
-                            Name = "PATIENT"
-                        },
-                        new
-                        {
-                            Id = new Guid("e0a9e287-77a2-49dc-8f5d-159da004312c"),
-                            ConcurrencyStamp = "dc339555-acbb-451a-99a1-fb70a8bd2a63",
-                            Name = "SECRITAIRE"
-                        },
-                        new
-                        {
-                            Id = new Guid("30a34648-0a26-4f9b-8ba1-e01571f3b001"),
-                            ConcurrencyStamp = "714c12e8-6245-43a3-a6e5-8c399d2802ed",
-                            Name = "MEDECIN"
-                        },
-                        new
-                        {
-                            Id = new Guid("3a03f25d-2299-4fce-bed2-991d5d09bf76"),
-                            ConcurrencyStamp = "8944607e-d542-4725-bd0b-a8ad4e6f1492",
-                            Name = "RADIOLOGUE"
-                        },
-                        new
-                        {
-                            Id = new Guid("a3b1cbd5-7bd1-45a0-8718-45acf24c946b"),
-                            ConcurrencyStamp = "02e0293e-c250-4f27-ae90-b81e72a317a4",
-                            Name = "PHARMACIEN"
-                        },
-                        new
-                        {
-                            Id = new Guid("fb679392-3345-493b-8bb9-6ccea0402b30"),
-                            ConcurrencyStamp = "ff6d0c59-caee-461c-a6b1-9a53d8084657",
-                            Name = "ANALYSE"
-                        });
                 });
 
             modelBuilder.Entity("Server.Models.UserAccount.User", b =>
@@ -881,27 +671,6 @@ namespace Server.Migrations
                         .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("Server.Models.UserRoles.UserRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdUser");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("userRoles");
                 });
 
             modelBuilder.Entity("Server.Models.WorkDoctor.WorkDoctors", b =>
@@ -1270,25 +1039,6 @@ namespace Server.Migrations
                     b.Navigation("specialites");
                 });
 
-            modelBuilder.Entity("Server.Models.UserRoles.UserRole", b =>
-                {
-                    b.HasOne("Server.Models.UserAccount.User", "User")
-                        .WithMany("usersRoles")
-                        .HasForeignKey("IdUser")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Server.Models.UserAccount.Role", "Role")
-                        .WithMany("usersRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Server.Models.WorkDoctor.WorkDoctors", b =>
                 {
                     b.HasOne("Server.Models.Doctor.Doctors", "Doctor")
@@ -1413,11 +1163,6 @@ namespace Server.Migrations
                     b.Navigation("specialtiesDoctors");
                 });
 
-            modelBuilder.Entity("Server.Models.UserAccount.Role", b =>
-                {
-                    b.Navigation("usersRoles");
-                });
-
             modelBuilder.Entity("Server.Models.UserAccount.User", b =>
                 {
                     b.Navigation("Doctor");
@@ -1431,8 +1176,6 @@ namespace Server.Migrations
                     b.Navigation("fileMedical");
 
                     b.Navigation("pharmacists");
-
-                    b.Navigation("usersRoles");
                 });
 
             modelBuilder.Entity("Server.Models.fileMedical.fileMedicals", b =>

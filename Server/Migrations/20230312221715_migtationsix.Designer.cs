@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    partial class ServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230312221715_migtationsix")]
+    partial class migtationsix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -146,53 +149,6 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("chronicDiseases");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            NameChronicDiseases = "DIABÈTE"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            NameChronicDiseases = "HYPERTENSION-ARTÉRIELLE"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            NameChronicDiseases = "MALADIES-RESPIRATOIRES"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            NameChronicDiseases = "MALADIES RÉNALES"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            NameChronicDiseases = "MALADIES ARTICULAIRES"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            NameChronicDiseases = "MALADIES DU FOIE"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            NameChronicDiseases = "MALADIES NEUROLOGIQUES"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            NameChronicDiseases = "CANCER"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            NameChronicDiseases = "MALADIES-CARDIOVASCULAIRES"
-                        });
                 });
 
             modelBuilder.Entity("Server.Models.Doctor.Doctors", b =>
@@ -757,44 +713,44 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ec9cab11-8d63-4b08-a57c-e37af41e7214"),
-                            ConcurrencyStamp = "7d2b6dad-e23b-409c-91e5-21ea831c26d9",
+                            Id = new Guid("03774a0c-daea-4307-a5c7-5c70c6ceb66b"),
+                            ConcurrencyStamp = "83587897-e131-4634-882f-70ae3c48398b",
                             Name = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("60f2a2e4-636d-4161-8e97-0d609583292d"),
-                            ConcurrencyStamp = "980628dd-cac5-425d-af00-e55df6c3ecc1",
+                            Id = new Guid("6632ad66-7b67-4d83-9ade-3796178cd5d6"),
+                            ConcurrencyStamp = "54ab3908-c766-4235-b37b-24f42da574c1",
                             Name = "PATIENT"
                         },
                         new
                         {
-                            Id = new Guid("e0a9e287-77a2-49dc-8f5d-159da004312c"),
-                            ConcurrencyStamp = "dc339555-acbb-451a-99a1-fb70a8bd2a63",
+                            Id = new Guid("e877586d-71f9-4d74-a4d9-5e35dbee5206"),
+                            ConcurrencyStamp = "0f2a043c-88a0-4ef6-a1d7-837f3000ecf4",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
-                            Id = new Guid("30a34648-0a26-4f9b-8ba1-e01571f3b001"),
-                            ConcurrencyStamp = "714c12e8-6245-43a3-a6e5-8c399d2802ed",
+                            Id = new Guid("b4e82abc-7536-4371-a58e-e5ff0da322d3"),
+                            ConcurrencyStamp = "f9532f28-adac-4681-bde3-b5ca638e2e93",
                             Name = "MEDECIN"
                         },
                         new
                         {
-                            Id = new Guid("3a03f25d-2299-4fce-bed2-991d5d09bf76"),
-                            ConcurrencyStamp = "8944607e-d542-4725-bd0b-a8ad4e6f1492",
+                            Id = new Guid("7bb41889-0876-4fb7-8be2-2260dae9c453"),
+                            ConcurrencyStamp = "46753a3f-5546-4523-b5b3-adcad8ad1e26",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
-                            Id = new Guid("a3b1cbd5-7bd1-45a0-8718-45acf24c946b"),
-                            ConcurrencyStamp = "02e0293e-c250-4f27-ae90-b81e72a317a4",
+                            Id = new Guid("1365f700-dc1f-4976-b95a-347c260cd248"),
+                            ConcurrencyStamp = "769af9b8-a168-4803-a84a-625c08827f5e",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
-                            Id = new Guid("fb679392-3345-493b-8bb9-6ccea0402b30"),
-                            ConcurrencyStamp = "ff6d0c59-caee-461c-a6b1-9a53d8084657",
+                            Id = new Guid("be1aac51-9269-4b93-8f0c-afd5b6d0b5c7"),
+                            ConcurrencyStamp = "8fadad6a-9088-442f-b586-f2a3dc1f9eb1",
                             Name = "ANALYSE"
                         });
                 });
