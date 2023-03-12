@@ -15,6 +15,13 @@ namespace Server.Models.UserAccount
     [Index(nameof(Email), IsUnique = true)]
     public class User : IdentityUser<Guid>
     {
+        [Key]
+        public override Guid Id
+        {
+            get => base.Id;
+            set => base.Id = value;
+        }
+
         [Required]
         public string Firstname { get; set; }
         [Required]
@@ -22,7 +29,7 @@ namespace Server.Models.UserAccount
         [Required]
         public string NationalNumber { get; set; }
         [Required]
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         [Required]
         public EnumSexe Sexe { get; set; }
         [Required]

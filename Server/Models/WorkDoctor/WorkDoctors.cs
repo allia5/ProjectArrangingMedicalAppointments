@@ -9,8 +9,8 @@ namespace Server.Models.WorkDoctor
     {
         [Key]
         public Guid Id { get; set; }
-        public TimeOnly ReadyTime { get; set; }
-        public TimeOnly EndTime { get; set; }
+        public DateTime ReadyTime { get; set; }
+        public DateTime EndTime { get; set; }
         public StatusService statusServcie { get; set; }
         public StatusReservation statusReservation { get; set; }
         public StatusWork StatusWork { get; set; }

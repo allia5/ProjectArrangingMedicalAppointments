@@ -21,11 +21,11 @@ namespace Server.Models.fileMedical
         [Required]
         public string Lastname { get; set; }
         [Required]
-        public DateOnly DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         [Required]
         public EnumSexe Sexe { get; set; }
         [ForeignKey("User")]
-        public Guid IdUser { get; set; }
+        public Guid? IdUser { get; set; }
         public User user { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }

@@ -11,9 +11,9 @@ namespace Server.Models.MedicalPlannings
         [Key]
         public Guid Id { get; set; }
         [Required]
-        public DateOnly AppointmentDate { get; set; }
+        public DateTime AppointmentDate { get; set; }
         [Required]
-        public TimeOnly AppointmentTime { get; set; }
+        public DateTime AppointmentTime { get; set; }
         [Required]
         public int AppointmentCount { get; set; }
         [Required]

@@ -22,6 +22,8 @@ using Server.Models.SpecialtieDoctor;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 
+
+
 namespace Server.Data
 {
     public class ServerDbContext : DbContext
@@ -30,6 +32,16 @@ namespace Server.Data
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+            base.OnModelCreating(modelBuilder);
+
+        }
+        public DbSet<User> users { get; set; }
         public DbSet<Admins> admins { get; set; }
         public DbSet<Analyses> Analyses { get; set; }
         public DbSet<CabinetMedical> cabinetMedicals { get; set; }
@@ -50,7 +62,7 @@ namespace Server.Data
         public DbSet<Secretarys> Secretarys { get; set; }
         public DbSet<Specialite> specialites { get; set; }
         public DbSet<SpecialtiesDoctor> specialtiesDoctors { get; set; }
-        public DbSet<User> users { get; set; }
+
         public DbSet<WorkDoctors> WorkDoctors { get; set; }
 
     }
