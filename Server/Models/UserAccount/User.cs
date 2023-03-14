@@ -35,6 +35,8 @@ namespace Server.Models.UserAccount
         public EnumSexe Sexe { get; set; }
         [Required]
         public UserStatus Status { get; set; }
+        [Required]
+        public DateTime DateCreateAccount { get; set; }
         public string? RefreshToken { get; set; }
         public DateTime? DateExpireRefreshToken { get; set; }
 

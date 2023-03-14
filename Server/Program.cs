@@ -1,11 +1,71 @@
+using DTO;
+using MailKit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Server.Data;
+using Server.Managers.UserManager;
 using Server.Models.UserAccount;
+
+using Server.Services.UserService;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//
+
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 5;
+    options.Password.RequiredUniqueChars = 1;
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+
+    options.SignIn.RequireConfirmedEmail = true;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(20);
+    options.Lockout.MaxFailedAccessAttempts = 3;
+});
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromMinutes(10);
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+{
+    option.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:key"]))
+
+
+    };
+});
+
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddIdentity<User, IdentityRole>()
+               .AddEntityFrameworkStores<ServerDbContext>().AddDefaultTokenProviders();
+
+
+
+
 // Add services to the container.
+builder.Services.AddScoped<IUserManager, UserManager>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IMailService, MailService>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -15,7 +75,8 @@ builder.Services.AddDbContextPool<ServerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionDataBase"))
 );
 
-
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 var app = builder.Build();
 
 
@@ -29,6 +90,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseRouting();
+app.UseCors(policy =>
+    policy.WithOrigins("https://localhost:7286", "https://localhost:7286")
+    .AllowAnyMethod()
+    .WithHeaders(HeaderNames.ContentType)
+.AllowAnyHeader()
+
+
+);
 
 app.UseAuthorization();
 

@@ -25,6 +25,11 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Managers\Storages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DTO\DTO.csproj" />
   </ItemGroup>
 
 </Project>
