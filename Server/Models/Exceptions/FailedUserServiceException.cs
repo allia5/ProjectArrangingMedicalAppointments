@@ -4,12 +4,14 @@
 // ---------------------------------------------------------------
 
 using System;
+using Xeptions;
 
-namespace Server.Models.Doctor.Exceptions
+namespace OtripleS.Web.Api.Models.Users.Exceptions
 {
-    public class AlreadyExistsException : Exception
+    public class FailedUserServiceException : Exception
     {
-        public AlreadyExistsException(string actor)
-            : base(message: $"{actor} with the same id already exists.") { }
+        public FailedUserServiceException(Exception innerException)
+            : base(message: "Failed user service error occurred.", innerException)
+        { }
     }
 }

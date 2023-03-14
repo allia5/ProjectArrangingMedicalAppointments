@@ -8,5 +8,7 @@ namespace Server.Services.Foundation.MailService
     {
         public Task<IdentityResult> ValidateCompteUserService(string id, string token);
         public Task<MessageResultDto> SendValidationMailToClient(User user);
+
+
     }
 }
