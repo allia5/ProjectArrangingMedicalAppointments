@@ -23,7 +23,7 @@ namespace Server.Models.Pharmacist
         [Required]
         public Statuspharmacist status { get; set; }
         [ForeignKey("User")]
-        public Guid idUser { get; set; }
+        public string idUser { get; set; }
         public User User { get; set; }
         [JsonIgnore]
         public IEnumerable<PrescriptionLines> PrescriptionLines { get; set; }

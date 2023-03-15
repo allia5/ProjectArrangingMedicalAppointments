@@ -1,5 +1,6 @@
 ﻿using DTO;
 using Server.Models.UserAccount;
+using Server.Models.UserRoles;
 
 namespace Server.Services.UserService
 {
@@ -15,9 +16,20 @@ namespace Server.Services.UserService
                 Firstname = registreAccountDto.FirstName,
                 Sexe = (EnumSexe)(int)registreAccountDto.Sexe,
                 NationalNumber = registreAccountDto.NationalNumber,
-                PhoneNumber = registreAccountDto.PhoneNumber
+                PhoneNumber = registreAccountDto.PhoneNumber,
+                DateOfBirth = registreAccountDto.DateOfBirth
 
 
+
+            };
+        }
+        public static UserRole MaperToUserRole(string idUser, Guid IdRole)
+        {
+            return new UserRole
+            {
+                Id = Guid.NewGuid(),
+                IdUser = idUser,
+                RoleId = IdRole
 
             };
         }

@@ -9,7 +9,7 @@ namespace Server.Models.UserRoles
         [Key]
         public Guid Id { get; set; }
         [ForeignKey("User")]
-        public Guid IdUser { get; set; }
+        public string IdUser { get; set; }
         public User User { get; set; }
         [ForeignKey("Role")]
         public Guid RoleId { get; set; }

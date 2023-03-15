@@ -1,7 +1,9 @@
 ﻿using DTO;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Net.Http.Headers;
 using Server.Models.Doctor.Exceptions;
+using Server.Models.Exceptions;
 using Server.Models.UserAccount;
 using System.Drawing;
 
@@ -9,14 +11,46 @@ namespace Server.Services.UserService
 {
     public partial class UserService
     {
-        public void ValidateUsenOnCreate(RegistreAccountDto registreAccountDto)
+        public async Task ValidateUsenOnCreate(RegistreAccountDto registreAccountDto)
         {
-            ValidateUserAccountIsNotInSystem(registreAccountDto.Email);
+            await ValidateUserAccountIsNotInSystem(registreAccountDto.Email);
             ValidateRegistreUserIsNull(registreAccountDto);
             ValidateUserFields(registreAccountDto);
             ValidateInvalidAuditFields(registreAccountDto);
 
 
+        }
+
+        public void ValidateEntryConfirmeEmail(string id, string Token)
+        {
+            if (IsInvalid(id) == true && IsInvalid(Token) == true)
+            {
+                throw new NullException(nameof(id) + nameof(Token));
+            }
+            else if (IsInvalid(id) == true)
+            {
+                throw new NullException(nameof(id));
+            }
+            else if (IsInvalid(Token) == true)
+            {
+                throw new NullException(nameof(Token));
+            }
+
+        }
+
+        public void ValidateUserIsNull(User user)
+        {
+            if (user == null)
+            {
+                throw new NullException(nameof(user));
+            }
+        }
+        public void ValidateIdentityToken(IdentityResult identityResult)
+        {
+            if (identityResult.Succeeded != false)
+            {
+                throw new IdentityTokenException(nameof(identityResult));
+            }
         }
 
         private void ValidateUserFields(RegistreAccountDto registreAccountDto)
@@ -47,36 +81,32 @@ namespace Server.Services.UserService
 
 
 
+
             }
         }
 
-        private async void ValidateUserAccountIsNotInSystem(string Email)
-        {
-            var UserAccount = await this._userManager.FindByEmailAsync(Email);
-            var Exception = new Exception();
 
-            if (CheckUserIsNull(UserAccount))
-            {
-                throw new AlreadyExistsException(nameof(UserAccount));
-            }
-        }
 
         private void ValidateInvalidAuditFields(RegistreAccountDto registreAccountDto)
         {
             switch (registreAccountDto)
             {
-                case { } when ChackNumberValidate(registreAccountDto.PhoneNumber):
+                case { } when !ChackNumberValidate(registreAccountDto.PhoneNumber):
                     throw new InvalidException(
                     parameterName: nameof(registreAccountDto.PhoneNumber),
                     parameterValue: registreAccountDto.PhoneNumber, nameof(registreAccountDto));
-                case { } when ChackNumberValidate(registreAccountDto.NationalNumber):
+                /*case { } when !ChackNumberValidate(registreAccountDto.NationalNumber):
                     throw new InvalidException(
                     parameterName: nameof(registreAccountDto.NationalNumber),
-                    parameterValue: registreAccountDto.NationalNumber, nameof(registreAccountDto));
+                    parameterValue: registreAccountDto.NationalNumber, nameof(registreAccountDto));*/
                 case { } when ChackUserSexe((int)registreAccountDto.Sexe):
                     throw new InvalidException(
                     parameterName: nameof(registreAccountDto.Sexe),
                     parameterValue: ((int)registreAccountDto.Sexe), nameof(registreAccountDto));
+                case { } when ValidateDate(registreAccountDto.DateOfBirth):
+                    throw new InvalidException(
+                    parameterName: nameof(registreAccountDto.DateOfBirth),
+                    parameterValue: registreAccountDto.DateOfBirth, nameof(registreAccountDto));
 
             }
 
@@ -90,10 +120,21 @@ namespace Server.Services.UserService
         }
 
 
-        private static bool IsInvalid(string input) => String.IsNullOrWhiteSpace(input);
-        private static bool ChackNumberValidate(string Field) { int n; var isNumeric = int.TryParse(Field, out n); return isNumeric; }
-        private static bool ChackUserSexe(int Sexe) { if (Sexe != 1 || Sexe != 2) { return false; } return true; }
-        private static bool CheckUserIsNull(User user)
+        public static bool IsInvalid(string input) => String.IsNullOrWhiteSpace(input);
+        public static bool ValidateDate(DateTime Date)
+        {
+            if (DateTime.UtcNow > Date)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public static bool ChackNumberValidate(string Field) { int n; var isNumeric = Int32.TryParse(Field, out n); return isNumeric; }
+        public static bool ChackUserSexe(int Sexe) { if (Sexe != 1 || Sexe != 2) { return false; } return true; }
+        public static bool CheckUserIsNull(User user)
         {
             if (user is null)
             {

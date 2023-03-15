@@ -19,7 +19,7 @@ namespace Server.Models.MedicalPlannings
         [Required]
         public string AppointmentAdress { get; set; }
         [ForeignKey("User")]
-        public Guid IdUser { get; set; }
+        public string IdUser { get; set; }
         public User user { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }

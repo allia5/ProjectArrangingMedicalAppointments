@@ -13,7 +13,7 @@ namespace Server.Services.Foundation.MailService
     {
         public readonly UserManager<User> _userManager;
         public readonly IConfiguration configuration;
-        private readonly IOptions<MailSettings> mailSeetting;
+        private IOptions<MailSettings> mailSeetting { get; set; }
 
         public MailService(UserManager<User> _userManager, IConfiguration configuration, IOptions<MailSettings> mailSeetting)
         {
@@ -23,27 +23,19 @@ namespace Server.Services.Foundation.MailService
 
         }
 
-        public async Task<IdentityResult> ValidateCompteUserService(string id, string token)
-        {
-            try
-            {
-                var user = await this._userManager.FindByIdAsync(id);
 
-
-                return await this._userManager.ConfirmEmailAsync(user, token);
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
 
 
         public async Task<MessageResultDto> SendValidationMailToClient(User user)
         {
             var message = $"Verify your account {user.Email} " + "we send Link Validation Account";
             await GenerateTokenValidationEmailAsync(user);
-            return user.UserToReponseRegistre(message);
+            //return user.UserToReponseRegistre(message);
+            return new MessageResultDto
+            {
+                EmailAdress = user.Email,
+                Message = message
+            };
 
         }
         private async Task GenerateTokenValidationEmailAsync(User user)
@@ -94,7 +86,8 @@ namespace Server.Services.Foundation.MailService
 
                 MailMessage mail = new MailMessage
                 {
-                    /* To = userEmailOptions.ToEmail,*/
+                    // To = userEmailOptions.ToEmail,
+
 
                     Subject = userEmailOptions.Subject,
                     Body = userEmailOptions.Body,
@@ -107,11 +100,13 @@ namespace Server.Services.Foundation.MailService
 
                 SmtpClient smtpClient = new SmtpClient
                 {
+
                     Host = mailSeetting.Value.Host,
                     Port = mailSeetting.Value.Port,
                     EnableSsl = true,
                     UseDefaultCredentials = false,
                     Credentials = networkCredential,
+
 
 
 

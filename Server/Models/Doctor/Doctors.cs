@@ -26,7 +26,7 @@ namespace Server.Models.Doctor
         [Required]
         public StatusDoctor StatusDoctor { get; set; }
         [ForeignKey("User")]
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public User UserAccount { get; set; }
 
 

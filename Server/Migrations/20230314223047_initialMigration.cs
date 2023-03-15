@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Server.Migrations
 {
     /// <inheritdoc />
-    public partial class migrationone : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,6 +45,20 @@ namespace Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "roles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "specialites",
                 columns: table => new
                 {
@@ -59,13 +75,14 @@ namespace Server.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NationalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sexe = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    DateCreateAccount = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateExpireRefreshToken = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -97,7 +114,7 @@ namespace Server.Migrations
                     InsuranceNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LicenseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StatusDoctor = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,8 +135,8 @@ namespace Server.Migrations
                     NameMedicalAnalyse = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AuthenticationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Adress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    userAccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IdUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    userAccountId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -141,7 +158,7 @@ namespace Server.Migrations
                     AuthenticationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AdressPharmacist = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     status = table.Column<int>(type: "int", nullable: false),
-                    idUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    idUser = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -161,7 +178,7 @@ namespace Server.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdCabinetMedical = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     cabinetMedicalId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    IdUser = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -174,6 +191,31 @@ namespace Server.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Secretarys_users_IdUser",
+                        column: x => x.IdUser,
+                        principalTable: "users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "userRoles",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdUser = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_userRoles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_userRoles_roles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "roles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_userRoles_users_IdUser",
                         column: x => x.IdUser,
                         principalTable: "users",
                         principalColumn: "Id",
@@ -216,8 +258,8 @@ namespace Server.Migrations
                     Lastname = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Sexe = table.Column<int>(type: "int", nullable: false),
-                    IdUser = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IdDoctor = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     doctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -247,8 +289,8 @@ namespace Server.Migrations
                     AppointmentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AppointmentCount = table.Column<int>(type: "int", nullable: false),
                     AppointmentAdress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdUser = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    userId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IdUser = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    userId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IdDoctor = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     doctorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IdCabinet = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -575,6 +617,67 @@ namespace Server.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "chronicDiseases",
+                columns: new[] { "Id", "NameChronicDiseases" },
+                values: new object[,]
+                {
+                    { 1, "DIABÈTE" },
+                    { 2, "HYPERTENSION-ARTÉRIELLE" },
+                    { 3, "MALADIES-RESPIRATOIRES" },
+                    { 4, "MALADIES RÉNALES" },
+                    { 5, "MALADIES ARTICULAIRES" },
+                    { 6, "MALADIES DU FOIE" },
+                    { 7, "MALADIES NEUROLOGIQUES" },
+                    { 8, "CANCER" },
+                    { 9, "MALADIES-CARDIOVASCULAIRES" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "roles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { new Guid("1b3f2841-d086-4def-8bff-e0ebcdffcd02"), "46c09e0a-e8a6-4e10-8339-53f2250d2827", "RADIOLOGUE", null },
+                    { new Guid("28b44ccb-cb89-43f4-90da-4caf3f4d483a"), "e251d0d5-10d5-4ad4-8b99-7d3b3dc60053", "ANALYSE", null },
+                    { new Guid("2af56642-d47e-45c1-a624-11a87690d687"), "2054539d-32ec-4db0-af45-be7368c95701", "ADMIN", null },
+                    { new Guid("48d6d414-b030-451b-8965-9d7723039f7a"), "1cf7beb9-99c6-4c99-8ba9-1d03d6928e3b", "PATIENT", null },
+                    { new Guid("832476e3-d289-4c47-aa22-8beceea22c9d"), "ec8c42d1-5a19-471d-bff9-c4a4878eb11b", "MEDECIN", null },
+                    { new Guid("a5b089be-9b77-41bf-a864-e1ca0ae575d7"), "26f38e8a-c10a-41b3-affd-8cfdc87711d9", "PHARMACIEN", null },
+                    { new Guid("d14b3e47-5d61-47d3-b7df-6c02979c37e4"), "5dbb98b4-2b04-463c-8778-934dbb8cc241", "SECRITAIRE", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "specialites",
+                columns: new[] { "Id", "NameSpecialite" },
+                values: new object[,]
+                {
+                    { 1, "ANESTHÉSIOLOGIE" },
+                    { 2, "CARDIOLOGIE" },
+                    { 3, "CHIRURGIE" },
+                    { 4, "DERMATOLOGIE" },
+                    { 5, "ENDOCRINOLOGIE" },
+                    { 6, "GASTRO ENTÉROLOGIE" },
+                    { 7, "GYNÉCOLOGIE" },
+                    { 8, "HÉMATOLOGIE" },
+                    { 9, "INFECTIOLOGIE" },
+                    { 10, "MÉDECINE DU TRAVAIL" },
+                    { 11, "MÉDECINE INTERNE" },
+                    { 12, "NÉPHROLOGIE" },
+                    { 13, "NEUROLOGIE" },
+                    { 14, "OBSTÉTRIQUE" },
+                    { 15, "ONCOLOGIE" },
+                    { 16, "OPHTALMOLOGIE" },
+                    { 17, "ORTHOPÉDIE" },
+                    { 18, "OTO-RHINO-LARYNGOLOGIE" },
+                    { 19, "PÉDIATRIE" },
+                    { 20, "PNEUMOLOGIE" },
+                    { 21, "PSYCHIATRIE" },
+                    { 22, "RADIOLOGIE" },
+                    { 23, "RHUMATOLOGIE" },
+                    { 24, "URGENTISTE" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_admins_DoctorId",
                 table: "admins",
@@ -746,6 +849,16 @@ namespace Server.Migrations
                 column: "Specialite");
 
             migrationBuilder.CreateIndex(
+                name: "IX_userRoles_IdUser",
+                table: "userRoles",
+                column: "IdUser");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_userRoles_RoleId",
+                table: "userRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_users_Email",
                 table: "users",
                 column: "Email",
@@ -788,6 +901,9 @@ namespace Server.Migrations
                 name: "specialtiesDoctors");
 
             migrationBuilder.DropTable(
+                name: "userRoles");
+
+            migrationBuilder.DropTable(
                 name: "WorkDoctors");
 
             migrationBuilder.DropTable(
@@ -804,6 +920,9 @@ namespace Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "specialites");
+
+            migrationBuilder.DropTable(
+                name: "roles");
 
             migrationBuilder.DropTable(
                 name: "radiologies");

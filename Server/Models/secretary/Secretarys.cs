@@ -16,7 +16,7 @@ namespace Server.Models.secretary
 
         public CabinetMedical cabinetMedical { get; set; }
         [ForeignKey("User")]
-        public Guid IdUser { get; set; }
+        public string IdUser { get; set; }
         public User User { get; set; }
         [JsonIgnore]
         public IEnumerable<MedicalOrdres> MedicalOrdres { get; set; }

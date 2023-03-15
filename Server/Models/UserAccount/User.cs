@@ -14,14 +14,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Server.Models.UserAccount
 {
     [Index(nameof(Email), IsUnique = true)]
-    public class User : IdentityUser<Guid>
+    public class User : IdentityUser
     {
-        [Key]
-        public override Guid Id
-        {
-            get => base.Id;
-            set => base.Id = value;
-        }
+
 
         [Required]
         public string Firstname { get; set; }

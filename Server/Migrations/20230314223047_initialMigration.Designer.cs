@@ -12,8 +12,8 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    [Migration("20230312221715_migtationsix")]
-    partial class migtationsix
+    [Migration("20230314223047_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -149,6 +149,53 @@ namespace Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("chronicDiseases");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            NameChronicDiseases = "DIABÈTE"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            NameChronicDiseases = "HYPERTENSION-ARTÉRIELLE"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            NameChronicDiseases = "MALADIES-RESPIRATOIRES"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            NameChronicDiseases = "MALADIES RÉNALES"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            NameChronicDiseases = "MALADIES ARTICULAIRES"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            NameChronicDiseases = "MALADIES DU FOIE"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            NameChronicDiseases = "MALADIES NEUROLOGIQUES"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            NameChronicDiseases = "CANCER"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            NameChronicDiseases = "MALADIES-CARDIOVASCULAIRES"
+                        });
                 });
 
             modelBuilder.Entity("Server.Models.Doctor.Doctors", b =>
@@ -172,8 +219,9 @@ namespace Server.Migrations
                     b.Property<int>("StatusDoctor")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -220,15 +268,16 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NameMedicalAnalyse")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("userAccountId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("userAccountId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -303,14 +352,15 @@ namespace Server.Migrations
                     b.Property<Guid>("IdDoctor")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("doctorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -341,8 +391,9 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("idUser")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("idUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("status")
                         .HasColumnType("int");
@@ -713,59 +764,61 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("03774a0c-daea-4307-a5c7-5c70c6ceb66b"),
-                            ConcurrencyStamp = "83587897-e131-4634-882f-70ae3c48398b",
+                            Id = new Guid("2af56642-d47e-45c1-a624-11a87690d687"),
+                            ConcurrencyStamp = "2054539d-32ec-4db0-af45-be7368c95701",
                             Name = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("6632ad66-7b67-4d83-9ade-3796178cd5d6"),
-                            ConcurrencyStamp = "54ab3908-c766-4235-b37b-24f42da574c1",
+                            Id = new Guid("48d6d414-b030-451b-8965-9d7723039f7a"),
+                            ConcurrencyStamp = "1cf7beb9-99c6-4c99-8ba9-1d03d6928e3b",
                             Name = "PATIENT"
                         },
                         new
                         {
-                            Id = new Guid("e877586d-71f9-4d74-a4d9-5e35dbee5206"),
-                            ConcurrencyStamp = "0f2a043c-88a0-4ef6-a1d7-837f3000ecf4",
+                            Id = new Guid("d14b3e47-5d61-47d3-b7df-6c02979c37e4"),
+                            ConcurrencyStamp = "5dbb98b4-2b04-463c-8778-934dbb8cc241",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
-                            Id = new Guid("b4e82abc-7536-4371-a58e-e5ff0da322d3"),
-                            ConcurrencyStamp = "f9532f28-adac-4681-bde3-b5ca638e2e93",
+                            Id = new Guid("832476e3-d289-4c47-aa22-8beceea22c9d"),
+                            ConcurrencyStamp = "ec8c42d1-5a19-471d-bff9-c4a4878eb11b",
                             Name = "MEDECIN"
                         },
                         new
                         {
-                            Id = new Guid("7bb41889-0876-4fb7-8be2-2260dae9c453"),
-                            ConcurrencyStamp = "46753a3f-5546-4523-b5b3-adcad8ad1e26",
+                            Id = new Guid("1b3f2841-d086-4def-8bff-e0ebcdffcd02"),
+                            ConcurrencyStamp = "46c09e0a-e8a6-4e10-8339-53f2250d2827",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
-                            Id = new Guid("1365f700-dc1f-4976-b95a-347c260cd248"),
-                            ConcurrencyStamp = "769af9b8-a168-4803-a84a-625c08827f5e",
+                            Id = new Guid("a5b089be-9b77-41bf-a864-e1ca0ae575d7"),
+                            ConcurrencyStamp = "26f38e8a-c10a-41b3-affd-8cfdc87711d9",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
-                            Id = new Guid("be1aac51-9269-4b93-8f0c-afd5b6d0b5c7"),
-                            ConcurrencyStamp = "8fadad6a-9088-442f-b586-f2a3dc1f9eb1",
+                            Id = new Guid("28b44ccb-cb89-43f4-90da-4caf3f4d483a"),
+                            ConcurrencyStamp = "e251d0d5-10d5-4ad4-8b99-7d3b3dc60053",
                             Name = "ANALYSE"
                         });
                 });
 
             modelBuilder.Entity("Server.Models.UserAccount.User", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreateAccount")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateExpireRefreshToken")
                         .HasColumnType("datetime2");
@@ -845,8 +898,9 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
@@ -917,8 +971,8 @@ namespace Server.Migrations
                     b.Property<Guid>("IdDoctor")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("IdUser")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdUser")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Lastname")
                         .IsRequired()
@@ -938,8 +992,8 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("userId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -961,8 +1015,9 @@ namespace Server.Migrations
                     b.Property<Guid>("IdCabinetMedical")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("IdUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid>("cabinetMedicalId")
                         .HasColumnType("uniqueidentifier");
@@ -1054,8 +1109,7 @@ namespace Server.Migrations
                     b.HasOne("Server.Models.UserAccount.User", "userAccount")
                         .WithMany("MedicalAnalyse")
                         .HasForeignKey("userAccountId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("userAccount");
                 });
@@ -1104,8 +1158,7 @@ namespace Server.Migrations
                     b.HasOne("Server.Models.UserAccount.User", "user")
                         .WithMany("MedicalPlanning")
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CabinetMedical");
 
@@ -1275,8 +1328,7 @@ namespace Server.Migrations
                     b.HasOne("Server.Models.UserAccount.User", "user")
                         .WithMany("fileMedical")
                         .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("doctor");
 

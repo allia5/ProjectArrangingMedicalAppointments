@@ -19,6 +19,11 @@ namespace DTO
         public string FirstName { get; set; }
         [Required(ErrorMessage = "Field Is Required")]
         public Sexe Sexe { get; set; }
+
+        [Required(ErrorMessage = "DateOFBirth Is Required")]
+        [DataType(DataType.DateTime)]
+        public DateTime DateOfBirth { get; set; }
+
         [Required(ErrorMessage = "NationalNumber Is Required")]
         [StringLength(18)]
         public string NationalNumber { get; set; }

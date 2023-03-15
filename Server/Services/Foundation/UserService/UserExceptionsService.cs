@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OtripleS.Web.Api.Models.Users.Exceptions;
 using Server.Models.Doctor.Exceptions;
+using Server.Models.Exceptions;
 using Server.Models.UserAccount;
 
 namespace Server.Services.UserService
@@ -34,9 +35,18 @@ namespace Server.Services.UserService
             {
                 throw new FailedUserServiceException(SqlException);
             }
+            catch (FailedCreateUserException failedCreateUser)
+            {
+                throw new FailedUserServiceException(failedCreateUser);
+            }
+            catch (IdentityTokenException identityTokenException)
+            {
+                throw new IdentityException(identityTokenException);
+
+            }
             catch (Exception exception)
             {
-                throw new ServiceException(exception);
+                throw new Exception(exception.Message);//ServiceException(exception);
 
 
             }

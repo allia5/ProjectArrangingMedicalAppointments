@@ -4,7 +4,7 @@
 // ---------------------------------------------------------------
 
 using System;
-using Xeptions;
+
 
 namespace OtripleS.Web.Api.Models.Users.Exceptions
 {

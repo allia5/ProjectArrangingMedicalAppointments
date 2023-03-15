@@ -24,8 +24,9 @@ namespace Server.Models.fileMedical
         public DateTime DateOfBirth { get; set; }
         [Required]
         public EnumSexe Sexe { get; set; }
+        public DateTime DateOfCreate { get; set; }
         [ForeignKey("User")]
-        public Guid? IdUser { get; set; }
+        public string? IdUser { get; set; }
         public User user { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
