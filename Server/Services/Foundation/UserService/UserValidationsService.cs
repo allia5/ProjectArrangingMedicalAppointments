@@ -47,7 +47,7 @@ namespace Server.Services.UserService
         }
         public void ValidateIdentityToken(IdentityResult identityResult)
         {
-            if (identityResult.Succeeded != false)
+            if (identityResult.Succeeded == false)
             {
                 throw new IdentityTokenException(nameof(identityResult));
             }

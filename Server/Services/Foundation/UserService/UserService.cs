@@ -7,7 +7,7 @@ using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.UserAccount;
 using Server.Services.Foundation.MailService;
-using static Server.Services.UserService.UserMapperService
+using static Server.Services.UserService.UserMapperService;
 
 namespace Server.Services.UserService
 {
