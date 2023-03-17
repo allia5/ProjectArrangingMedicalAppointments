@@ -9,8 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csp
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{DF5033B8-8CB2-48C4-954C-BF82DC16FAC7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AD3EA84E-3162-4DB1-9E35-34CC3DEE3311} = {AD3EA84E-3162-4DB1-9E35-34CC3DEE3311}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTO", "DTO\DTO.csproj", "{AD3EA84E-3162-4DB1-9E35-34CC3DEE3311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "DTO\DTO.csproj", "{AD3EA84E-3162-4DB1-9E35-34CC3DEE3311}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

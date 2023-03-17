@@ -39,7 +39,7 @@ namespace Server.Controllers
             catch (ServiceException serviceException)
             {
                 var messageException = GetInnerMessage(serviceException);
-                return Problem(messageException);
+                return Conflict(messageException);
             }
             catch (FailedUserServiceException failedUserServiceException)
             {
@@ -51,7 +51,7 @@ namespace Server.Controllers
                 transaction.Dispose();
             }
         }
-        [HttpPost("ValidatAccount")]
+        [HttpGet("ValidatAccount")]
         public async Task<ActionResult<MessageResultDto>> ValidateEmailAdress(string uid, string token)
         {
             TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
@@ -75,7 +75,7 @@ namespace Server.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return Problem(ex.Message);
             }
             finally
             {

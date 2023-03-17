@@ -34,7 +34,8 @@ namespace Server.Services.UserService
                      {
                          if (identityResult.Succeeded)
                          {
-                             return await this.mailService.SendValidationMailToClient(User);
+                             var UserAccount = await this._userManager.FindByEmailAsync(User.Email);
+                             return await this.mailService.SendValidationMailToClient(UserAccount);
                          }
                          else
                          {
