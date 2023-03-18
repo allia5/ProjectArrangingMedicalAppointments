@@ -2,10 +2,13 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
+using Server.Managers.Storages.RolesManager;
 using Server.Managers.Storages.UserRoleManager;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.UserAccount;
+using Server.Models.UserRoles;
+using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
 using static Server.Services.UserService.UserMapperService;
 
@@ -16,16 +19,19 @@ namespace Server.Services.UserService
         public readonly UserManager<User> _userManager;
         public IMailService mailService { get; set; }
         public readonly IUserRoleManager userRoleManager;
-        public UserService(UserManager<User> _userManager, IMailService mailService, IUserRoleManager userRoleManager)
+        public readonly IRolesManager rolesManager;
+        public readonly IJwtService jwtService;
+        public UserService(UserManager<User> _userManager, IMailService mailService, IUserRoleManager userRoleManager, IRolesManager rolesManager, IJwtService jwtService)
         {
             this._userManager = _userManager;
             this.mailService = mailService;
             this.userRoleManager = userRoleManager;
+            this.rolesManager = rolesManager;
+            this.jwtService = jwtService;
         }
         public async Task<MessageResultDto> RegistreAccountAsync(RegistreAccountDto registreAccountDto) =>
             await TryCatch(async () =>
                  {
-
                      await ValidateUsenOnCreate(registreAccountDto);
                      var User = registreAccountDto.MaperToUser();
                      var identityResult = await this._userManager.CreateAsync(User, registreAccountDto.Password);
@@ -94,6 +100,41 @@ namespace Server.Services.UserService
 
 
             });
+
+        public async Task<JwtDto> AuthenticationAccountAsync(LoginAccountDto loginAccountDto)
+        =>
+           await TryCatch(async () =>
+           {
+               ValidateEntryOnLogin(loginAccountDto);
+               var User = await this._userManager.FindByEmailAsync(loginAccountDto.Email);
+               ValidateUserIsNull(User);
+               var resultAuthentification = await this._userManager.CheckPasswordAsync(User, loginAccountDto.Password);
+               ValidateAuthentificationPassword(resultAuthentification);
+               var UserRoles = await this.userRoleManager.GetUserRolesById(User.Id);
+               ValidateListUserRolesIsNull(UserRoles);
+               var list = UserRoles.Cast<UserRole>().ToList();
+               List<Role> listItem = new List<Role>();
+               foreach (var Item in list)
+               {
+                   var role = await this.rolesManager.GetRolesById(Item.RoleId);
+                   listItem.Add(role);
+               }
+               var Token = this.jwtService.Generitedtoken(User, listItem);
+               var refreshToken = this.jwtService.GenerateTokenRefresh();
+               DateTime DateExpire = DateTime.Now.AddDays(7);
+               var NewUser = AppendRfToken(User, refreshToken, DateExpire);
+               var IdentityResult = await this._userManager.UpdateAsync(NewUser);
+               ValidateIdentityToken(IdentityResult);
+               return MapperToJwtResult(Token, refreshToken);
+
+           }
+           );
+
+
+
+
+
+
 
     }
 

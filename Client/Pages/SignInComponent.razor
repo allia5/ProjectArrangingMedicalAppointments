@@ -5,7 +5,7 @@
 @if(MessageError != null){
     <ErrorRoutingMessage Message="@MessageError"></ErrorRoutingMessage>
 
-}else if(messageResult != null){
+}else if(messageResult.Message != null){
 
     <CorrectRoutingMessage Message="@messageResult.Message"></CorrectRoutingMessage>
 }

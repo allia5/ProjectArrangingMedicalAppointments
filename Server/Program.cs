@@ -6,9 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Server.Data;
+using Server.Managers.Storages.RolesManager;
 using Server.Managers.Storages.UserRoleManager;
 using Server.Managers.UserManager;
 using Server.Models.UserAccount;
+using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
 using Server.Services.UserService;
 using System.Text;
@@ -67,7 +69,9 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.AddScoped<IUserManager, UserManager>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IUserRoleManager, UserRoleManager>();
+builder.Services.AddScoped<IRolesManager, RolesManager>();
 
 
 builder.Services.AddControllers();

@@ -1,6 +1,7 @@
 ﻿using DTO;
 using Server.Models.UserAccount;
 using Server.Models.UserRoles;
+using System.Runtime.CompilerServices;
 
 namespace Server.Services.UserService
 {
@@ -17,7 +18,8 @@ namespace Server.Services.UserService
                 Sexe = (EnumSexe)(int)registreAccountDto.Sexe,
                 NationalNumber = registreAccountDto.NationalNumber,
                 PhoneNumber = registreAccountDto.PhoneNumber,
-                DateOfBirth = registreAccountDto.DateOfBirth
+                DateOfBirth = registreAccountDto.DateOfBirth,
+                Status = UserStatus.Activated
 
 
 
@@ -31,6 +33,24 @@ namespace Server.Services.UserService
                 IdUser = idUser,
                 RoleId = IdRole
 
+            };
+        }
+        public static List<object> MapperToList(IQueryable obj)
+        {
+            return new List<object>((IEnumerable<object>)obj);
+        }
+        public static User AppendRfToken(User user, string RefreshToken, DateTime DateExpired)
+        {
+            user.RefreshToken = RefreshToken;
+            user.DateExpireRefreshToken = DateExpired;
+            return user;
+        }
+        public static JwtDto MapperToJwtResult(string Token, string RefreshToken)
+        {
+            return new JwtDto
+            {
+                Token = Token,
+                RefreshToken = RefreshToken
             };
         }
     }

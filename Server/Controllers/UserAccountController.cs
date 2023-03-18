@@ -84,8 +84,41 @@ namespace Server.Controllers
 
 
         }
+
+        [HttpPost("LoginAccount")]
+        public async Task<ActionResult<JwtDto>> Authentification(LoginAccountDto loginAccountDto)
+        {
+            try
+            {
+                return await this.userService.AuthenticationAccountAsync(loginAccountDto);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (StorageValidationException Ex)
+            {
+                return NotFound(Ex.InnerException);
+            }
+            catch (IdentityException Ex)
+            {
+                return Unauthorized(Ex.InnerException);
+            }
+            catch (FailedUserServiceException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+
+        }
+
         private static string GetInnerMessage(Exception exception) =>
           exception.InnerException.Message;
+
+
 
     }
 }

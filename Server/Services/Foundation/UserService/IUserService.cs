@@ -8,6 +8,8 @@ namespace Server.Services.UserService
         public Task<MessageResultDto> RegistreAccountAsync(RegistreAccountDto registreAccountDto);
         public Task<MessageResultDto> ValidateAccountUserAsync(string Id, string Token);
 
+        public Task<JwtDto> AuthenticationAccountAsync(LoginAccountDto loginAccountDto);
+
 
     }
 }

@@ -11,7 +11,7 @@ namespace Server.Services.UserService
     public partial class UserService
     {
         private delegate ValueTask<MessageResultDto> ReturningUserFunction();
-        private delegate IQueryable<MessageResultDto> ReturningQueryableUserFunction();
+        private delegate ValueTask<JwtDto> ReturningAuthenticationFunction();
 
         private async ValueTask<MessageResultDto> TryCatch(ReturningUserFunction returningUserFunction)
         {
@@ -47,6 +47,40 @@ namespace Server.Services.UserService
             catch (Exception exception)
             {
                 throw new Exception(exception.Message);//ServiceException(exception);
+
+
+            }
+        }
+        private async ValueTask<JwtDto> TryCatch(ReturningAuthenticationFunction returningUserFunction)
+        {
+            try
+            {
+                return await returningUserFunction();
+            }
+            catch (NullException nullUserException)
+            {
+                throw new ValidationException(nullUserException);
+            }
+
+
+            catch (SqlException SqlException)
+            {
+                throw new FailedUserServiceException(SqlException);
+            }
+
+            catch (IdentityTokenException identityTokenException)
+            {
+                throw new IdentityException(identityTokenException);
+
+            }
+            catch (NullDataStorageException ExStorage)
+            {
+                throw new StorageValidationException(ExStorage);
+
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
 
 
             }

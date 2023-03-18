@@ -5,6 +5,7 @@ using Microsoft.Net.Http.Headers;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.UserAccount;
+using Server.Models.UserRoles;
 using System.Drawing;
 
 namespace Server.Services.UserService
@@ -20,7 +21,41 @@ namespace Server.Services.UserService
 
 
         }
+        public void ValidateEntryOnLogin(LoginAccountDto loginAccountDto)
+        {
+            if (loginAccountDto != null)
+            {
+                if (IsInvalid(loginAccountDto.Email) == true)
+                {
+                    throw new NullException(nameof(loginAccountDto.Email));
+                }
+                else if (IsInvalid(loginAccountDto.Password) == true)
+                {
+                    throw new NullException(nameof(loginAccountDto.Password));
+                }
+            }
+            else
+            {
+                throw new NullException(nameof(loginAccountDto));
+            }
+        }
+        public void ValidateAuthentificationPassword(bool Password)
+        {
+            if (Password != true)
+            {
+                throw new IdentityTokenException(nameof(Password));
+            }
+        }
+        public void ValidateListUserRolesIsNull(IQueryable UserRoles)
+        {
+            var list = UserRoles.Cast<UserRole>().ToList();
+            if (list.Count() == 0)
+            {
+                throw new NullDataStorageException(nameof(UserRoles));
+            }
 
+
+        }
         public void ValidateEntryConfirmeEmail(string id, string Token)
         {
             if (IsInvalid(id) == true && IsInvalid(Token) == true)

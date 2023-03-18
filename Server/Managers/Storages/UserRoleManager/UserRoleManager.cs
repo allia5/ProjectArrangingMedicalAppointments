@@ -16,5 +16,11 @@ namespace Server.Managers.Storages.UserRoleManager
             await this.ServerDbContext.SaveChangesAsync();
             return result.Entity;
         }
+
+        public async Task<IQueryable<UserRole>> GetUserRolesById(string IdUser)
+        {
+            return this.ServerDbContext.userRoles.Where(w => w.IdUser == IdUser);
+
+        }
     }
 }
