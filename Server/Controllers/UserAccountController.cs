@@ -1,4 +1,6 @@
 ﻿using DTO;
+using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -6,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using OtripleS.Web.Api.Models.Users.Exceptions;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
+using Server.Services.Foundation.JwtService;
 using Server.Services.UserService;
 using System.Transactions;
 using static Server.Utility.Utility;
@@ -17,9 +20,11 @@ namespace Server.Controllers
     public class UserAccountController : ControllerBase
     {
         public readonly IUserService userService;
-        public UserAccountController(IUserService userService)
+        public readonly IJwtService jwtService;
+        public UserAccountController(IUserService userService, IJwtService jwtService)
         {
             this.userService = userService;
+            this.jwtService = jwtService;
         }
         [HttpPost("CreateUserAccount")]
         public async Task<ActionResult<MessageResultDto>> CreateUserAccount([FromBody] RegistreAccountDto registreAccountDto)
@@ -117,6 +122,46 @@ namespace Server.Controllers
 
         private static string GetInnerMessage(Exception exception) =>
           exception.InnerException.Message;
+
+
+        [HttpGet("AuthenticatedState")]
+
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme)]
+        public IActionResult GetAuthenticatedState()
+        {
+            return Ok();
+        }
+
+        [HttpPost("TokenAlive")]
+        public async Task<ActionResult<JwtDto>> PostNewRefreshToken(JwtDto jwtDto)
+        {
+            try
+            {
+                return await this.jwtService.UpdateRefreshToken(jwtDto);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (ServiceException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (IdentityException Ex)
+            {
+                return Unauthorized(Ex.InnerException);
+            }
+            catch (FailedUserServiceException Ex)
+            {
+                return Problem(Ex.Message);
+            }
+            catch (Exception Ex)
+            {
+                return Problem(Ex.Message);
+            }
+
+        }
+
 
 
 
