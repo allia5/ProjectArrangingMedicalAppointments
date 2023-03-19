@@ -1,8 +1,10 @@
 using Blazored.LocalStorage;
 using Client;
+using Client.Services.Foundations.AuthentificationStatService;
 using Client.Services.Foundations.LocalStorageService;
 using Client.Services.Foundations.LoginService;
 using Client.Services.Foundations.SignInService;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -16,5 +18,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https:/
 builder.Services.AddScoped<ISignInService, SignInService>();
 builder.Services.AddScoped<ILocalStorageServices, LocalStorageServices>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<AuthentificationStatService>();
+builder.Services.AddScoped<AuthenticationStateProvider>((provider => provider.GetRequiredService<AuthentificationStatService>()));
 builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddAuthorizationCore();
 await builder.Build().RunAsync();

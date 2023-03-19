@@ -15,17 +15,14 @@ namespace Client.Pages
         public string Id { get; set; }
         [Parameter]
         public string Token { get; set; }
-        protected override async void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
             try
             {
                 if (this.Id != null && this.Token != null)
                 {
-                    messageResult = await this.signInService.ValidateAccountService(this.Id, this.Token);
-                    if (messageResult == null)
-                    {
-                        ErrorMessage = "Empty Content";
-                    }
+                    this.messageResult = await this.signInService.ValidateAccountService(this.Id, this.Token);
+
 
                 }
             }
@@ -37,6 +34,11 @@ namespace Client.Pages
             catch (UnauthorizedException Ex)
             {
                 ErrorMessage = Ex.Message;
+            }
+
+            catch (NullException Ex)
+            {
+                ErrorMessage = "Empty Content";
             }
             catch (Exception Ex)
             {

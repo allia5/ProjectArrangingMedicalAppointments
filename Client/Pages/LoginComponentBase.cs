@@ -1,5 +1,8 @@
-﻿using DTO;
+﻿using Client.Services.Exceptions;
+using Client.Services.Foundations.LoginService;
+using DTO;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Client.Pages
 {
@@ -11,15 +14,47 @@ namespace Client.Pages
         public string ReturnUrl { get; set; }
         [Inject]
         public NavigationManager navigationManager { get; set; }
+        [Inject]
+        public ILoginService loginService { get; set; }
+        [Inject]
+        public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
 
 
-        protected override Task OnInitializedAsync()
+
+
+        protected override async Task OnInitializedAsync()
         {
-            return base.OnInitializedAsync();
         }
-        protected override Task OnParametersSetAsync()
+        protected async override Task OnParametersSetAsync()
         {
-            return base.OnParametersSetAsync();
+
+            var Stat = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (Stat.User.Identity?.IsAuthenticated ?? false)
+            {
+                this.navigationManager.NavigateTo(ReturnUrl);
+            }
+
+        }
+        public async Task OnValid()
+        {
+            try
+            {
+                await this.loginService.AuthentificationAccount(loginAccount);
+                navigationManager.NavigateTo("/Home");
+            }
+            catch (UnauthorizedException Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+
+            }
+            catch (NotFoundException Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
+            catch (BadRequestException Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
         }
 
     }

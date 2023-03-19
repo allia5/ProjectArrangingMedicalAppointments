@@ -1,13 +1,16 @@
 ﻿using Blazored.LocalStorage;
+using DTO;
 
 namespace Client.Services.Foundations.LocalStorageService
 {
     public class LocalStorageServices : ILocalStorageServices
     {
+
         public ILocalStorageService localStorageService { get; set; }
         public LocalStorageServices(ILocalStorageService localStorageService)
         {
             this.localStorageService = localStorageService;
+
         }
         public async Task ClearAsync()
         {
@@ -19,10 +22,18 @@ namespace Client.Services.Foundations.LocalStorageService
             return await localStorageService.GetItemAsync<T>(key);
         }
 
-        public async Task<string> KeyAsync(int index)
-        {
-            return await localStorageService.KeyAsync(index);
-        }
+        /* public async ValueTask<string> KeyAsync(int index)
+         {
+             try
+             {
+                 return await localStorageService.KeyAsync(index);
+             }
+             catch (Exception e)
+             {
+                 throw new Exception(e.Message);
+             }
+
+         }*/
 
         public async Task RemoveItemAsync(string key)
         {

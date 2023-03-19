@@ -6,7 +6,7 @@
         public Task<T> GetItemAsync<T>(string key);
         public Task RemoveItemAsync(string key);
         public Task ClearAsync();
-        public Task<string> KeyAsync(int index);
+        //public ValueTask<string> KeyAsync(int index);
 
     }
 }

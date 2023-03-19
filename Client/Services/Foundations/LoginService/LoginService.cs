@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using System.Net;
 using Client.Services.Exceptions;
 using Client.Services.Foundations.LocalStorageService;
+using System.Net.Http;
 
 namespace Client.Services.Foundations.LoginService
 {
@@ -22,8 +23,8 @@ namespace Client.Services.Foundations.LoginService
             {
                 if (result.Content.Headers.ContentLength != 0)
                 {
-                    var key = await this.localStorageService.KeyAsync(1);
-                    await this.localStorageService.SetItemAsync(key, result);
+                    var jwt = await result.Content.ReadFromJsonAsync<JwtDto>();
+                    await this.localStorageService.SetItemAsync("JwtLocalStorage", jwt);
                 }
 
             }
@@ -45,12 +46,45 @@ namespace Client.Services.Foundations.LoginService
             }
         }
 
-        public async Task AuthentificationState()
+        public async Task AuthentificationState(JwtDto jwtDto)
         {
-            var Result = await this.HttpClient.GetAsync("/api/UserAccount/AuthenticatedState");
-            if (Result.StatusCode == HttpStatusCode.Unauthorized)
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/UserAccount/AuthenticatedState");
+
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtDto.Token);
+            var result = await HttpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.Unauthorized)
             {
                 throw new UnauthorizedException("Account Not Authonticated in System");
+            }
+
+        }
+
+        public async Task<JwtDto> CorrectEntryToken(JwtDto jwtDto)
+        {
+            var result = await this.HttpClient.PostAsJsonAsync<JwtDto>("/api/UserAccount/TokenAlive", jwtDto);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<JwtDto>();
+                }
+                else
+                {
+                    throw new NullException("Jwt Empty Result");
+                }
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+
+                throw new ProblemException("Error intern Server");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("Token Is Not Correct");
             }
             else
             {

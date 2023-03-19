@@ -2,4 +2,25 @@
 @inherits LoginComponentBase
 @layout EmptyLayout
 
+@if(ErrorMessage!=null){
+<ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}
+<EditForm Model="loginAccount" OnValidSubmit="OnValid" >
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container m-auto w-50 ">
+        <div class="form-floating mb-3  ">
+            <InputText type="email" class="form-control" id="floatingInput" @bind-Value="loginAccount.Email" placeholder="name@example.com"></InputText>
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating mb-3 ">
+            <InputText type="password" class="form-control" @bind-Value="loginAccount.Password" id="floatingPassword" placeholder="Password"></InputText>
+            <label for="floatingPassword">Password</label>
+        </div>
 
+        <button class="btn btn-light mb-3">Login</button>
+        <div class="text">
+            <p class="fw-light fs-6">if you not have account <a href="https://localhost:7286/SignIn">sign up</a></p>
+        </div>
+    </div>
+</EditForm>

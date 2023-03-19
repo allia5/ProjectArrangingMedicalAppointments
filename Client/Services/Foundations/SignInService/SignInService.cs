@@ -58,7 +58,7 @@ namespace Client.Services.Foundations.SignInService
                 }
                 else
                 {
-                    return null;
+                    throw new NullException("Empty Result");
                 }
             }
             else if (result.StatusCode == HttpStatusCode.BadRequest)
