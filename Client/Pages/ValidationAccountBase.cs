@@ -15,6 +15,8 @@ namespace Client.Pages
         public string Id { get; set; }
         [Parameter]
         public string Token { get; set; }
+
+
         protected override async Task OnParametersSetAsync()
         {
             try
@@ -51,3 +53,7 @@ namespace Client.Pages
         }
     }
 }
+
+
+
+

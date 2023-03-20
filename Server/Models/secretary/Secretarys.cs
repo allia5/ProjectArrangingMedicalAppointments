@@ -14,7 +14,7 @@ namespace Server.Models.secretary
         [ForeignKey("CabinetMedical")]
         public Guid IdCabinetMedical { get; set; }
 
-        public CabinetMedical cabinetMedical { get; set; }
+        public CabinetMedical CabinetMedical { get; set; }
         [ForeignKey("User")]
         public string IdUser { get; set; }
         public User User { get; set; }

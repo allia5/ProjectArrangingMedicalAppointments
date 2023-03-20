@@ -15,6 +15,6 @@ namespace Server.Models.Admin
         public CabinetMedical CabinetMedical { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
-        public Doctors Doctor { get; set; }
+        public Doctors Doctors { get; set; }
     }
 }

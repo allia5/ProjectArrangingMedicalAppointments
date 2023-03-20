@@ -12,8 +12,8 @@ namespace Server.Models.SpecialtieDoctor
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
         public Doctors Doctors { get; set; }
-        public int IdSpecialites { get; set; }
         [ForeignKey("Specialite")]
-        public Specialite specialites { get; set; }
+        public int SpecialitesId { get; set; }
+        public Specialite Specialite { get; set; }
     }
 }

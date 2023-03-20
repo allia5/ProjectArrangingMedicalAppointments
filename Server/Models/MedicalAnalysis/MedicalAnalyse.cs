@@ -23,7 +23,7 @@ namespace Server.Models.MedicalAnalysis
         public StatusMedicalAnalyse Status;
         [ForeignKey("User")]
         public string IdUser { get; set; }
-        public User userAccount { get; set; }
+        public User User { get; set; }
         [JsonIgnore]
         public IEnumerable<Analyses> Analyses { get; set; }
     }

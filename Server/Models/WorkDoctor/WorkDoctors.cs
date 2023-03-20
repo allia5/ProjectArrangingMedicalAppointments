@@ -11,6 +11,7 @@ namespace Server.Models.WorkDoctor
         public Guid Id { get; set; }
         public DateTime ReadyTime { get; set; }
         public DateTime EndTime { get; set; }
+        public int TimeOfConsultation { get; set; }
         public StatusService statusServcie { get; set; }
         public StatusReservation statusReservation { get; set; }
         public StatusWork StatusWork { get; set; }
@@ -20,6 +21,6 @@ namespace Server.Models.WorkDoctor
         public Doctors Doctor { get; set; }
         [ForeignKey("CabinetMedical")]
         public Guid IdCabinet { get; set; }
-        public CabinetMedical cabinetMedical { get; set; }
+        public CabinetMedical CabinetMedical { get; set; }
     }
 }

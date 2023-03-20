@@ -14,6 +14,6 @@ namespace Server.Models.FileChronicDisease
         public fileMedicals fileMedicals { get; set; }
         [ForeignKey("ChronicDisease")]
         public int IdChronicDisease { get; set; }
-        public ChronicDisease chronicDisease { get; set; }
+        public ChronicDisease ChronicDisease { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace Server.Models.Doctor
         public StatusDoctor StatusDoctor { get; set; }
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public User UserAccount { get; set; }
+        public User User { get; set; }
 
 
         [JsonIgnore]

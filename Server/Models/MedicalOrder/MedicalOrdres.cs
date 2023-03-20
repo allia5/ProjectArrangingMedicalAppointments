@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Server.Models.Analyse;
+using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
 using Server.Models.fileMedical;
 using Server.Models.Prescriptions;
@@ -25,10 +26,13 @@ namespace Server.Models.MedicalOrder
         public Doctors Doctors { get; set; }
         [ForeignKey("fileMedicals")]
         public Guid IdFileMedical { get; set; }
-        public fileMedicals FileMedicals { get; set; }
+        public fileMedicals fileMedicals { get; set; }
         [ForeignKey("Secretarys")]
         public Guid IdSecritary { get; set; }
         public Secretarys Secretarys { get; set; }
+        [ForeignKey("CabinetMedical")]
+        public Guid IdCabinetMedical { get; set; }
+        public CabinetMedical CabinetMedical { get; set; }
         [JsonIgnore]
         public IEnumerable<Prescription> prescriptions { get; set; }
         [JsonIgnore]

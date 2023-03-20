@@ -86,7 +86,7 @@ namespace Server.Services.UserService
                 ValidateUserIsNull(User);
                 var IdentityResult = await ValidateCompteUserService(User, Token);
                 ValidateIdentityToken(IdentityResult);
-                var userRole = MaperToUserRole(User.Id, Guid.Parse("b275d069-0f86-4069-952b-cba00510638b"));
+                var userRole = MaperToUserRole(User.Id, Guid.Parse("2B102F8F-079C-4AE1-B093-487BA70CF183"));
                 await this.userRoleManager.InsertUserRoleAsync(userRole);
                 return new MessageResultDto
                 {

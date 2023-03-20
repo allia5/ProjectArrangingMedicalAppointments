@@ -60,15 +60,24 @@ namespace Server.Services.Foundation.JwtService
 
 
             };
+            var list = claim.ToList();
+
+
+            // int k = 3;
+
             foreach (var item in userRoles)
             {
-                claim.Append(new Claim(ClaimTypes.Role, item.Name));
+                list.Add(new Claim(ClaimTypes.Role, item.Name));
+                //  claim.Append(new Claim(ClaimTypes.Role, item.Name));
+                //claim[k] = new Claim(ClaimTypes.Role, item.Name);
+                // k++;
             }
+            var claim2 = list.ToArray();
 
 
 
 
-            var token = new JwtSecurityToken(configuration["Jwt:Issuer"], configuration["Jwt:Audience"], claim, expires: DateTime.Now.AddMinutes(720), signingCredentials: credential);
+            var token = new JwtSecurityToken(configuration["Jwt:Issuer"], configuration["Jwt:Audience"], claim2, expires: DateTime.Now.AddMinutes(720), signingCredentials: credential);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 

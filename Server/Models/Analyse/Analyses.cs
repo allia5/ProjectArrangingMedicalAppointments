@@ -22,7 +22,7 @@ namespace Server.Models.Analyse
         public StatusAnalyse Status { get; set; }
         [ForeignKey("Pharmacists")]
         public Guid IdPharmacist { get; set; }
-        public Pharmacists pharmacists { get; set; }
+        public Pharmacists Pharmacists { get; set; }
         [ForeignKey("MedicalOrdres")]
         public Guid IdOrdreMedical { get; set; }
         public MedicalOrdres MedicalOrdres { get; set; }

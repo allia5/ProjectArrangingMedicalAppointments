@@ -23,7 +23,7 @@ namespace Server.Models.MedicalPlannings
         public User user { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
-        public Doctors doctor { get; set; }
+        public Doctors Doctors { get; set; }
         [ForeignKey("CabinetMedical")]
         public Guid IdCabinet { get; set; }
         public CabinetMedical CabinetMedical { get; set; }

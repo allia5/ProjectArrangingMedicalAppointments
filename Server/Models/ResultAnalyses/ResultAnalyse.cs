@@ -14,6 +14,6 @@ namespace Server.Models.ResultAnalyses
         public FileType FileType { get; set; }
         [ForeignKey("Analyses")]
         public Guid IdAnalyse { get; set; }
-        public Analyses analyses { get; set; }
+        public Analyses Analyses { get; set; }
     }
 }

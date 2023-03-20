@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Server.Models.Admin;
+using Server.Models.MedicalOrder;
 using Server.Models.MedicalPlannings;
 using Server.Models.secretary;
 using Server.Models.WorkDoctor;
@@ -26,6 +27,7 @@ namespace Server.Models.CabinetMedicals
         public string MapAdress { get; set; }
         [Required]
         public string numberPhone { get; set; }
+        public StatusService statusService { get; set; }
         [Required]
         public string JobTime { get; set; }
         [Required]
@@ -38,6 +40,8 @@ namespace Server.Models.CabinetMedicals
         public IEnumerable<Secretarys> Secretarys { get; set; }
         [JsonIgnore]
         public IEnumerable<MedicalPlanning> MedicalPlanning { get; set; }
+        [JsonIgnore]
+        public IEnumerable<MedicalOrdres> MedicalOrder { get; set; }
 
 
 

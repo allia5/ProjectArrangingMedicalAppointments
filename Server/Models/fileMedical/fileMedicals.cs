@@ -27,10 +27,10 @@ namespace Server.Models.fileMedical
         public DateTime DateOfCreate { get; set; }
         [ForeignKey("User")]
         public string? IdUser { get; set; }
-        public User user { get; set; }
+        public User User { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
-        public Doctors doctor { get; set; }
+        public Doctors Doctors { get; set; }
         [JsonIgnore]
         public IEnumerable<MedicalOrdres> MedicalOrders { get; set; }
         [JsonIgnore]

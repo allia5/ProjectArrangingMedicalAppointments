@@ -12,8 +12,8 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    [Migration("20230314223047_initialMigration")]
-    partial class initialMigration
+    [Migration("20230320223117_migration3")]
+    partial class migration3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,9 +31,6 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("DoctorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("IdCabinet")
                         .HasColumnType("uniqueidentifier");
 
@@ -42,9 +39,9 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId");
-
                     b.HasIndex("IdCabinet");
+
+                    b.HasIndex("IdDoctor");
 
                     b.ToTable("admins");
                 });
@@ -79,16 +76,13 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("pharmacistsId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdOrdreMedical");
 
-                    b.HasIndex("MedicalAnalyseId");
+                    b.HasIndex("IdPharmacist");
 
-                    b.HasIndex("pharmacistsId");
+                    b.HasIndex("MedicalAnalyseId");
 
                     b.ToTable("Analyses");
                 });
@@ -127,11 +121,28 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("statusService")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NameCabinet");
 
                     b.ToTable("cabinetMedicals");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cf35304b-7896-4b81-8f57-d0dccdccb836"),
+                            Adress = "rue 112 -Kores-Biskra",
+                            JobTime = "8h->16h --dimanche a jeudi",
+                            MapAdress = "",
+                            NameCabinet = "Cabinet Medical El Balsem",
+                            Services = "chirurgie-Coudre blessé-Médecin Général",
+                            image = "",
+                            numberPhone = "0541253658",
+                            statusService = 0
+                        });
                 });
 
             modelBuilder.Entity("Server.Models.ChronicDiseases.ChronicDisease", b =>
@@ -242,14 +253,11 @@ namespace Server.Migrations
                     b.Property<Guid>("IdFile")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("chronicDiseaseId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("IdFile");
+                    b.HasIndex("IdChronicDisease");
 
-                    b.HasIndex("chronicDiseaseId");
+                    b.HasIndex("IdFile");
 
                     b.ToTable("FileChronicDiseases");
                 });
@@ -270,20 +278,17 @@ namespace Server.Migrations
 
                     b.Property<string>("IdUser")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("NameMedicalAnalyse")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("userAccountId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("NameMedicalAnalyse");
+                    b.HasIndex("IdUser");
 
-                    b.HasIndex("userAccountId");
+                    b.HasIndex("NameMedicalAnalyse");
 
                     b.ToTable("medicalAnalyses");
                 });
@@ -294,7 +299,7 @@ namespace Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("FileMedicalsId")
+                    b.Property<Guid>("IdCabinetMedical")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("IdDoctor")
@@ -318,9 +323,11 @@ namespace Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileMedicalsId");
+                    b.HasIndex("IdCabinetMedical");
 
                     b.HasIndex("IdDoctor");
+
+                    b.HasIndex("IdFileMedical");
 
                     b.HasIndex("IdSecritary");
 
@@ -356,9 +363,6 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("doctorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("userId")
                         .HasColumnType("nvarchar(450)");
 
@@ -366,7 +370,7 @@ namespace Server.Migrations
 
                     b.HasIndex("IdCabinet");
 
-                    b.HasIndex("doctorId");
+                    b.HasIndex("IdDoctor");
 
                     b.HasIndex("userId");
 
@@ -544,12 +548,9 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("analysesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("analysesId");
+                    b.HasIndex("IdAnalyse");
 
                     b.ToTable("resultAnalyses");
                 });
@@ -727,17 +728,14 @@ namespace Server.Migrations
                     b.Property<Guid>("IdDoctor")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("IdSpecialites")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Specialite")
+                    b.Property<int>("SpecialitesId")
                         .HasColumnType("int");
 
                     b.HasKey("id");
 
                     b.HasIndex("IdDoctor");
 
-                    b.HasIndex("Specialite");
+                    b.HasIndex("SpecialitesId");
 
                     b.ToTable("specialtiesDoctors");
                 });
@@ -764,44 +762,44 @@ namespace Server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("2af56642-d47e-45c1-a624-11a87690d687"),
-                            ConcurrencyStamp = "2054539d-32ec-4db0-af45-be7368c95701",
+                            Id = new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"),
+                            ConcurrencyStamp = "6a13774d-b4e2-4979-a130-2a6491ae6a0d",
                             Name = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("48d6d414-b030-451b-8965-9d7723039f7a"),
-                            ConcurrencyStamp = "1cf7beb9-99c6-4c99-8ba9-1d03d6928e3b",
+                            Id = new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"),
+                            ConcurrencyStamp = "c7dbb838-5558-460c-b798-4513c13e791c",
                             Name = "PATIENT"
                         },
                         new
                         {
-                            Id = new Guid("d14b3e47-5d61-47d3-b7df-6c02979c37e4"),
-                            ConcurrencyStamp = "5dbb98b4-2b04-463c-8778-934dbb8cc241",
+                            Id = new Guid("0d518584-64a4-424b-b011-7283083394b8"),
+                            ConcurrencyStamp = "8096d543-6cfa-4d99-bca3-c6aa52eba7fc",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
-                            Id = new Guid("832476e3-d289-4c47-aa22-8beceea22c9d"),
-                            ConcurrencyStamp = "ec8c42d1-5a19-471d-bff9-c4a4878eb11b",
+                            Id = new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"),
+                            ConcurrencyStamp = "17059315-dc37-4e24-aba8-689388ba5757",
                             Name = "MEDECIN"
                         },
                         new
                         {
-                            Id = new Guid("1b3f2841-d086-4def-8bff-e0ebcdffcd02"),
-                            ConcurrencyStamp = "46c09e0a-e8a6-4e10-8339-53f2250d2827",
+                            Id = new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"),
+                            ConcurrencyStamp = "ea866171-1012-41aa-bcf5-d0db08ba0554",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
-                            Id = new Guid("a5b089be-9b77-41bf-a864-e1ca0ae575d7"),
-                            ConcurrencyStamp = "26f38e8a-c10a-41b3-affd-8cfdc87711d9",
+                            Id = new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"),
+                            ConcurrencyStamp = "6faa5e3a-2dd5-4e40-a6a4-d6999162def5",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
-                            Id = new Guid("28b44ccb-cb89-43f4-90da-4caf3f4d483a"),
-                            ConcurrencyStamp = "e251d0d5-10d5-4ad4-8b99-7d3b3dc60053",
+                            Id = new Guid("232d07c5-711e-4802-a048-f2f73804ea40"),
+                            ConcurrencyStamp = "a9730119-ee11-462e-ab6a-699ade68b43c",
                             Name = "ANALYSE"
                         });
                 });
@@ -941,8 +939,8 @@ namespace Server.Migrations
                     b.Property<int>("StatusWork")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("cabinetMedicalId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("TimeOfConsultation")
+                        .HasColumnType("int");
 
                     b.Property<int>("statusReservation")
                         .HasColumnType("int");
@@ -954,7 +952,7 @@ namespace Server.Migrations
 
                     b.HasIndex("DoctorId");
 
-                    b.HasIndex("cabinetMedicalId");
+                    b.HasIndex("IdCabinet");
 
                     b.ToTable("WorkDoctors");
                 });
@@ -968,11 +966,14 @@ namespace Server.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DateOfCreate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("IdDoctor")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("IdUser")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Lastname")
                         .IsRequired()
@@ -985,21 +986,15 @@ namespace Server.Migrations
                     b.Property<int>("Sexe")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("doctorId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("firstname")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("userId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("doctorId");
+                    b.HasIndex("IdDoctor");
 
-                    b.HasIndex("userId");
+                    b.HasIndex("IdUser");
 
                     b.HasIndex("firstname", "Lastname");
 
@@ -1019,35 +1014,32 @@ namespace Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("cabinetMedicalId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("IdUser");
+                    b.HasIndex("IdCabinetMedical");
 
-                    b.HasIndex("cabinetMedicalId");
+                    b.HasIndex("IdUser");
 
                     b.ToTable("Secretarys");
                 });
 
             modelBuilder.Entity("Server.Models.Admin.Admins", b =>
                 {
-                    b.HasOne("Server.Models.Doctor.Doctors", "Doctor")
-                        .WithMany("Admin")
-                        .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Server.Models.CabinetMedicals.CabinetMedical", "CabinetMedical")
                         .WithMany("Admins")
                         .HasForeignKey("IdCabinet")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Server.Models.Doctor.Doctors", "Doctors")
+                        .WithMany("Admin")
+                        .HasForeignKey("IdDoctor")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("CabinetMedical");
 
-                    b.Navigation("Doctor");
+                    b.Navigation("Doctors");
                 });
 
             modelBuilder.Entity("Server.Models.Analyse.Analyses", b =>
@@ -1058,67 +1050,68 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Server.Models.Pharmacist.Pharmacists", "Pharmacists")
+                        .WithMany()
+                        .HasForeignKey("IdPharmacist")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Server.Models.MedicalAnalysis.MedicalAnalyse", null)
                         .WithMany("Analyses")
                         .HasForeignKey("MedicalAnalyseId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Server.Models.Pharmacist.Pharmacists", "pharmacists")
-                        .WithMany()
-                        .HasForeignKey("pharmacistsId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("MedicalOrdres");
 
-                    b.Navigation("pharmacists");
+                    b.Navigation("Pharmacists");
                 });
 
             modelBuilder.Entity("Server.Models.Doctor.Doctors", b =>
                 {
-                    b.HasOne("Server.Models.UserAccount.User", "UserAccount")
+                    b.HasOne("Server.Models.UserAccount.User", "User")
                         .WithMany("Doctor")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("UserAccount");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Server.Models.FileChronicDisease.FileChronicDiseases", b =>
                 {
+                    b.HasOne("Server.Models.ChronicDiseases.ChronicDisease", "ChronicDisease")
+                        .WithMany()
+                        .HasForeignKey("IdChronicDisease")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Server.Models.fileMedical.fileMedicals", "fileMedicals")
                         .WithMany("FileChronicDiseases")
                         .HasForeignKey("IdFile")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.ChronicDiseases.ChronicDisease", "chronicDisease")
-                        .WithMany()
-                        .HasForeignKey("chronicDiseaseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("chronicDisease");
+                    b.Navigation("ChronicDisease");
 
                     b.Navigation("fileMedicals");
                 });
 
             modelBuilder.Entity("Server.Models.MedicalAnalysis.MedicalAnalyse", b =>
                 {
-                    b.HasOne("Server.Models.UserAccount.User", "userAccount")
+                    b.HasOne("Server.Models.UserAccount.User", "User")
                         .WithMany("MedicalAnalyse")
-                        .HasForeignKey("userAccountId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("IdUser")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Navigation("userAccount");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Server.Models.MedicalOrder.MedicalOrdres", b =>
                 {
-                    b.HasOne("Server.Models.fileMedical.fileMedicals", "FileMedicals")
-                        .WithMany("MedicalOrders")
-                        .HasForeignKey("FileMedicalsId")
+                    b.HasOne("Server.Models.CabinetMedicals.CabinetMedical", "CabinetMedical")
+                        .WithMany("MedicalOrder")
+                        .HasForeignKey("IdCabinetMedical")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1128,17 +1121,25 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Server.Models.fileMedical.fileMedicals", "fileMedicals")
+                        .WithMany("MedicalOrders")
+                        .HasForeignKey("IdFileMedical")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Server.Models.secretary.Secretarys", "Secretarys")
                         .WithMany("MedicalOrdres")
                         .HasForeignKey("IdSecritary")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("CabinetMedical");
+
                     b.Navigation("Doctors");
 
-                    b.Navigation("FileMedicals");
-
                     b.Navigation("Secretarys");
+
+                    b.Navigation("fileMedicals");
                 });
 
             modelBuilder.Entity("Server.Models.MedicalPlannings.MedicalPlanning", b =>
@@ -1149,9 +1150,9 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.Doctor.Doctors", "doctor")
+                    b.HasOne("Server.Models.Doctor.Doctors", "Doctors")
                         .WithMany("MedicalPlanning")
-                        .HasForeignKey("doctorId")
+                        .HasForeignKey("IdDoctor")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1162,7 +1163,7 @@ namespace Server.Migrations
 
                     b.Navigation("CabinetMedical");
 
-                    b.Navigation("doctor");
+                    b.Navigation("Doctors");
 
                     b.Navigation("user");
                 });
@@ -1240,13 +1241,13 @@ namespace Server.Migrations
 
             modelBuilder.Entity("Server.Models.ResultAnalyses.ResultAnalyse", b =>
                 {
-                    b.HasOne("Server.Models.Analyse.Analyses", "analyses")
+                    b.HasOne("Server.Models.Analyse.Analyses", "Analyses")
                         .WithMany("ResultAnalyse")
-                        .HasForeignKey("analysesId")
+                        .HasForeignKey("IdAnalyse")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("analyses");
+                    b.Navigation("Analyses");
                 });
 
             modelBuilder.Entity("Server.Models.ResultsRadio.ResultRadio", b =>
@@ -1268,15 +1269,15 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.Specialites.Specialite", "specialites")
+                    b.HasOne("Server.Models.Specialites.Specialite", "Specialite")
                         .WithMany("specialtiesDoctors")
-                        .HasForeignKey("Specialite")
+                        .HasForeignKey("SpecialitesId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Doctors");
 
-                    b.Navigation("specialites");
+                    b.Navigation("Specialite");
                 });
 
             modelBuilder.Entity("Server.Models.UserRoles.UserRole", b =>
@@ -1306,52 +1307,52 @@ namespace Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.CabinetMedicals.CabinetMedical", "cabinetMedical")
+                    b.HasOne("Server.Models.CabinetMedicals.CabinetMedical", "CabinetMedical")
                         .WithMany("WorkDoctors")
-                        .HasForeignKey("cabinetMedicalId")
+                        .HasForeignKey("IdCabinet")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Doctor");
+                    b.Navigation("CabinetMedical");
 
-                    b.Navigation("cabinetMedical");
+                    b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("Server.Models.fileMedical.fileMedicals", b =>
                 {
-                    b.HasOne("Server.Models.Doctor.Doctors", "doctor")
+                    b.HasOne("Server.Models.Doctor.Doctors", "Doctors")
                         .WithMany("fileMedical")
-                        .HasForeignKey("doctorId")
+                        .HasForeignKey("IdDoctor")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.UserAccount.User", "user")
+                    b.HasOne("Server.Models.UserAccount.User", "User")
                         .WithMany("fileMedical")
-                        .HasForeignKey("userId")
+                        .HasForeignKey("IdUser")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("doctor");
+                    b.Navigation("Doctors");
 
-                    b.Navigation("user");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Server.Models.secretary.Secretarys", b =>
                 {
+                    b.HasOne("Server.Models.CabinetMedicals.CabinetMedical", "CabinetMedical")
+                        .WithMany("Secretarys")
+                        .HasForeignKey("IdCabinetMedical")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Server.Models.UserAccount.User", "User")
                         .WithMany("Secretarys")
                         .HasForeignKey("IdUser")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Server.Models.CabinetMedicals.CabinetMedical", "cabinetMedical")
-                        .WithMany("Secretarys")
-                        .HasForeignKey("cabinetMedicalId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Navigation("CabinetMedical");
 
                     b.Navigation("User");
-
-                    b.Navigation("cabinetMedical");
                 });
 
             modelBuilder.Entity("Server.Models.Analyse.Analyses", b =>
@@ -1362,6 +1363,8 @@ namespace Server.Migrations
             modelBuilder.Entity("Server.Models.CabinetMedicals.CabinetMedical", b =>
                 {
                     b.Navigation("Admins");
+
+                    b.Navigation("MedicalOrder");
 
                     b.Navigation("MedicalPlanning");
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Server.Models.Admin;
 using Server.Models.Analyse;
 using Server.Models.CabinetMedicals;
@@ -39,51 +40,65 @@ namespace Server.Data
         {
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<CabinetMedical>().HasData(new CabinetMedical
+            {
+                Id = Guid.Parse("CF35304B-7896-4B81-8F57-D0DCCDCCB836"),
+                NameCabinet = "Cabinet Medical El Balsem",
+                Adress = "rue 112 -Kores-Biskra",
+                JobTime = "8h->16h --dimanche a jeudi",
+                image = "",
+                numberPhone = "0541253658",
+                MapAdress = "",
+                Services = "chirurgie-Coudre blessé-Médecin Général",
+
+
+
+            });
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("CF35304B-0241-4B81-8F57-D0DCCDCCB836"),
                 Name = "ADMIN"
 
 
             });
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("2B102F8F-079C-4AE1-B093-487BA70CF183"),
                 Name = "PATIENT"
 
 
             });
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("0D518584-64A4-424B-B011-7283083394B8"),
                 Name = "SECRITAIRE"
 
 
             });
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("14E8987F-77B0-44A9-A641-6C6779B9564C"),
                 Name = "MEDECIN"
 
 
             });
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("03D2395F-A472-4A41-B95F-45828D5F8AF4"),
                 Name = "Radiologue".ToUpper()
 
 
             });
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("0916F1E5-FF87-4D4F-89B2-D6DBB922027E"),
                 Name = "pharmacien".ToUpper()
 
 
             });
             modelBuilder.Entity<Role>().HasData(new Role
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.Parse("232D07C5-711E-4802-A048-F2F73804EA40"),
                 Name = "analyse".ToUpper()
 
 
@@ -343,14 +358,14 @@ namespace Server.Data
 
 
 
-
+            base.OnModelCreating(modelBuilder);
 
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-            base.OnModelCreating(modelBuilder);
+
 
         }
         public DbSet<User> users { get; set; }
