@@ -3,6 +3,7 @@ using Client.Services.Foundations.AuthentificationStatService;
 using Client.Services.Foundations.CabinetMedicalService;
 using DTO;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Reflection.Metadata;
 
 namespace Client.Pages
@@ -10,6 +11,8 @@ namespace Client.Pages
     public class InformationCabinetMedicalComponentBase : ComponentBase
     {
         public string ErrorMessage = null;
+        public string SuccessMessage = null;
+
         public CabinetMedicalDto CabinetMedicalInformation = new CabinetMedicalDto();
         [Inject]
         public ICabinetMedicalService CabinetMedicalService { get; set; }
@@ -52,8 +55,50 @@ namespace Client.Pages
                 ErrorMessage = "Error Intern ";
             }
         }
+        protected async Task HandleFileSelected(InputFileChangeEventArgs e)
+        {
+            var file = e.File;
+            using (var stream = file.OpenReadStream())
+            {
+                var buffer = new byte[file.Size];
+                await stream.ReadAsync(buffer, 0, (int)file.Size);
+                CabinetMedicalInformation.Image = buffer;
+            }
+        }
         public async Task Update()
         {
+            try
+            {
+                var result = await this.CabinetMedicalService.UpdateInformationCabinetMedical(CabinetMedicalInformation);
+                if (result != null)
+                {
+                    SuccessMessage = "Update Success";
+                }
+                else
+                {
+                    ErrorMessage = "Update Failed";
+                }
+            }
+            catch (BadRequestException Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
+            catch (NoContentException Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
+            catch (UnauthorizedException Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
+            catch (ProblemException Ex)
+            {
+                this.ErrorMessage = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                this.ErrorMessage = "Intern Error";
+            }
 
         }
     }

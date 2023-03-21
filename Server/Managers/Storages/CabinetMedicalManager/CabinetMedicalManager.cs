@@ -21,5 +21,20 @@ namespace Server.Managers.Storages.CabinetMedicalManager
                           join Cabinet in ServerDbContext.cabinetMedicals on admin.IdCabinet equals Cabinet.Id
                           select Cabinet).FirstAsync();
         }
+
+        public async Task<CabinetMedical> UpdateCabinetMedical(CabinetMedical cabinetMedical)
+        {
+            try
+            {
+                var result = this.ServerDbContext.cabinetMedicals.Update(cabinetMedical);
+                await ServerDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+        }
     }
 }

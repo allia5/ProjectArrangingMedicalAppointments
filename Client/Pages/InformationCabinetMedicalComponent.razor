@@ -1,7 +1,11 @@
 ﻿@page "/InformationCabinetMedical"
 @inherits InformationCabinetMedicalComponentBase
 
-
+@if(ErrorMessage != null){
+   <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
+}else if(SuccessMessage != null){
+     <CorrectRoutingMessage Message="@SuccessMessage"></CorrectRoutingMessage>
+}
 
 
 <EditForm Model="CabinetMedicalInformation" OnValidSubmit="Update">
@@ -29,7 +33,7 @@
             <label for="floatingPassword">Adress Map</label>
         </div>
         <div class="form-floating mb-3 ">
-            <InputFile type="text" class="form-control"  id="floatingPassword" ></InputFile>
+            <InputFile OnChange="HandleFileSelected" />
             <label for="floatingPassword">Upload Image</label>
         </div>
         <div class="form-floating mb-3 ">

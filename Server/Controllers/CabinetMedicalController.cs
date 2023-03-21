@@ -29,7 +29,7 @@ namespace Server.Controllers
                 return await this.CabinetMedicalService.SelectCabinetMedicalByAdmin(email);
 
             }
-            catch (NullDataStorageException Ex)
+            catch (StorageValidationException Ex)
             {
                 return NotFound(Ex.InnerException);
             }
@@ -42,5 +42,30 @@ namespace Server.Controllers
                 return Problem(Ex.Message);
             }
         }
+
+        [HttpPatch("UpdateCabinetMedical")]
+
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "ADMIN")]
+        public async Task<ActionResult<CabinetMedicalDto>> UpdateCabinet([FromBody] CabinetMedicalDto cabinetMedicalDto)
+        {
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.CabinetMedicalService.UpdateCabinetMedicalService(email, cabinetMedicalDto);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (StorageValidationException Ex)
+            {
+                return NoContent();
+            }
+            catch (Exception Ex)
+            {
+                return Problem(Ex.Message);
+            }
+        }
+
     }
 }

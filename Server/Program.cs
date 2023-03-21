@@ -7,7 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Server.Data;
 using Server.Managers.Storages.CabinetMedicalManager;
+using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.RolesManager;
+using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.UserRoleManager;
 using Server.Managers.UserManager;
 using Server.Models.UserAccount;
@@ -75,6 +77,8 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<ICabinetMedicalManager, CabinetMedicalManager>();
 builder.Services.AddScoped<ICabinetMedicalService, CabinetMedicalService>();
 builder.Services.AddScoped<IUserRoleManager, UserRoleManager>();
+builder.Services.AddScoped<IDoctorManager, DoctorManager>();
+builder.Services.AddScoped<ISpecialitiesManager, SpecialitiesManager>();
 builder.Services.AddScoped<IRolesManager, RolesManager>();
 
 

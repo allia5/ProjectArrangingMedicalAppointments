@@ -27,6 +27,26 @@ namespace Server.Services.Foundation.CabinetMedicalService
             return Result;
         });
 
+        public async Task<CabinetMedicalDto> UpdateCabinetMedicalService(string Email, CabinetMedicalDto cabinetMedicalDto) =>
+        await TryCatch(async () =>
+        {
+            ValidateEntryOnUpdate(Email, cabinetMedicalDto);
+            var User = await this._userManager.FindByEmailAsync(Email);
+            ValidateUserIsNull(User);
+            var CabinetMedical = await this.cabinetMedicalManager.SelectCabinetMedicalByUserId(User.Id);
+            ValidateCabinetMedicalIsNull(CabinetMedical);
+            var newCabinetMedical = cabinetMedicalDto.MapperToNewCabinetMedical(CabinetMedical);
+            var ResultUpdate = await this.cabinetMedicalManager.UpdateCabinetMedical(newCabinetMedical);
+            ValidateCabinetMedicalIsNull(ResultUpdate);
+            var Result = MapperToCabinetMedicalDto(ResultUpdate);
+            return Result;
+        }
+            );
+
+
+
+
+
 
 
     }
