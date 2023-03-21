@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using Server.Models.Admin;
 using Server.Models.MedicalOrder;
@@ -6,6 +7,7 @@ using Server.Models.MedicalPlannings;
 using Server.Models.secretary;
 using Server.Models.WorkDoctor;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 
 namespace Server.Models.CabinetMedicals
@@ -21,8 +23,10 @@ namespace Server.Models.CabinetMedicals
         public string NameCabinet { get; set; }
         [Required]
         public string Adress { get; set; }
-
-        public string image { get; set; }
+        [Column(TypeName = "varbinary")]
+        [MaxLength(100)]
+        public byte[]? image { get; set; }
+       // public string image { get; set; }
         [Required]
         public string MapAdress { get; set; }
         [Required]

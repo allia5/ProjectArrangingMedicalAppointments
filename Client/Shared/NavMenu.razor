@@ -17,7 +17,7 @@
 
             <Authorized>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+            <NavLink class="nav-link"  Match="NavLinkMatch.All">
                      @context.User?.FindFirst(ClaimTypes.Name)?.Value
             </NavLink>
         </div>
@@ -65,7 +65,7 @@
 
             <Authorized>
                 <div class="nav-item px-3" >
-                    <NavLink class="nav-link" Match="NavLinkMatch.All">
+                    <NavLink href="/InformationCabinetMedical" class="nav-link" Match="NavLinkMatch.All">
                         About  clinic
                     </NavLink>
                 </div>

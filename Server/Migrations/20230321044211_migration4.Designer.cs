@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Server.Data;
 
@@ -11,9 +12,11 @@ using Server.Data;
 namespace Server.Migrations
 {
     [DbContext(typeof(ServerDbContext))]
-    partial class ServerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230321044211_migration4")]
+    partial class migration4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -759,43 +762,43 @@ namespace Server.Migrations
                         new
                         {
                             Id = new Guid("cf35304b-0241-4b81-8f57-d0dccdccb836"),
-                            ConcurrencyStamp = "cdd2696f-424f-497c-8d1a-492a130d70ec",
+                            ConcurrencyStamp = "ca2a487f-52d4-4997-8ff8-7014086f7051",
                             Name = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("2b102f8f-079c-4ae1-b093-487ba70cf183"),
-                            ConcurrencyStamp = "9da9df2e-e622-44ad-9165-c2bb972e4602",
+                            ConcurrencyStamp = "04436c93-a407-4596-bcff-23781b53d731",
                             Name = "PATIENT"
                         },
                         new
                         {
                             Id = new Guid("0d518584-64a4-424b-b011-7283083394b8"),
-                            ConcurrencyStamp = "d7160436-4f31-41fc-8372-78fc3e0ef70b",
+                            ConcurrencyStamp = "21c4491a-1264-4971-9e06-ee314421ffb1",
                             Name = "SECRITAIRE"
                         },
                         new
                         {
                             Id = new Guid("14e8987f-77b0-44a9-a641-6c6779b9564c"),
-                            ConcurrencyStamp = "a80833a1-9bfd-4e58-99fd-9270a82862ef",
+                            ConcurrencyStamp = "dad24669-9cd4-4ef8-9f92-a5e1d29179d9",
                             Name = "MEDECIN"
                         },
                         new
                         {
                             Id = new Guid("03d2395f-a472-4a41-b95f-45828d5f8af4"),
-                            ConcurrencyStamp = "83c10472-f9e7-449f-90b6-363d8c1aaf6a",
+                            ConcurrencyStamp = "dc8df2e7-7adb-437a-acfd-428ac3b36d1b",
                             Name = "RADIOLOGUE"
                         },
                         new
                         {
                             Id = new Guid("0916f1e5-ff87-4d4f-89b2-d6dbb922027e"),
-                            ConcurrencyStamp = "d00aabfd-98c2-4a1f-a923-ebc0e7b5f58f",
+                            ConcurrencyStamp = "b35e094f-8d8c-4bbe-bf82-c803a8235644",
                             Name = "PHARMACIEN"
                         },
                         new
                         {
                             Id = new Guid("232d07c5-711e-4802-a048-f2f73804ea40"),
-                            ConcurrencyStamp = "82255efb-98f5-4e7c-9586-556cfd22e756",
+                            ConcurrencyStamp = "1bc86afa-3d88-4fb3-bb2a-6cd9e297d24c",
                             Name = "ANALYSE"
                         });
                 });

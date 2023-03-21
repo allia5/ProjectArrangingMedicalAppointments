@@ -1,6 +1,7 @@
 using Blazored.LocalStorage;
 using Client;
 using Client.Services.Foundations.AuthentificationStatService;
+using Client.Services.Foundations.CabinetMedicalService;
 using Client.Services.Foundations.LocalStorageService;
 using Client.Services.Foundations.LoginService;
 using Client.Services.Foundations.SignInService;
@@ -19,6 +20,7 @@ builder.Services.AddScoped<ISignInService, SignInService>();
 builder.Services.AddScoped<ILocalStorageServices, LocalStorageServices>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<AuthentificationStatService>();
+builder.Services.AddScoped<ICabinetMedicalService, CabinetMedicalService>();
 builder.Services.AddScoped<AuthenticationStateProvider>((provider => provider.GetRequiredService<AuthentificationStatService>()));
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();

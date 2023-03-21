@@ -40,13 +40,14 @@ namespace Server.Data
         {
 
             base.OnModelCreating(modelBuilder);
+            
             modelBuilder.Entity<CabinetMedical>().HasData(new CabinetMedical
             {
                 Id = Guid.Parse("CF35304B-7896-4B81-8F57-D0DCCDCCB836"),
                 NameCabinet = "Cabinet Medical El Balsem",
                 Adress = "rue 112 -Kores-Biskra",
                 JobTime = "8h->16h --dimanche a jeudi",
-                image = "",
+                
                 numberPhone = "0541253658",
                 MapAdress = "",
                 Services = "chirurgie-Coudre blessé-Médecin Général",
