@@ -15,5 +15,20 @@ namespace Server.Managers.Storages.WorkDoctorManager
         {
             return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdCabinet == IdCabinet select Work).ToListAsync();
         }
+
+        public async Task<WorkDoctors> InsertWorkDoctor(WorkDoctors workDoctors)
+        {
+            try
+            {
+                var result = await this.ServerDbContext.WorkDoctors.AddAsync(workDoctors);
+                await this.ServerDbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+          
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace Server.Services.Foundation.DoctorService
         public static DoctorInformationDto MapperToDoctorInformationDto(List<Specialite> specialities, User user)
         {
             List<string> names = specialities.Select(p => p.NameSpecialite).ToList();
-            return new DoctorInformationDto
+            var result = new DoctorInformationDto
             {
                 Email = user.Email,
                 DateOfBirth = user.DateOfBirth,
@@ -21,6 +21,8 @@ namespace Server.Services.Foundation.DoctorService
                 Specialities = names
 
             };
+
+            return result;
         }
     }
 }

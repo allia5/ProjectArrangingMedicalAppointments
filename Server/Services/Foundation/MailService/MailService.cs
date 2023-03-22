@@ -122,5 +122,10 @@ namespace Server.Services.Foundation.MailService
                 throw new Exception(e.Message);
             }
         }
+
+        public async Task SendEmailNotification(MailRequest mailRequest)
+        {
+            await SendEmail(mailRequest);
+        }
     }
 }

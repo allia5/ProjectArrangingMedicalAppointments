@@ -2,7 +2,10 @@
 {
     public enum StatusWork
     {
-        active = 1,
-        notActive = 0
+        accepted = 1,
+        Notaccepted = 2,
+        still = 0
+
+
     }
 }

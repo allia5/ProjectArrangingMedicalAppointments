@@ -54,8 +54,11 @@ namespace Server.Services.Foundation.DoctorService
                   var ListOfSpecialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(Doctor.Id);
                   var informationDoctor = MapperToDoctorInformationDto(ListOfSpecialities, user);
                   InformationsDoctor.Add(informationDoctor);
+                  ListOfSpecialities.Clear();
 
               }
+              Sign = true;
+
           }
           return InformationsDoctor;
 

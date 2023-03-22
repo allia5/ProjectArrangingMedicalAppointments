@@ -12,6 +12,9 @@
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    @if(IsLoding==true){
+        <Client.Pages.WaitComponent></Client.Pages.WaitComponent>
+    }
     <nav class="flex-column">
         <AuthorizeView>
 

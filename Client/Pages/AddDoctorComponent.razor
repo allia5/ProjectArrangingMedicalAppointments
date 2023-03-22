@@ -2,7 +2,6 @@
 @inherits AddDoctorComponentBase
 
 
-
 <table class="table caption-top">
     <caption>List of users</caption>
     <thead>
@@ -18,7 +17,10 @@
 
         </tr>
     </thead>
+   
     <tbody>
+        
+
         @foreach(var item in Informations){
 
        
@@ -29,9 +31,26 @@
                 <td>@item.Sexe</td>
                 <td>@item.DateOfBirth</td>
                 <td>@item.NumberPhone</td>
-                <td>Specialities</td>
-            <td><button class="btn btn-success">Send</button></td>
+                <td>@foreach (var Sp in @item.Specialities)
+                    {
+                         <a>@Sp</a><br />
+
+                       
+                    }   
+                    </td>
+                <td><button @onclick="() =>SendInvitation(item.IdUser)"  class="btn btn-success">Send
+                    @if(Index==item.IdUser){
+
+                    
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">Loading...</span>
+                    }
+                </button></td>
         </tr>
         }
     </tbody>
 </table>
+@if (IsLoading == true)
+{
+    <WaitComponent></WaitComponent>
+}

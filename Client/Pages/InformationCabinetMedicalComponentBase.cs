@@ -12,6 +12,7 @@ namespace Client.Pages
     {
         public string ErrorMessage = null;
         public string SuccessMessage = null;
+        public bool IsLoding = true;
 
         public CabinetMedicalDto CabinetMedicalInformation = new CabinetMedicalDto();
         [Inject]
@@ -28,6 +29,7 @@ namespace Client.Pages
                 if (ResultAuth.User.Identity?.IsAuthenticated ?? false)
                 {
                     this.CabinetMedicalInformation = await this.CabinetMedicalService.GetInformationFromCabinetMedical();
+                    this.IsLoding = false;
                 }
                 else
                 {

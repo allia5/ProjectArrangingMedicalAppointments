@@ -9,6 +9,7 @@ namespace Client.Shared
 {
     public class NavMenuBase : ComponentBase
     {
+        protected bool IsLoding = true;
         [Inject]
         public ILocalStorageServices localStorages { get; set; }
         [Inject]
@@ -18,11 +19,12 @@ namespace Client.Shared
         protected override async Task OnInitializedAsync()
         {
 
-            // await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
+            await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
+            this.IsLoding = false;
         }
-       
 
-      
+
+
         public async Task Logout()
         {
             await this.localStorages.RemoveItemAsync("JwtLocalStorage");
