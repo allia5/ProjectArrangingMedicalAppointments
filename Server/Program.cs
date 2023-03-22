@@ -11,9 +11,11 @@ using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.RolesManager;
 using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.UserRoleManager;
+using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.UserManager;
 using Server.Models.UserAccount;
 using Server.Services.Foundation.CabinetMedicalService;
+using Server.Services.Foundation.DoctorService;
 using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
 using Server.Services.UserService;
@@ -80,6 +82,8 @@ builder.Services.AddScoped<IUserRoleManager, UserRoleManager>();
 builder.Services.AddScoped<IDoctorManager, DoctorManager>();
 builder.Services.AddScoped<ISpecialitiesManager, SpecialitiesManager>();
 builder.Services.AddScoped<IRolesManager, RolesManager>();
+builder.Services.AddScoped<IWorkDoctorManager, WorkDoctorManager>();
+builder.Services.AddScoped<IDoctorService, DoctorService>();
 
 
 builder.Services.AddControllers();

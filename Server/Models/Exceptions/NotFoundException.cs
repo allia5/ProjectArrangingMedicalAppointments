@@ -9,7 +9,7 @@ namespace Server.Models.Doctor.Exceptions
 {
     public class NotFoundException : Exception
     {
-        public NotFoundException(Guid userId, string actor)
-            : base(message: $"Couldn't find {actor} with id: {userId}.") { }
+        public NotFoundException(string actor)
+            : base(message: $"Couldn't find Data.") { }
     }
 }

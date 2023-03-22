@@ -15,6 +15,7 @@ namespace Server.Models.WorkDoctor
         public StatusService statusServcie { get; set; }
         public StatusReservation statusReservation { get; set; }
         public StatusWork StatusWork { get; set; }
+        public DateTime DateInvitation { get; set; }
         public int NbPatientAvailble { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }

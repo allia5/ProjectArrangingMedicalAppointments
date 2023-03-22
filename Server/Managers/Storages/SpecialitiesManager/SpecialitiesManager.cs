@@ -1,4 +1,5 @@
-﻿using Server.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Server.Data;
 using Server.Models.Specialites;
 
 namespace Server.Managers.Storages.SpecialitiesManager
@@ -10,9 +11,12 @@ namespace Server.Managers.Storages.SpecialitiesManager
         {
             this.ServerDbContext = ServerDbContext;
         }
-        public async Task<List<Specialite>> SelectSpecialitiesByIdUser(string IdUser)
+        public async Task<List<Specialite>> SelectSpecialitiesByIdDoctor(Guid IdDoctor)
         {
-            return await (from userItem in this.ServerDbContext.users join doctorItem in this.ServerDbContext.Doctors on userItem.Id equals doctorItem.UserId join spDoctor in this.ServerDbContext.specialtiesDoctors )
+            return await (from doctorItem in this.ServerDbContext.Doctors
+                          join DocSp in this.ServerDbContext.specialtiesDoctors on doctorItem.Id equals DocSp.IdDoctor
+                          join Sp in this.ServerDbContext.specialites on DocSp.SpecialitesId equals Sp.Id
+                          select Sp).ToListAsync();
         }
     }
 }

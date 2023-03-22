@@ -4,6 +4,6 @@ namespace Server.Managers.Storages.SpecialitiesManager
 {
     public interface ISpecialitiesManager
     {
-        public Task<List<Specialite>> SelectSpecialitiesByIdUser(string IdUser);
+        public Task<List<Specialite>> SelectSpecialitiesByIdDoctor(Guid IdDoctor);
     }
 }
