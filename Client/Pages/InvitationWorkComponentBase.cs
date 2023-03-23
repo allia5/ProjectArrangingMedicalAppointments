@@ -7,7 +7,7 @@ namespace Client.Pages
 {
     public class InvitationWorkComponentBase : ComponentBase
     {
-        protected Guid Index { get; set; }
+        protected string Index { get; set; }
         protected bool IsLoding = true;
         public List<InvitationsDoctorDto> invitationsDoctorDtos = new List<InvitationsDoctorDto>();
         [Inject]

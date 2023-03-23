@@ -8,7 +8,7 @@ namespace DTO
 {
     public class InvitationsDoctorDto
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public DateTime DateInvitation { get; set; }
         public string NameCabinet { get; set; }
         public string Services { get; set; }

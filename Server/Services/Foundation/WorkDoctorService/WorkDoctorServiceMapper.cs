@@ -4,6 +4,7 @@ using Server.Models.CabinetMedicals;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 using System;
+using static Server.Utility.Utility;
 
 namespace Server.Services.Foundation.WorkDoctorService
 {
@@ -42,7 +43,7 @@ namespace Server.Services.Foundation.WorkDoctorService
             {
                 adress = cabinet.Adress,
                 DateInvitation = work.DateInvitation,
-                Id = work.Id,
+                Id = EncryptGuid(work.Id),
                 NameCabinet = cabinet.NameCabinet,
                 Services = cabinet.Services
 
