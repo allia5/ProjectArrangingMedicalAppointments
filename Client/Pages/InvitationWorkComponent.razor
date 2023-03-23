@@ -33,9 +33,9 @@
             <td>@item.Services</td>
       
                 <td>
-                    <button  class="btn btn-danger">
+                    <button @onclick="() => OnRefuse(item.Id)" class="btn btn-danger">
                         Refuse
-                        @if (Index == item.Id)
+                        @if (IndexRefuse == item.Id)
                         {
 
 
@@ -46,9 +46,9 @@
                 </td>
       
                 <td>
-                    <button class="btn btn-success">
+                    <button @onclick="() => OnAccept(item.Id)" class="btn btn-success">
                         Accepted
-                        @if (Index == item.Id)
+                        @if (IndexAccepte == item.Id)
                         {
 
 

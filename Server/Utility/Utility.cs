@@ -5,7 +5,7 @@ namespace Server.Utility
 {
     public static class Utility
     {
-        private const string encryptionKey = "XWS456IZMAR";
+        private const string encryptionKey = "AAECAwQFBgcICQoLDA0ODw==";
         public static TransactionScope CreateAsyncTransactionScope(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
             var transactionOptions = new TransactionOptions

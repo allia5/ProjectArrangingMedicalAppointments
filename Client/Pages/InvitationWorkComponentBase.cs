@@ -7,7 +7,9 @@ namespace Client.Pages
 {
     public class InvitationWorkComponentBase : ComponentBase
     {
-        protected string Index { get; set; }
+        public string ErrorMessage { get; set; }
+        protected string IndexRefuse = null;
+        protected string IndexAccepte = null;
         protected bool IsLoding = true;
         public List<InvitationsDoctorDto> invitationsDoctorDtos = new List<InvitationsDoctorDto>();
         [Inject]
@@ -29,6 +31,33 @@ namespace Client.Pages
                 this.NavigationManager.NavigateTo("Login/InvitationWork");
             }
         }
-
+        public async Task OnRefuse(string Id)
+        {
+            try
+            {
+                this.IndexRefuse = Id;
+                await this.WorkDoctorService.UpdateStatusServiceWorkDoctor(new UpdateStatusWorkDoctorDto { Status = StatusWorkDoctor.Notaccepted, WorkId = Id });
+                invitationsDoctorDtos = invitationsDoctorDtos.Where(e => e.Id != Id).ToList();
+                this.IndexAccepte = null;
+            }
+            catch (Exception e)
+            {
+                ErrorMessage = e.Message;
+            }
+        }
+        public async Task OnAccept(string id)
+        {
+            try
+            {
+                this.IndexAccepte = id;
+                await this.WorkDoctorService.UpdateStatusServiceWorkDoctor(new UpdateStatusWorkDoctorDto { Status = StatusWorkDoctor.accepted, WorkId = id });
+                invitationsDoctorDtos = invitationsDoctorDtos.Where(e => e.Id != id).ToList();
+                this.IndexAccepte = null;
+            }
+            catch (Exception e)
+            {
+                ErrorMessage = e.Message;
+            }
+        }
     }
 }

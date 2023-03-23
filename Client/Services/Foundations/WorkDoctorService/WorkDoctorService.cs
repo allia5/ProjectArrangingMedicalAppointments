@@ -81,5 +81,34 @@ namespace Client.Services.Foundations.WorkDoctorService
                 throw new ProblemException("Error Intern");
             }
         }
+
+        public async Task UpdateStatusServiceWorkDoctor(UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto)
+        {
+            var httpRequest = new HttpRequestMessage(HttpMethod.Patch, "/api/WorkDoctor/PatchStatusServiceWorkDoctor");
+            var JwtDto = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtDto.Token);
+            var JsWorkDoctorDto = JsonSerializer.Serialize(updateStatusWorkDoctorDto);
+            // var byteObject = System.Text.Encoding.UTF8.GetBytes(JsWorkDoctorDto);
+            httpRequest.Content = new StringContent(JsWorkDoctorDto, Encoding.UTF8, "application/json");
+            var result = await httpClient.SendAsync(httpRequest);
+            if (result.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException("Error Data Source ");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+
+
+        }
     }
 }

@@ -7,6 +7,7 @@ using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 using Server.Services.Foundation.MailService;
 using static Server.Services.Foundation.WorkDoctorService.WorkDoctorServiceMapper;
+using static Server.Utility.Utility;
 
 namespace Server.Services.Foundation.WorkDoctorService
 {
@@ -71,6 +72,21 @@ namespace Server.Services.Foundation.WorkDoctorService
                 await this.mailService.SendEmailNotification(mailRequest);
 
 
+
+            });
+
+        public async Task UpdateStatusServiceWorkDoctor(string Email, UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto) =>
+            await TryCatch(async () =>
+            {
+                ValidateOnUpdateStatusWorkDoctoter(Email, updateStatusWorkDoctorDto);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(User.Id);
+                ValidationDoctorIsNull(Doctor);
+                var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorWithIdWorkDoctor(DecryptGuid(updateStatusWorkDoctorDto.WorkId), Doctor.Id);
+                ValidateWorkDoctorIsNull(WorkDoctor);
+                var newWorkDoctor = MapperToNewWorkDoctorStatusService(WorkDoctor, updateStatusWorkDoctorDto);
+                await this.workDoctorManager.UpdateWorkDoctor(WorkDoctor);
 
             });
 

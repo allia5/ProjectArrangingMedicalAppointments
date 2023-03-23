@@ -6,6 +6,8 @@ namespace Server.Managers.Storages.WorkDoctorManager
     {
         public Task<List<WorkDoctors>> SelectWorksDoctorByIdCabinet(Guid IdCabinet);
         public Task<List<WorkDoctors>> SelectWorksDoctorByIdDoctor(Guid DoctorId);
+        public Task<WorkDoctors> UpdateWorkDoctor(WorkDoctors workDoctors);
+        public Task<WorkDoctors> SelectWorkDoctorByIdDoctorWithIdWorkDoctor(Guid id, Guid IdDoctor);
         public Task<WorkDoctors> InsertWorkDoctor(WorkDoctors workDoctors);
     }
 }

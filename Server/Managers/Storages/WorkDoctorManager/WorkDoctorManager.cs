@@ -35,5 +35,17 @@ namespace Server.Managers.Storages.WorkDoctorManager
         {
             return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId select Work).ToListAsync();
         }
+
+        public async Task<WorkDoctors> UpdateWorkDoctor(WorkDoctors workDoctors)
+        {
+            var result = this.ServerDbContext.WorkDoctors.Update(workDoctors);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
+
+        public async Task<WorkDoctors> SelectWorkDoctorByIdDoctorWithIdWorkDoctor(Guid id, Guid IdDoctor)
+        {
+            return await (from work in this.ServerDbContext.WorkDoctors where work.Id == id && work.IdDoctor == IdDoctor select work).FirstAsync();
+        }
     }
 }

@@ -39,15 +39,29 @@ namespace Server.Services.Foundation.WorkDoctorService
         }
         public static InvitationsDoctorDto MapperToInvitationsDoctorDto(CabinetMedical cabinet, WorkDoctors work)
         {
-            return new InvitationsDoctorDto
+            try
             {
-                adress = cabinet.Adress,
-                DateInvitation = work.DateInvitation,
-                Id = EncryptGuid(work.Id),
-                NameCabinet = cabinet.NameCabinet,
-                Services = cabinet.Services
+                return new InvitationsDoctorDto
+                {
+                    adress = cabinet.Adress,
+                    DateInvitation = work.DateInvitation,
+                    Id = EncryptGuid(work.Id),
+                    NameCabinet = cabinet.NameCabinet,
+                    Services = cabinet.Services
 
-            };
+                };
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
+
+        }
+        public static WorkDoctors MapperToNewWorkDoctorStatusService(WorkDoctors workDoctors, UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto)
+        {
+            workDoctors.StatusWork = (StatusWork)updateStatusWorkDoctorDto.Status;
+            return workDoctors;
         }
 
     }

@@ -10,6 +10,29 @@ namespace Server.Services.Foundation.WorkDoctorService
 {
     public partial class WorkDoctorService
     {
+        public void ValidateOnUpdateStatusWorkDoctoter(string Email, UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto)
+        {
+            if (updateStatusWorkDoctorDto != null)
+            {
+                if (updateStatusWorkDoctorDto?.Status == null)
+                {
+                    throw new NullException(nameof(updateStatusWorkDoctorDto.Status));
+                }
+                else if (updateStatusWorkDoctorDto.WorkId == null)
+                {
+                    throw new NullException(nameof(updateStatusWorkDoctorDto.WorkId));
+                }
+            }
+            else
+            {
+                throw new NullException(nameof(updateStatusWorkDoctorDto));
+            }
+            if (Email == null)
+            {
+                throw new NullException(nameof(Email));
+            }
+
+        }
         public void ValidateEmailIsNull(string Email)
         {
             if (IsInvalid(Email))

@@ -72,5 +72,26 @@ namespace Server.Controllers
                 return Problem(e.Message);
             }
         }
+
+        [HttpPatch("PatchStatusServiceWorkDoctor")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult> PatchStatusServiceDoctor([FromBody] UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto)
+        {
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.workDoctorService.UpdateStatusServiceWorkDoctor(email, updateStatusWorkDoctorDto);
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.Message);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
     }
 }
