@@ -11,11 +11,11 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu" >
     @if(IsLoding==true){
         <Client.Pages.WaitComponent></Client.Pages.WaitComponent>
     }
-    <nav class="flex-column">
+    <nav class="flex-column" >
         <AuthorizeView>
 
             <Authorized>
@@ -50,7 +50,7 @@
                         </NavLink>
                     </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" Match="NavLinkMatch.All">
+                    <NavLink class="nav-link" href="/InvitationWork" Match="NavLinkMatch.All">
                         Notification
                     </NavLink>
                 </div>
@@ -91,10 +91,8 @@
 
             <Authorized>
                 <div class="nav-item px-3">
-
                     <NavLink class="nav-link" href="/Login/Home" Match="NavLinkMatch.All">
-                        <span class="oi oi-home" aria-hidden="true"></span> <button class="btn btn-danger" @onclick="Logout">log out</button>
-
+                         <button class="btn btn-danger" @onclick="Logout">log out</button>
                     </NavLink>
                 </div>
             </Authorized>

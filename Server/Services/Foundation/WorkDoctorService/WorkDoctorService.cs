@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DTO;
+using Microsoft.AspNetCore.Identity;
 using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.WorkDoctorManager;
@@ -24,6 +25,33 @@ namespace Server.Services.Foundation.WorkDoctorService
             this.workDoctorManager = workDoctorManager;
             this.mailService = mailService;
         }
+
+        public async Task<List<InvitationsDoctorDto>> GetInvitationDoctor(string Email) =>
+      await _TryCatch(async () =>
+      {
+          List<InvitationsDoctorDto> invitationsDoctors = new List<InvitationsDoctorDto>();
+          ValidateEmailIsNull(Email);
+          var UserAccount = await this._userManager.FindByEmailAsync(Email);
+          ValidateUserIsNull(UserAccount);
+          var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccount.Id);
+          ValidationDoctorIsNull(Doctor);
+          var ListWorkDoctor = await this.workDoctorManager.SelectWorksDoctorByIdDoctor(Doctor.Id);
+          ValidateListInvitationWorkDoctor(ListWorkDoctor);
+          foreach (var item in ListWorkDoctor)
+          {
+              var cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(item.IdCabinet);
+              ValidateCabinetMedicalIsNull(cabinet);
+              var invitation = MapperToInvitationsDoctorDto(cabinet, item);
+              invitationsDoctors.Add(invitation);
+
+
+          }
+          return invitationsDoctors;
+
+
+
+      });
+
         public async Task PostNewInvitationWorkDoctor(string Email, string UserId) =>
             await TryCatch(async () =>
             {

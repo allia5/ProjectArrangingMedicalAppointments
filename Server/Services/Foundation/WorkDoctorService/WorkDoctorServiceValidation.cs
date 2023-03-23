@@ -10,6 +10,20 @@ namespace Server.Services.Foundation.WorkDoctorService
 {
     public partial class WorkDoctorService
     {
+        public void ValidateEmailIsNull(string Email)
+        {
+            if (IsInvalid(Email))
+            {
+                throw new NullException(nameof(Email));
+            }
+        }
+        public void ValidateListInvitationWorkDoctor(List<WorkDoctors> worksInvitation)
+        {
+            if (worksInvitation.Count() == 0)
+            {
+                throw new NullDataStorageException(nameof(worksInvitation));
+            }
+        }
         public void ValidateOnPostInvitationWorkDoctor(string Email, string IdUserDoctor)
         {
             if (IsInvalid(Email))

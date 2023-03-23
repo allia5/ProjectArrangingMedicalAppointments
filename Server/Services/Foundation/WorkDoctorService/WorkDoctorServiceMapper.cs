@@ -19,7 +19,7 @@ namespace Server.Services.Foundation.WorkDoctorService
                 statusServcie = Models.WorkDoctor.StatusService.OutService,
                 statusReservation = StatusReservation.NotAvailable,
                 IdCabinet = IdCabinet,
-                 IdDoctor= IdDoctor,
+                IdDoctor = IdDoctor,
                 NbPatientAvailble = 0,
                 TimeOfConsultation = 0,
                 EndTime = DateTime.MinValue,
@@ -34,6 +34,18 @@ namespace Server.Services.Foundation.WorkDoctorService
                 Subject = "Notification",
                 Body = " <h3> AliaMed.Com </h3> " +
                                 $"<a>you are recived Invitation from Cabine {cabinetMedical.NameCabinet}</a>" + "<br/>"
+            };
+        }
+        public static InvitationsDoctorDto MapperToInvitationsDoctorDto(CabinetMedical cabinet, WorkDoctors work)
+        {
+            return new InvitationsDoctorDto
+            {
+                adress = cabinet.Adress,
+                DateInvitation = work.DateInvitation,
+                Id = work.Id,
+                NameCabinet = cabinet.NameCabinet,
+                Services = cabinet.Services
+
             };
         }
 

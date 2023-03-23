@@ -1,4 +1,5 @@
-﻿using IdentityServer4.AccessTokenValidation;
+﻿using DTO;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,29 @@ namespace Server.Controllers
             finally
             {
                 transaction.Dispose();
+            }
+        }
+        [HttpGet("GetListInvitationDoctor")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult<List<InvitationsDoctorDto>>> GetListInvitationDoctor()
+        {
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                var result = await this.workDoctorService.GetInvitationDoctor(email);
+                return result;
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (ServiceException Ex)
+            {
+                return NotFound(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
             }
         }
     }

@@ -17,6 +17,43 @@ namespace Client.Services.Foundations.WorkDoctorService
             this.httpClient = httpClient;
             this.localStorageServices = localStorageServices;
         }
+
+        public async Task<List<InvitationsDoctorDto>> invitationsDoctorService()
+        {
+            var result = new HttpRequestMessage(HttpMethod.Get, "/api/WorkDoctor/GetListInvitationDoctor");
+            var Jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            result.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Jwt.Token);
+            var Reponse = await httpClient.SendAsync(result);
+            //await this.httpClient.GetAsync("/api/WorkDoctor/GetListInvitationDoctor");
+            if (Reponse.StatusCode == HttpStatusCode.OK)
+            {
+                if (Reponse.Content.Headers.ContentLength != 0)
+                {
+                    return await Reponse.Content.ReadFromJsonAsync<List<InvitationsDoctorDto>>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }
+            else if (Reponse.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("Authorization Error");
+            }
+            else if (Reponse.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (Reponse.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException("Not Found Data");
+            }
+            else
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
         public async Task SendInvitationWorkToDoctot(string IdUser)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/api/WorkDoctor/PostInvitationWorkDoctor");

@@ -1,0 +1,68 @@
+﻿@page "/InvitationWork"
+@inherits InvitationWorkComponentBase
+
+
+
+
+<table class="table caption-top">
+    <caption>List of users</caption>
+    <thead>
+        <tr>
+            <th scope="col">Name Cabinet</th>
+            <th scope="col">Date Invitation</th>
+            <th scope="col">Adress</th>
+            <th scope="col">Services</th>
+            <th scope="col">Accept Invitation</th>
+            <th scope="col">Refuse Invitation</th>
+          
+
+        </tr>
+    </thead>
+   
+    <tbody>
+        @foreach(var item in invitationsDoctorDtos){
+
+       
+         <tr>
+            <td>@item.NameCabinet</td>
+       
+            <td>@item.DateInvitation</td>
+       
+            <td>@item.adress</td>
+       
+            <td>@item.Services</td>
+      
+                <td>
+                    <button  class="btn btn-danger">
+                        Refuse
+                        @if (Index == item.Id)
+                        {
+
+
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </button>
+                </td>
+      
+                <td>
+                    <button class="btn btn-success">
+                        Accepted
+                        @if (Index == item.Id)
+                        {
+
+
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </button>
+                </td>
+        </tr>
+        }
+    </tbody>
+   </table>
+@if (IsLoding)
+{
+    <WaitComponent></WaitComponent>
+
+}

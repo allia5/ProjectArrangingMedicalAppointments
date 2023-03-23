@@ -24,11 +24,16 @@ namespace Server.Managers.Storages.WorkDoctorManager
                 await this.ServerDbContext.SaveChangesAsync();
                 return result.Entity;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
-          
+
+        }
+
+        public async Task<List<WorkDoctors>> SelectWorksDoctorByIdDoctor(Guid DoctorId)
+        {
+            return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId select Work).ToListAsync();
         }
     }
 }

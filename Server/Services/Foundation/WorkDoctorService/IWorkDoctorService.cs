@@ -1,7 +1,10 @@
-﻿namespace Server.Services.Foundation.WorkDoctorService
+﻿using DTO;
+
+namespace Server.Services.Foundation.WorkDoctorService
 {
     public interface IWorkDoctorService
     {
         public Task PostNewInvitationWorkDoctor(string Email, string UserId);
+        public Task<List<InvitationsDoctorDto>> GetInvitationDoctor(string Email);
     }
 }
