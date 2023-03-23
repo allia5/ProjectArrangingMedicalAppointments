@@ -9,6 +9,7 @@ namespace Server.Services.Foundation.WorkDoctorService
     {
         private delegate Task returningFunction();
         private delegate Task<List<InvitationsDoctorDto>> ReturningInvitationFunction();
+        private delegate Task<List<JobsDoctorDto>> ReturningFunctionJobsDoctor();
 
         private async Task TryCatch(returningFunction returningFunction)
         {
@@ -39,6 +40,23 @@ namespace Server.Services.Foundation.WorkDoctorService
             catch (NullDataStorageException Ex)
             {
                 throw new ServiceException(Ex);
+            }
+
+
+        }
+        private async Task<List<JobsDoctorDto>> TryCatch_(ReturningFunctionJobsDoctor returningFunctionJobsDoctor)
+        {
+            try
+            {
+                return await returningFunctionJobsDoctor();
+            }
+            catch (NullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch (NullDataStorageException Ex)
+            {
+                throw new ValidationException(Ex);
             }
 
         }

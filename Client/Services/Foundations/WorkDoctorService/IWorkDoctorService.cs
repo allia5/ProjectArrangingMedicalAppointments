@@ -7,5 +7,6 @@ namespace Client.Services.Foundations.WorkDoctorService
         public Task SendInvitationWorkToDoctot(string IdUser);
         public Task<List<InvitationsDoctorDto>> invitationsDoctorService();
         public Task UpdateStatusServiceWorkDoctor(UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto);
+        public Task<List<JobsDoctorDto>> GetJobsDoctorService();
     }
 }

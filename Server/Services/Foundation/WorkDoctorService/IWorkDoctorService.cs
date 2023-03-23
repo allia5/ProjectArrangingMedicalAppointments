@@ -7,5 +7,6 @@ namespace Server.Services.Foundation.WorkDoctorService
         public Task PostNewInvitationWorkDoctor(string Email, string UserId);
         public Task<List<InvitationsDoctorDto>> GetInvitationDoctor(string Email);
         public Task UpdateStatusServiceWorkDoctor(string Email, UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto);
+        public Task<List<JobsDoctorDto>> GetListJobsDoctorService(string Email);
     }
 }

@@ -63,6 +63,20 @@ namespace Server.Services.Foundation.WorkDoctorService
             workDoctors.StatusWork = (StatusWork)updateStatusWorkDoctorDto.Status;
             return workDoctors;
         }
+        public static JobsDoctorDto MapperToJobsDoctorDto(Guid JobId, CabinetMedical cabinetMedical)
+        {
+            return new JobsDoctorDto
+            {
+                Adress = cabinetMedical.Adress,
+                IdJob = EncryptGuid(JobId),
+                Image = cabinetMedical.image,
+                nameCabinet = cabinetMedical.NameCabinet,
+                NumberPhone = cabinetMedical.numberPhone,
+                Services = cabinetMedical.Services,
+                timeJob = cabinetMedical.JobTime
+            };
+        }
+
 
     }
 }

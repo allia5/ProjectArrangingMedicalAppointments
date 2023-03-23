@@ -18,6 +18,40 @@ namespace Client.Services.Foundations.WorkDoctorService
             this.localStorageServices = localStorageServices;
         }
 
+        public async Task<List<JobsDoctorDto>> GetJobsDoctorService()
+        {
+
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, "/api/WorkDoctor/GetJobsDoctor");
+            var jwtDto = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtDto.Token);
+            var result = await this.httpClient.SendAsync(httpRequest);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<List<JobsDoctorDto>>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("User Not Authorized ");
+            }
+            else
+            {
+                throw new ProblemException("Error Intern");
+            }
+
+
+        }
+
         public async Task<List<InvitationsDoctorDto>> invitationsDoctorService()
         {
             var result = new HttpRequestMessage(HttpMethod.Get, "/api/WorkDoctor/GetListInvitationDoctor");
@@ -110,5 +144,6 @@ namespace Client.Services.Foundations.WorkDoctorService
 
 
         }
+
     }
 }

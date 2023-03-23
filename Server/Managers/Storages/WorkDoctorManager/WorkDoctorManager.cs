@@ -33,7 +33,7 @@ namespace Server.Managers.Storages.WorkDoctorManager
 
         public async Task<List<WorkDoctors>> SelectWorksDoctorByIdDoctor(Guid DoctorId)
         {
-            return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId select Work).ToListAsync();
+            return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId && Work.StatusWork == StatusWork.still select Work).ToListAsync();
         }
 
         public async Task<WorkDoctors> UpdateWorkDoctor(WorkDoctors workDoctors)
@@ -46,6 +46,11 @@ namespace Server.Managers.Storages.WorkDoctorManager
         public async Task<WorkDoctors> SelectWorkDoctorByIdDoctorWithIdWorkDoctor(Guid id, Guid IdDoctor)
         {
             return await (from work in this.ServerDbContext.WorkDoctors where work.Id == id && work.IdDoctor == IdDoctor select work).FirstAsync();
+        }
+
+        public async Task<List<WorkDoctors>> SelectWorksDoctorActiveByIdDoctor(Guid DoctorId)
+        {
+            return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId && Work.StatusWork == StatusWork.accepted select Work).ToListAsync();
         }
     }
 }

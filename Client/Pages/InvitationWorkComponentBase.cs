@@ -1,4 +1,5 @@
-﻿using Client.Services.Foundations.AuthentificationStatService;
+﻿using Client.Services.Exceptions;
+using Client.Services.Foundations.AuthentificationStatService;
 using Client.Services.Foundations.WorkDoctorService;
 using DTO;
 using Microsoft.AspNetCore.Components;
@@ -20,16 +21,25 @@ namespace Client.Pages
         public IWorkDoctorService WorkDoctorService { get; set; }
         protected override async Task OnInitializedAsync()
         {
-            var UserStat = await this.AuthentificationStatService.GetAuthenticationStateAsync();
-            if (UserStat.User.Identity?.IsAuthenticated ?? false)
+            try
             {
-                this.invitationsDoctorDtos = await this.WorkDoctorService.invitationsDoctorService();
-                this.IsLoding = false;
+                var UserStat = await this.AuthentificationStatService.GetAuthenticationStateAsync();
+                if (UserStat.User.Identity?.IsAuthenticated ?? false)
+                {
+                    this.invitationsDoctorDtos = await this.WorkDoctorService.invitationsDoctorService();
+                    this.IsLoding = false;
+                }
+                else
+                {
+                    this.NavigationManager.NavigateTo("Login/InvitationWork");
+                }
             }
-            else
+            catch (Exception Ex)
             {
-                this.NavigationManager.NavigateTo("Login/InvitationWork");
+                ErrorMessage = Ex.Message;
+
             }
+
         }
         public async Task OnRefuse(string Id)
         {

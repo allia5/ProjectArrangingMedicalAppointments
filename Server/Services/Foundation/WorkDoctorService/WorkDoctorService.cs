@@ -37,7 +37,7 @@ namespace Server.Services.Foundation.WorkDoctorService
           var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserAccount.Id);
           ValidationDoctorIsNull(Doctor);
           var ListWorkDoctor = await this.workDoctorManager.SelectWorksDoctorByIdDoctor(Doctor.Id);
-          ValidateListInvitationWorkDoctor(ListWorkDoctor);
+          //  ValidateListInvitationWorkDoctor(ListWorkDoctor);
           foreach (var item in ListWorkDoctor)
           {
               var cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(item.IdCabinet);
@@ -89,6 +89,32 @@ namespace Server.Services.Foundation.WorkDoctorService
                 await this.workDoctorManager.UpdateWorkDoctor(WorkDoctor);
 
             });
+
+        public async Task<List<JobsDoctorDto>> GetListJobsDoctorService(string Email) =>
+            await TryCatch_(async () =>
+            {
+                List<JobsDoctorDto> jobsDoctorDtos = new List<JobsDoctorDto>();
+                ValidateEmailIsNull(Email);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(User.Id);
+                ValidationDoctorIsNull(Doctor);
+                var ListJobsDoctor = await this.workDoctorManager.SelectWorksDoctorActiveByIdDoctor(Doctor.Id);
+                foreach (var item in ListJobsDoctor)
+                {
+                    var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(item.IdCabinet);
+                    ValidateCabinetMedicalIsNull(Cabinet);
+                    var JobDoctorDto = MapperToJobsDoctorDto(item.Id, Cabinet);
+                    jobsDoctorDtos.Add(JobDoctorDto);
+                }
+                return jobsDoctorDtos;
+
+            });
+
+
+
+
+
 
 
     }
