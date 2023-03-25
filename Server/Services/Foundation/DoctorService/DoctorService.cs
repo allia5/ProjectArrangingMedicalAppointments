@@ -33,7 +33,7 @@ namespace Server.Services.Foundation.DoctorService
           var User = await this._userManager.FindByEmailAsync(Email);
           ValidateUserIsNull(User);
           var UsersOfRoleDoctor = await this.doctorManager.SelectDoctor();
-          ValidateListUserIsEmpty(UsersOfRoleDoctor);
+          //  ValidateListUserIsEmpty(UsersOfRoleDoctor);
           var CabinetMedical = await this.cabinetMedicalManager.SelectCabinetMedicalByUserId(User.Id);
           ValidateCabinetMedicalIsNull(CabinetMedical);
           var ListOfWorksDoctor = await this.workDoctorManager.SelectWorksDoctorByIdCabinet(CabinetMedical.Id);

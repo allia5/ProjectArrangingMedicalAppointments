@@ -7,7 +7,7 @@ namespace Server.Models.Doctor
 {
     public enum StatusDoctor
     {
-        Activated,
-        Deactivated
+        Activated=1,
+        Deactivated=0
     }
 }

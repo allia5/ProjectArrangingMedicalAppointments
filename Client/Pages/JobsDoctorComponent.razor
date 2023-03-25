@@ -16,7 +16,7 @@
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4">
-                <img src="@($"data:image/png;base64,{Convert.ToBase64String(item.Image)}")" class="img-fluid rounded-start" alt="...">
+                <img src="@($"data:image/png;base64,{Convert.ToBase64String(item.Image)}")" class="img-fluid rounded-start " style="height:100%;" alt="...">
             </div>
             <div class="col-md-8">
                 <div class="card-body">
@@ -24,10 +24,12 @@
                     <p class="card-text">Adress : @item.Adress</p>
                     <p class="card-text">Services : @item.Services</p>
                         <p class="card-text">Number Phone:@item.NumberPhone</p>
+                       
                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
             </div>
         </div>
+        <div class="align-self-end ml-auto "> <button class="btn btn-danger">Delete Job</button><a href="/JobSetting/@item.IdJob.Replace("/","*")"><button class="btn btn-success">Update Job</button></a></div>
     </div>
 }
 

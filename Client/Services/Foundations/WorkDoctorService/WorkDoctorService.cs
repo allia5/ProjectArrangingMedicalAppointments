@@ -52,6 +52,42 @@ namespace Client.Services.Foundations.WorkDoctorService
 
         }
 
+        public async Task<JobSettingDto> GetJobSetting(string IdJob)
+        {
+            string encodedIdJob = System.Web.HttpUtility.UrlEncode(IdJob);
+            var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"/api/WorkDoctor/GetJobSetting?IdJob={encodedIdJob}");
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            // var JsIdJob = JsonSerializer.Serialize(IdJob);
+            // httpRequest.Content = new StringContent(JsIdJob, Encoding.UTF8, "application/json");
+            var result = await httpClient.SendAsync(httpRequest);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<JobSettingDto>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else
+            {
+                throw new ProblemException("Error Intern");
+            }
+
+
+        }
+
         public async Task<List<InvitationsDoctorDto>> invitationsDoctorService()
         {
             var result = new HttpRequestMessage(HttpMethod.Get, "/api/WorkDoctor/GetListInvitationDoctor");
@@ -90,7 +126,7 @@ namespace Client.Services.Foundations.WorkDoctorService
 
         public async Task SendInvitationWorkToDoctot(string IdUser)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "/api/WorkDoctor/PostInvitationWorkDoctor");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/api/WorkDoctor/PostInvitationWorkDoctor");
             var JsCabinetMedical = JsonSerializer.Serialize(IdUser);
             var byteObject = System.Text.Encoding.UTF8.GetBytes(JsCabinetMedical);
             request.Content = new StringContent(JsCabinetMedical, Encoding.UTF8, "application/json");
@@ -98,6 +134,33 @@ namespace Client.Services.Foundations.WorkDoctorService
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
             var result = await httpClient.SendAsync(request);
 
+            if (result.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new NotFoundException("Error Data Source ");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
+        public async Task UpdateJobSetting(JobSettingDto jobSettingDto)
+        {
+            var httpRequest = new HttpRequestMessage(HttpMethod.Patch, "/api/WorkDoctor/UpdateJobSetting");
+            var JwtDto = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtDto.Token);
+            var JsWorkDoctorDto = JsonSerializer.Serialize(jobSettingDto);
+            // var byteObject = System.Text.Encoding.UTF8.GetBytes(JsWorkDoctorDto);
+            httpRequest.Content = new StringContent(JsWorkDoctorDto, Encoding.UTF8, "application/json");
+            var result = await httpClient.SendAsync(httpRequest);
             if (result.StatusCode == HttpStatusCode.NotFound)
             {
                 throw new NotFoundException("Error Data Source ");
@@ -144,6 +207,7 @@ namespace Client.Services.Foundations.WorkDoctorService
 
 
         }
+
 
     }
 }

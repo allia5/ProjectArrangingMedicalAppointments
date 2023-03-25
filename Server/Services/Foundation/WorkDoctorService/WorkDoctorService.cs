@@ -111,9 +111,37 @@ namespace Server.Services.Foundation.WorkDoctorService
 
             });
 
+        public async Task<JobSettingDto> GetJobDoctorById(string Email, string IdJob) =>
+            await _TryCatch_(async () =>
+            {
+                ValidateOnPostInvitationWorkDoctor(Email, IdJob);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(User.Id);
+                ValidationDoctorIsNull(Doctor);
+                var JobDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorWithIdWorkDoctor(DecryptGuid(IdJob), Doctor.Id);
+                ValidateWorkDoctorIsNull(JobDoctor);
+                return MapperToJobSetting(JobDoctor);
 
 
 
+            });
+
+        public async Task UpdateSettingJobDoctor(JobSettingDto jobSettingDto, string Email) =>
+            await TryCatch(async () =>
+            {
+                ValidateOnUpdateSettingJob(jobSettingDto);
+                ValidateEmailIsNull(Email);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(User.Id);
+                ValidationDoctorIsNull(Doctor);
+                var job = await this.workDoctorManager.SelectWorkDoctorByIdDoctorWithIdWorkDoctor(DecryptGuid(jobSettingDto.IdJob), Doctor.Id);
+                ValidateWorkDoctorIsNull(job);
+                job = job.MapperToJobDoctorSetting(jobSettingDto);
+                await this.workDoctorManager.UpdateWorkDoctor(job);
+
+            });
 
 
 

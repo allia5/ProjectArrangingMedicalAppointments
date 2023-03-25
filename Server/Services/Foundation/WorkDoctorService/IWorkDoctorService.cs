@@ -1,4 +1,5 @@
 ﻿using DTO;
+using Microsoft.Identity.Client;
 
 namespace Server.Services.Foundation.WorkDoctorService
 {
@@ -8,5 +9,7 @@ namespace Server.Services.Foundation.WorkDoctorService
         public Task<List<InvitationsDoctorDto>> GetInvitationDoctor(string Email);
         public Task UpdateStatusServiceWorkDoctor(string Email, UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto);
         public Task<List<JobsDoctorDto>> GetListJobsDoctorService(string Email);
+        public Task<JobSettingDto> GetJobDoctorById(string Email, string IdJob);
+        public Task UpdateSettingJobDoctor(JobSettingDto jobSettingDto, string Email);
     }
 }

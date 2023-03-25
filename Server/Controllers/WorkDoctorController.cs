@@ -116,6 +116,47 @@ namespace Server.Controllers
             }
         }
 
+        [HttpGet("GetJobSetting")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult<JobSettingDto>> GetJobSetting(string IdJob)
+        {
+            try
+            {
+
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.workDoctorService.GetJobDoctorById(email, IdJob);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+        [HttpPatch("UpdateJobSetting")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
+        public async Task<ActionResult> UpdateJobSetting(JobSettingDto jobSettingDto)
+        {
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.workDoctorService.UpdateSettingJobDoctor(jobSettingDto, email);
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.Message);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+
 
     }
 }

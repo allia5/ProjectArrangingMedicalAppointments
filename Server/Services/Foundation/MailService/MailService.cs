@@ -125,7 +125,15 @@ namespace Server.Services.Foundation.MailService
 
         public async Task SendEmailNotification(MailRequest mailRequest)
         {
-            await SendEmail(mailRequest);
+            try
+            {
+                await SendEmail(mailRequest);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }

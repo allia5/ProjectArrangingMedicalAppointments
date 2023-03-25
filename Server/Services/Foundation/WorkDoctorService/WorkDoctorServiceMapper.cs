@@ -76,6 +76,34 @@ namespace Server.Services.Foundation.WorkDoctorService
                 timeJob = cabinetMedical.JobTime
             };
         }
+        public static JobSettingDto MapperToJobSetting(WorkDoctors workDoctors)
+        {
+            return new JobSettingDto
+            {
+                IdJob = EncryptGuid(workDoctors.Id),
+                EndTime = workDoctors.EndTime,
+                startTime = workDoctors.ReadyTime,
+                NumberPatientAccepted = workDoctors.NbPatientAvailble,
+                processingMinutes = workDoctors.TimeOfConsultation,
+                StatusReservation = (DTO.StatusReservationDoctor)workDoctors.statusReservation,
+                statusService = (StatusServiceDoctor)workDoctors.statusServcie
+
+            };
+        }
+        public static WorkDoctors MapperToJobDoctorSetting(this WorkDoctors workDoctors, JobSettingDto jobSettingDto)
+        {
+            workDoctors.ReadyTime = jobSettingDto.startTime;
+            workDoctors.statusReservation = (StatusReservation)jobSettingDto.StatusReservation;
+            workDoctors.statusServcie = (Models.WorkDoctor.StatusService)jobSettingDto.statusService;
+            workDoctors.EndTime = jobSettingDto.EndTime;
+            workDoctors.NbPatientAvailble = jobSettingDto.NumberPatientAccepted;
+            workDoctors.TimeOfConsultation = jobSettingDto.processingMinutes;
+            return workDoctors;
+
+
+
+
+        }
 
 
     }

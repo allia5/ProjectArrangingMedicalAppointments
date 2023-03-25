@@ -22,9 +22,7 @@ namespace Client.Pages
 
 
 
-        protected override async Task OnInitializedAsync()
-        {
-        }
+
         protected async override Task OnParametersSetAsync()
         {
 

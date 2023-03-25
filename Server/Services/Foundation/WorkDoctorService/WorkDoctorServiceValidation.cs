@@ -47,15 +47,15 @@ namespace Server.Services.Foundation.WorkDoctorService
                 throw new NullDataStorageException(nameof(worksInvitation));
             }
         }
-        public void ValidateOnPostInvitationWorkDoctor(string Email, string IdUserDoctor)
+        public void ValidateOnPostInvitationWorkDoctor(string Email, string parametre)
         {
             if (IsInvalid(Email))
             {
                 throw new NullException(nameof(Email));
             }
-            else if (IsInvalid(IdUserDoctor))
+            else if (IsInvalid(parametre))
             {
-                throw new NullException(nameof(IdUserDoctor));
+                throw new NullException(nameof(parametre));
             }
         }
         public void ValidateUserIsNull(User user)
@@ -87,6 +87,31 @@ namespace Server.Services.Foundation.WorkDoctorService
                 throw new NullException(nameof(workDoctors));
             }
         }
+
         public static bool IsInvalid(string input) => String.IsNullOrWhiteSpace(input);
+        public void ValidateOnUpdateSettingJob(JobSettingDto jobSettingDto)
+        {
+            if (IsInvalid(jobSettingDto.IdJob))
+            {
+                throw new NullException(nameof(jobSettingDto));
+            }
+            else if (IsInvalid(jobSettingDto.NumberPatientAccepted.ToString()))
+            {
+                throw new NullException(nameof(jobSettingDto));
+            }
+            else if (IsInvalid(jobSettingDto.processingMinutes.ToString()))
+            {
+                throw new NullException(nameof(jobSettingDto));
+            }
+            else if (IsInvalid(jobSettingDto.startTime.ToString()))
+            {
+                throw new NullException(nameof(jobSettingDto));
+            }
+            else if (IsInvalid(jobSettingDto.EndTime.ToString()))
+            {
+                throw new NullException(nameof(jobSettingDto));
+            }
+
+        }
     }
 }
