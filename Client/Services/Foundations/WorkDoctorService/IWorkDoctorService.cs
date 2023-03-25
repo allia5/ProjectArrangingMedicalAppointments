@@ -10,5 +10,6 @@ namespace Client.Services.Foundations.WorkDoctorService
         public Task<List<JobsDoctorDto>> GetJobsDoctorService();
         public Task<JobSettingDto> GetJobSetting(string IdJob);
         public Task UpdateJobSetting(JobSettingDto jobSettingDto);
+        public Task<List<DoctorCabinetDto>> GetListDoctorsInformationCabinet();
     }
 }

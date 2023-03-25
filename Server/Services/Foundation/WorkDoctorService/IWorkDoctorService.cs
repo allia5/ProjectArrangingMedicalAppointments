@@ -11,5 +11,7 @@ namespace Server.Services.Foundation.WorkDoctorService
         public Task<List<JobsDoctorDto>> GetListJobsDoctorService(string Email);
         public Task<JobSettingDto> GetJobDoctorById(string Email, string IdJob);
         public Task UpdateSettingJobDoctor(JobSettingDto jobSettingDto, string Email);
+        public Task<List<DoctorCabinetDto>> GetDoctorInformationFromCabinet(string Email);
+
     }
 }

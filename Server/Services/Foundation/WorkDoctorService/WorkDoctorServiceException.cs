@@ -11,6 +11,7 @@ namespace Server.Services.Foundation.WorkDoctorService
         private delegate Task<List<InvitationsDoctorDto>> ReturningInvitationFunction();
         private delegate Task<List<JobsDoctorDto>> ReturningFunctionJobsDoctor();
         private delegate Task<JobSettingDto> ReturningJobSetting();
+        private delegate Task<List<DoctorCabinetDto>> ReturningDoctorsCabinet();
 
         private async Task TryCatch(returningFunction returningFunction)
         {
@@ -68,6 +69,25 @@ namespace Server.Services.Foundation.WorkDoctorService
                 return await returningJobSetting();
             }
             catch (NullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        private async Task<List<DoctorCabinetDto>> _TryCatch_1(ReturningDoctorsCabinet returningDoctorsCabinet)
+        {
+            try
+            {
+                return await returningDoctorsCabinet();
+            }
+            catch (NullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+            catch (NullDataStorageException Ex)
             {
                 throw new ValidationException(Ex);
             }

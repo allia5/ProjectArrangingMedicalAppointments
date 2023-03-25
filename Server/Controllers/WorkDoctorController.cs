@@ -156,6 +156,25 @@ namespace Server.Controllers
             }
         }
 
+        [HttpGet("GetInformationDoctorCabinet")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "ADMIN")]
+        public async Task<ActionResult<List<DoctorCabinetDto>>> GetListInformationDoctorCabinetMedical()
+        {
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.workDoctorService.GetDoctorInformationFromCabinet(email);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
 
 
     }

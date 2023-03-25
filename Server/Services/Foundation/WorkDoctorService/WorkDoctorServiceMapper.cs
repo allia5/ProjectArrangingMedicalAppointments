@@ -1,6 +1,10 @@
 ﻿using DTO;
+using Microsoft.OpenApi.Extensions;
 using Newtonsoft.Json.Linq;
+using Server.Managers.Storages.DoctorManager;
 using Server.Models.CabinetMedicals;
+using Server.Models.Doctor;
+using Server.Models.Specialites;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 using System;
@@ -35,6 +39,16 @@ namespace Server.Services.Foundation.WorkDoctorService
                 Subject = "Notification",
                 Body = " <h3> AliaMed.Com </h3> " +
                                 $"<a>you are recived Invitation from Cabine {cabinetMedical.NameCabinet}</a>" + "<br/>"
+            };
+        }
+        public static MailRequest MapperMailRequestUpdateStatJobDoctor(User user, WorkDoctors workDoctors)
+        {
+            return new MailRequest
+            {
+                ToEmail = user.Email,
+                Subject = "Notification",
+                Body = " <h3> AliaMed.Com </h3> " +
+                                $"<a>{user.Email}   he is {workDoctors.StatusWork.ToString()} Work </a>" + "<br/>"
             };
         }
         public static InvitationsDoctorDto MapperToInvitationsDoctorDto(CabinetMedical cabinet, WorkDoctors work)
@@ -104,6 +118,22 @@ namespace Server.Services.Foundation.WorkDoctorService
 
 
         }
+        public static DoctorCabinetDto MapperToDoctorCabinetDto(List<Specialite> specialities, Doctors doctors, JobSettingDto jobSettingDto, User user,WorkDoctors work)
+        {
+            List<string> names = specialities.Select(p => p.NameSpecialite).ToList();
+            return new DoctorCabinetDto
+            {
+                Email = user.Email,
+                FirstName = user.Firstname,
+                LastName = user.LastName,
+                NumberPhone = user.PhoneNumber,
+                IdDoc = EncryptGuid(doctors.Id),
+                StatusWork = (StatusWorkDoctor)work.StatusWork,
+                JobSettingDto = jobSettingDto,
+                Specialities = names
+            };
+        }
+
 
 
     }

@@ -21,5 +21,10 @@ namespace Server.Managers.Storages.DoctorManager
         {
             return await (from DoctorItem in this.ServerDbContext.Doctors where DoctorItem.UserId == IdUser select DoctorItem).FirstAsync();
         }
+
+        public async Task<Doctors> SelectDoctorById(Guid IdDoctor)
+        {
+            return await this.ServerDbContext.Doctors.FindAsync(IdDoctor);
+        }
     }
 }

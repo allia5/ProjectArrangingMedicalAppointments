@@ -1,4 +1,5 @@
-﻿using Client.Services.Foundations.AuthentificationStatService;
+﻿using Client.Services.Exceptions;
+using Client.Services.Foundations.AuthentificationStatService;
 using Client.Services.Foundations.WorkDoctorService;
 using DTO;
 using Microsoft.AspNetCore.Components;
@@ -13,6 +14,8 @@ namespace Client.Pages
     public class JobsDoctorComponentBase : ComponentBase
     {
         protected bool Isloding = true;
+        protected string Index = null;
+        protected string ErrorMessage = null;
         public List<JobsDoctorDto> jobs = new List<JobsDoctorDto>();
         [Inject]
         public AuthentificationStatService AuthentificationStatService { get; set; }
@@ -37,16 +40,42 @@ namespace Client.Pages
         }
         protected override async Task OnInitializedAsync()
         {
-            var UserStat = await this.AuthentificationStatService.GetAuthenticationStateAsync();
-            if (UserStat.User.Identity?.IsAuthenticated ?? false)
+            try
             {
-                this.Isloding = true;
-                this.jobs = await this.WorkDoctorService.GetJobsDoctorService();
-                this.Isloding = false;
+                var UserStat = await this.AuthentificationStatService.GetAuthenticationStateAsync();
+                if (UserStat.User.Identity?.IsAuthenticated ?? false)
+                {
+                    this.Isloding = true;
+                    this.jobs = await this.WorkDoctorService.GetJobsDoctorService();
+                    this.Isloding = false;
+                }
+                else
+                {
+                    this.navigationManager.NavigateTo("Login/JobsDoctor");
+                }
             }
-            else
+            catch (UnauthorizedException Ex)
             {
-                this.navigationManager.NavigateTo("/JobsDoctor");
+                this.ErrorMessage = "You are Not Authorized";
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+
+        }
+        protected async Task UnAcceptedJob(string IdJob)
+        {
+            try
+            {
+                this.Index = IdJob;
+                await this.WorkDoctorService.UpdateStatusServiceWorkDoctor(new UpdateStatusWorkDoctorDto { Status = StatusWorkDoctor.Notaccepted, WorkId = IdJob });
+                this.jobs = this.jobs.Where(e => e.IdJob != IdJob).ToList();
+                this.Index = null;
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage = e.Message;
             }
         }
 

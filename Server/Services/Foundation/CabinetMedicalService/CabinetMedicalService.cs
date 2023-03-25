@@ -18,6 +18,7 @@ namespace Server.Services.Foundation.CabinetMedicalService
         public async Task<CabinetMedicalDto> SelectCabinetMedicalByAdmin(string Email) =>
         await TryCatch(async () =>
         {
+
             ValidateEntryString(Email);
             var User = await this._userManager.FindByEmailAsync(Email);
             ValidateUserIsNull(User);

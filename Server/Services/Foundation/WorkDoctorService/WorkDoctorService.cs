@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.DoctorManager;
+using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.WorkDoctorManager;
+using Server.Managers.UserManager;
+using Server.Models.CabinetMedicals;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
 using Server.Services.Foundation.MailService;
@@ -18,13 +21,17 @@ namespace Server.Services.Foundation.WorkDoctorService
         public readonly ICabinetMedicalManager cabinetMedicalManager;
         public readonly IWorkDoctorManager workDoctorManager;
         public readonly IMailService mailService;
-        public WorkDoctorService(UserManager<User> _userManager, IDoctorManager doctorManager, ICabinetMedicalManager cabinetMedicalManager, IWorkDoctorManager workDoctorManager, IMailService mailService)
+        public readonly ISpecialitiesManager specialitiesManager;
+        public readonly IUserManager userManager;
+        public WorkDoctorService(UserManager<User> _userManager, IDoctorManager doctorManager, ICabinetMedicalManager cabinetMedicalManager, IWorkDoctorManager workDoctorManager, IMailService mailService, ISpecialitiesManager specialitiesManager, IUserManager userManager)
         {
             this._userManager = _userManager;
             this.doctorManager = doctorManager;
             this.cabinetMedicalManager = cabinetMedicalManager;
             this.workDoctorManager = workDoctorManager;
             this.mailService = mailService;
+            this.specialitiesManager = specialitiesManager;
+            this.userManager = userManager;
         }
 
         public async Task<List<InvitationsDoctorDto>> GetInvitationDoctor(string Email) =>
@@ -86,7 +93,11 @@ namespace Server.Services.Foundation.WorkDoctorService
                 var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorWithIdWorkDoctor(DecryptGuid(updateStatusWorkDoctorDto.WorkId), Doctor.Id);
                 ValidateWorkDoctorIsNull(WorkDoctor);
                 var newWorkDoctor = MapperToNewWorkDoctorStatusService(WorkDoctor, updateStatusWorkDoctorDto);
-                await this.workDoctorManager.UpdateWorkDoctor(WorkDoctor);
+                var result = await this.workDoctorManager.UpdateWorkDoctor(WorkDoctor);
+                var mailrequest = MapperMailRequestUpdateStatJobDoctor(User, result);
+                await this.mailService.SendEmailNotification(mailrequest);
+
+
 
             });
 
@@ -143,6 +154,30 @@ namespace Server.Services.Foundation.WorkDoctorService
 
             });
 
+        public async Task<List<DoctorCabinetDto>> GetDoctorInformationFromCabinet(string Email) =>
+            await _TryCatch_1(async () =>
+            {
+                List<DoctorCabinetDto> ListResult = new List<DoctorCabinetDto>();
+                ValidateEmailIsNull(Email);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalByUserId(User.Id);
+                ValidateCabinetMedicalIsNull(Cabinet);
+                var ListJobByCabinet = await this.workDoctorManager.SelectWorksDoctorByIdCabinet(Cabinet.Id);
+                foreach (var item in ListJobByCabinet)
+                {
+                    var Doctor = await this.doctorManager.SelectDoctorById(item.IdDoctor);
+                    var Specialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(Doctor.Id);
+                    ValidationDoctorIsNull(Doctor);
+                    var user = await this.userManager.SelectUserByIdDoctor(Doctor.UserId);
+                    ValidateUserIsNull(user);
+                    var jobsetting = MapperToJobSetting(item);
+                    var result = MapperToDoctorCabinetDto(Specialities, Doctor, jobsetting, user, item);
+                    ListResult.Add(result);
+                }
+                return ListResult;
+
+            });
 
 
     }
