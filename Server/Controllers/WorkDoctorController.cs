@@ -77,10 +77,12 @@ namespace Server.Controllers
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "MEDECIN")]
         public async Task<ActionResult> PatchStatusServiceDoctor([FromBody] UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto)
         {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
                 var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.workDoctorService.UpdateStatusServiceWorkDoctor(email, updateStatusWorkDoctorDto);
+                transaction.Complete();
                 return Ok();
             }
             catch (ValidationException Ex)
@@ -90,6 +92,10 @@ namespace Server.Controllers
             catch (Exception e)
             {
                 return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
             }
         }
 
@@ -172,6 +178,35 @@ namespace Server.Controllers
             catch (Exception e)
             {
                 return Problem(e.Message);
+            }
+        }
+        [HttpDelete("deleteJobDoctor")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "ADMIN")]
+        public async Task<ActionResult> DeleteJobDoctor(string IdJob)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.workDoctorService.DeleteWorkDoctorByAdmin(email, IdJob);
+                transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (ServiceException Ex)
+            {
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
             }
         }
 

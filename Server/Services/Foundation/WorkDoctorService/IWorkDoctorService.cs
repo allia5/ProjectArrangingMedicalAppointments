@@ -13,5 +13,7 @@ namespace Server.Services.Foundation.WorkDoctorService
         public Task UpdateSettingJobDoctor(JobSettingDto jobSettingDto, string Email);
         public Task<List<DoctorCabinetDto>> GetDoctorInformationFromCabinet(string Email);
 
+        public Task DeleteWorkDoctorByAdmin(string Email, string IdJob);
+
     }
 }

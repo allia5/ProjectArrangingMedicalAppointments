@@ -52,5 +52,19 @@ namespace Server.Managers.Storages.WorkDoctorManager
         {
             return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId && Work.StatusWork == StatusWork.accepted select Work).ToListAsync();
         }
+
+        public async Task<WorkDoctors> DeleteWorkDoctor(WorkDoctors workDoctors)
+        {
+            var result = this.ServerDbContext.WorkDoctors.Remove(workDoctors);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+
+
+        }
+
+        public async Task<WorkDoctors> SelectWorkDoctorByIdAndIdCabinet(Guid Id, Guid IdCabinet)
+        {
+            return await (from job in this.ServerDbContext.WorkDoctors where job.Id == Id && job.IdCabinet == IdCabinet select job).FirstAsync();
+        }
     }
 }

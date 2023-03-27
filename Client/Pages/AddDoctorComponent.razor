@@ -1,7 +1,7 @@
 ﻿@page "/AddDoctor"
 @inherits AddDoctorComponentBase
 
-
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
 <table class="table caption-top">
     <caption>List of users</caption>
     <thead>
@@ -50,6 +50,7 @@
         }
     </tbody>
 </table>
+</div>
 @if (IsLoading == true)
 {
     <WaitComponent></WaitComponent>

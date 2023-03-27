@@ -11,7 +11,7 @@
 }
 
 
-
+<div class="shadow-lg p-3 mb-5 bg-light rounded">
 
 <EditForm Model="CabinetMedicalInformation" OnValidSubmit="Update">
     <DataAnnotationsValidator />
@@ -46,18 +46,20 @@
             <InputText type="text" class="form-control" id="floatingPassword" @bind-Value="CabinetMedicalInformation.Services" ></InputText>
             <label for="floatingPassword">Services</label>
         </div>
-       
+        <p>Status Of Clinic Is: @CabinetMedicalInformation.Status.ToString()</p>
+
         <InputSelect class="form-control" @bind-Value="@CabinetMedicalInformation.Status" >
 
-            <option value="1">On </option>
+            <option value="1">Open </option>
 
-            <option value="0"> off </option>
+            <option value="0"> Close </option>
 
         </InputSelect>
-        <p>You selected: @CabinetMedicalInformation.Status</p>
+        
 
         <button class="btn btn-light mb-3">Update</button>
        
     </div>
 
 </EditForm>
+</div>

@@ -5,6 +5,7 @@ using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.WorkDoctorManager;
 using Server.Managers.UserManager;
+using Server.Models.Admin;
 using Server.Models.CabinetMedicals;
 using Server.Models.UserAccount;
 using Server.Models.WorkDoctor;
@@ -92,9 +93,11 @@ namespace Server.Services.Foundation.WorkDoctorService
                 ValidationDoctorIsNull(Doctor);
                 var WorkDoctor = await this.workDoctorManager.SelectWorkDoctorByIdDoctorWithIdWorkDoctor(DecryptGuid(updateStatusWorkDoctorDto.WorkId), Doctor.Id);
                 ValidateWorkDoctorIsNull(WorkDoctor);
+                var Admin = await this.userManager.SelectUserByIdCabinet(WorkDoctor.IdCabinet);
+                ValidateUserIsNull(Admin);
                 var newWorkDoctor = MapperToNewWorkDoctorStatusService(WorkDoctor, updateStatusWorkDoctorDto);
                 var result = await this.workDoctorManager.UpdateWorkDoctor(WorkDoctor);
-                var mailrequest = MapperMailRequestUpdateStatJobDoctor(User, result);
+                var mailrequest = MapperMailRequestUpdateStatJobDoctor(Admin, result);
                 await this.mailService.SendEmailNotification(mailrequest);
 
 
@@ -169,7 +172,7 @@ namespace Server.Services.Foundation.WorkDoctorService
                     var Doctor = await this.doctorManager.SelectDoctorById(item.IdDoctor);
                     var Specialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(Doctor.Id);
                     ValidationDoctorIsNull(Doctor);
-                    var user = await this.userManager.SelectUserByIdDoctor(Doctor.UserId);
+                    var user = await this.userManager.SelectUserByIdDoctor(Doctor.Id);
                     ValidateUserIsNull(user);
                     var jobsetting = MapperToJobSetting(item);
                     var result = MapperToDoctorCabinetDto(Specialities, Doctor, jobsetting, user, item);
@@ -178,6 +181,25 @@ namespace Server.Services.Foundation.WorkDoctorService
                 return ListResult;
 
             });
+
+        public async Task DeleteWorkDoctorByAdmin(string Email, string IdJob) =>
+            await TryCatch(async () =>
+            {
+                ValidateEmailIsNull(Email);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalByUserId(User.Id);
+                ValidateCabinetMedicalIsNull(Cabinet);
+                var Job = await this.workDoctorManager.SelectWorkDoctorByIdAndIdCabinet(DecryptGuid(IdJob), Cabinet.Id);
+                ValidateWorkDoctorIsNull(Job);
+                var Doctor = await this.doctorManager.SelectDoctorById(Job.IdDoctor);
+                var userDoctor = await this.userManager.SelectUserByIdDoctor(Job.IdDoctor);
+                await this.workDoctorManager.DeleteWorkDoctor(Job);
+                var mailRequest = MapperMailRequestDeleteUser(userDoctor, Cabinet);
+                await this.mailService.SendEmailNotification(mailRequest);
+            });
+
+
 
 
     }

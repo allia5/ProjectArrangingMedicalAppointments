@@ -31,6 +31,16 @@ namespace Server.Services.Foundation.WorkDoctorService
                 ReadyTime = DateTime.MaxValue,
             };
         }
+        public static MailRequest MapperMailRequestDeleteUser(User user, CabinetMedical cabinetMedical)
+        {
+            return new MailRequest
+            {
+                ToEmail = user.Email,
+                Subject = "Notification",
+                Body = " <h3> AliaMed.Com </h3> " +
+                                $"<a>Your Job Delete from cabinet :{cabinetMedical.NameCabinet}</a>" + "<br/>"
+            };
+        }
         public static MailRequest MapperMailRequest(User user, CabinetMedical cabinetMedical)
         {
             return new MailRequest
@@ -118,7 +128,7 @@ namespace Server.Services.Foundation.WorkDoctorService
 
 
         }
-        public static DoctorCabinetDto MapperToDoctorCabinetDto(List<Specialite> specialities, Doctors doctors, JobSettingDto jobSettingDto, User user,WorkDoctors work)
+        public static DoctorCabinetDto MapperToDoctorCabinetDto(List<Specialite> specialities, Doctors doctors, JobSettingDto jobSettingDto, User user, WorkDoctors work)
         {
             List<string> names = specialities.Select(p => p.NameSpecialite).ToList();
             return new DoctorCabinetDto

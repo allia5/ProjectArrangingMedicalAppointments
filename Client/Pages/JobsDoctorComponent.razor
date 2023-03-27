@@ -15,6 +15,7 @@
 
 
 @foreach(var item in jobs){
+    <div class="shadow-lg p-3 mb-5 bg-light rounded">
     <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
             <div class="col-md-4">
@@ -41,6 +42,7 @@
                 }
         </button>
         <a href="/JobSetting/@item.IdJob.Replace("/","*")"><button class="btn btn-success">Update Job</button></a></div>
+    </div>
     </div>
 }
 

@@ -48,14 +48,17 @@ namespace Client.Services.Foundations.LoginService
 
         public async Task AuthentificationState(JwtDto jwtDto)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/UserAccount/AuthenticatedState");
+          
+                var request = new HttpRequestMessage(HttpMethod.Get, "/api/UserAccount/AuthenticatedState");
 
-            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtDto.Token);
-            var result = await HttpClient.SendAsync(request);
-            if (result.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                throw new UnauthorizedException("Account Not Authonticated in System");
-            }
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwtDto.Token);
+                var result = await HttpClient.SendAsync(request);
+                if (result.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new UnauthorizedException("Account Not Authonticated in System");
+                }
+           
+
 
         }
 

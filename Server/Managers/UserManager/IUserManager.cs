@@ -4,6 +4,7 @@ namespace Server.Managers.UserManager
 {
     public interface IUserManager
     {
-        public Task<User> SelectUserByIdDoctor(string IdUser);
+        public Task<User> SelectUserByIdDoctor(Guid IdUser);
+        public Task<User> SelectUserByIdCabinet(Guid IdCabinet);
     }
 }

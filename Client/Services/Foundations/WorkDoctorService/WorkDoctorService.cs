@@ -18,6 +18,31 @@ namespace Client.Services.Foundations.WorkDoctorService
             this.localStorageServices = localStorageServices;
         }
 
+        public async Task DeleteJobDoctorByAdmin(string IdJob)
+        {
+            IdJob= System.Web.HttpUtility.UrlEncode(IdJob);
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            var httpRequest = new HttpRequestMessage(HttpMethod.Delete, $"/api/WorkDoctor/deleteJobDoctor?IdJob={IdJob}");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            var result = await this.httpClient.SendAsync(httpRequest);
+            if (result.StatusCode == HttpStatusCode.NoContent)
+            {
+                throw new NoContentException("No delete data");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
         public async Task<List<JobsDoctorDto>> GetJobsDoctorService()
         {
 

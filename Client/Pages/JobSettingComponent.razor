@@ -43,23 +43,24 @@ else if (SuccessMessage != null)
             <label for="floatingPassword">number patient Accepted</label>
         </div>
 
+        <p>Status Reservation: You selected @JobSettingModel.StatusReservation.ToString()</p>
+        <InputSelect class="form-select" @bind-Value="@JobSettingModel.StatusReservation" aria-label="Default select example">
+           
+            <option value="1">Ready</option>
 
-        <InputSelect class="form-control" @bind-Value="@JobSettingModel.StatusReservation">
-
-            <option value="1">On </option>
-
-            <option value="0"> off </option>
-
-        </InputSelect>
-        <p>You selected: @JobSettingModel.StatusReservation</p>
-        <InputSelect class="form-control" @bind-Value="@JobSettingModel.statusService">
-
-            <option value="1">On </option>
-
-            <option value="0"> off </option>
+            <option value="0"> Not Ready </option>
 
         </InputSelect>
-        <p>You selected: @JobSettingModel.statusService</p>
+       
+        <p>Status Service: You Selected  @JobSettingModel.statusService.ToString()</p>
+        <InputSelect class="form-select" @bind-Value="@JobSettingModel.statusService" aria-label="Default select example">
+          
+            <option value="1">InService </option>
+
+            <option value="0"> outService</option>
+
+        </InputSelect>
+       
 
         <button class="btn btn-light mb-3">Update</button>
 
