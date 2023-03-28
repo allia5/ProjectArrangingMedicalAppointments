@@ -11,6 +11,9 @@ namespace Server.Models.secretary
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
+        public StatusSecretary Status { get; set; }
+        public DateTime DateCreate { get; set; }
         [ForeignKey("CabinetMedical")]
         public Guid IdCabinetMedical { get; set; }
 

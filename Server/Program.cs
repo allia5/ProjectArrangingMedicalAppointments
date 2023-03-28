@@ -9,6 +9,7 @@ using Server.Data;
 using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.RolesManager;
+using Server.Managers.Storages.SecretaryManager;
 using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.UserRoleManager;
 using Server.Managers.Storages.WorkDoctorManager;
@@ -18,6 +19,7 @@ using Server.Services.Foundation.CabinetMedicalService;
 using Server.Services.Foundation.DoctorService;
 using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
+using Server.Services.Foundation.SecretaryService;
 using Server.Services.Foundation.WorkDoctorService;
 using Server.Services.UserService;
 using System.Text;
@@ -86,6 +88,8 @@ builder.Services.AddScoped<IRolesManager, RolesManager>();
 builder.Services.AddScoped<IWorkDoctorManager, WorkDoctorManager>();
 builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IWorkDoctorService, WorkDoctorService>();
+builder.Services.AddScoped<ISecretaryManager, SecretaryManager>();
+builder.Services.AddScoped<ISecretaryService, SecretaryService>();
 
 
 builder.Services.AddControllers();
