@@ -8,7 +8,7 @@ namespace Client.Pages
 {
     public class InvitationWorkComponentBase : ComponentBase
     {
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage = null;
         protected string IndexRefuse = null;
         protected string IndexAccepte = null;
         protected bool IsLoding = true;
@@ -46,7 +46,7 @@ namespace Client.Pages
             try
             {
                 this.IndexRefuse = Id;
-                await this.WorkDoctorService.UpdateStatusServiceWorkDoctor(new UpdateStatusWorkDoctorDto { Status = StatusWorkDoctor.Notaccepted, WorkId = Id });
+                await this.WorkDoctorService.DeleteJobDoctorByDoctor(Id);
                 invitationsDoctorDtos = invitationsDoctorDtos.Where(e => e.Id != Id).ToList();
                 this.IndexAccepte = null;
             }

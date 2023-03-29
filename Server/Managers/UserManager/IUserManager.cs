@@ -6,5 +6,6 @@ namespace Server.Managers.UserManager
     {
         public Task<User> SelectUserByIdDoctor(Guid IdUser);
         public Task<User> SelectUserByIdCabinet(Guid IdCabinet);
+        public Task<List<User>> SelectUsersAdminByIdCabinet(Guid CabinetId);
     }
 }

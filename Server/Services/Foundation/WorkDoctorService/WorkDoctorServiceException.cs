@@ -28,6 +28,7 @@ namespace Server.Services.Foundation.WorkDoctorService
                 throw new ServiceException(Ex);
             }
 
+
         }
         private async Task<List<InvitationsDoctorDto>> _TryCatch(ReturningInvitationFunction returningInvitationFunction)
         {

@@ -10,6 +10,13 @@ namespace Server.Services.Foundation.WorkDoctorService
 {
     public partial class WorkDoctorService
     {
+        public void ValidateListUsers(List<User> Users)
+        {
+            if (Users.Count() == 0)
+            {
+                throw new NullException(nameof(Users));
+            }
+        }
         public void ValidateOnUpdateStatusWorkDoctoter(string Email, UpdateStatusWorkDoctorDto updateStatusWorkDoctorDto)
         {
             if (updateStatusWorkDoctorDto != null)

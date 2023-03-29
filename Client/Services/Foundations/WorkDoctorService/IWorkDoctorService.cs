@@ -12,5 +12,6 @@ namespace Client.Services.Foundations.WorkDoctorService
         public Task UpdateJobSetting(JobSettingDto jobSettingDto);
         public Task<List<DoctorCabinetDto>> GetListDoctorsInformationCabinet();
         public Task DeleteJobDoctorByAdmin(string IdJob);
+        public Task DeleteJobDoctorByDoctor(string IdJob);
     }
 }

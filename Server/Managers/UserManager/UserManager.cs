@@ -28,5 +28,15 @@ namespace Server.Managers.UserManager
                           join user in this.ServerDbContext.users on doctor.UserId equals user.Id
                           select user).FirstAsync();
         }
+
+        public async Task<List<User>> SelectUsersAdminByIdCabinet(Guid CabinetId)
+        {
+            return await (from cabinet in this.ServerDbContext.cabinetMedicals
+                          where cabinet.Id == CabinetId
+                          join admin in this.ServerDbContext.admins on cabinet.Id equals admin.IdCabinet
+                          join doctor in this.ServerDbContext.Doctors on admin.IdDoctor equals doctor.Id
+                          join user in this.ServerDbContext.users on doctor.UserId equals user.Id
+                          select user).ToListAsync();
+        }
     }
 }

@@ -211,6 +211,32 @@ namespace Server.Controllers
         }
 
 
+        [HttpDelete("deleteInvitationJobByDoctor")]
+
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "ADMIN")]
+        public async Task<ActionResult> deleteInvitationJobByDoctor(string IdJob)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.workDoctorService.DeleteInvitationWorkDoctorByDoctor(email, IdJob);
+                transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+        }
 
 
     }

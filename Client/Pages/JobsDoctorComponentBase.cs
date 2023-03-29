@@ -25,19 +25,7 @@ namespace Client.Pages
         protected IWorkDoctorService WorkDoctorService { get; set; }
 
 
-        public static Image ByteArrayToImage(byte[] byteArray)
-        {
-            if (byteArray == null)
-            {
-                return null;
-            }
 
-            using (MemoryStream ms = new MemoryStream(byteArray))
-            {
-                Image image = Image.Load(ms);
-                return image;
-            }
-        }
         protected override async Task OnInitializedAsync()
         {
             try
@@ -64,13 +52,36 @@ namespace Client.Pages
             }
 
         }
-        protected async Task UnAcceptedJob(string IdJob)
+        protected async Task OnBackJob(string IdJob)
+        {
+            try
+            {
+                this.Index = IdJob;
+                await this.WorkDoctorService.UpdateStatusServiceWorkDoctor(new UpdateStatusWorkDoctorDto { Status = StatusWorkDoctor.accepted, WorkId = IdJob });
+                //this.jobs = this.jobs.Where(e => e.IdJob != IdJob).ToList();
+                var item = this.jobs.Where(e => e.IdJob == IdJob).First();
+                item.StatusServiceDoctor = StatusWorkDoctor.accepted;
+                var IndexList = this.jobs.FindIndex(e => e.IdJob == IdJob);
+                jobs[IndexList] = item;
+                this.Index = null;
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+        }
+
+        protected async Task OnInAcceptJob(string IdJob)
         {
             try
             {
                 this.Index = IdJob;
                 await this.WorkDoctorService.UpdateStatusServiceWorkDoctor(new UpdateStatusWorkDoctorDto { Status = StatusWorkDoctor.Notaccepted, WorkId = IdJob });
-                this.jobs = this.jobs.Where(e => e.IdJob != IdJob).ToList();
+                //  this.jobs = this.jobs.Where(e => e.IdJob != IdJob).ToList();
+                var item = this.jobs.Where(e => e.IdJob == IdJob).First();
+                item.StatusServiceDoctor = StatusWorkDoctor.Notaccepted;
+                var IndexList = this.jobs.FindIndex(e => e.IdJob == IdJob);
+                jobs[IndexList] = item;
                 this.Index = null;
             }
             catch (Exception e)

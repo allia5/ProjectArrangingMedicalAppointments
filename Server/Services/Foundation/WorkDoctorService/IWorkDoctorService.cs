@@ -14,6 +14,7 @@ namespace Server.Services.Foundation.WorkDoctorService
         public Task<List<DoctorCabinetDto>> GetDoctorInformationFromCabinet(string Email);
 
         public Task DeleteWorkDoctorByAdmin(string Email, string IdJob);
+        public Task DeleteInvitationWorkDoctorByDoctor(string Email, string jobId);
 
     }
 }

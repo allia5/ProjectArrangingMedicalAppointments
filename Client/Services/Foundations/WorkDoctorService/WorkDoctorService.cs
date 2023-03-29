@@ -20,7 +20,7 @@ namespace Client.Services.Foundations.WorkDoctorService
 
         public async Task DeleteJobDoctorByAdmin(string IdJob)
         {
-            IdJob= System.Web.HttpUtility.UrlEncode(IdJob);
+            IdJob = System.Web.HttpUtility.UrlEncode(IdJob);
             var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
             var httpRequest = new HttpRequestMessage(HttpMethod.Delete, $"/api/WorkDoctor/deleteJobDoctor?IdJob={IdJob}");
             httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
@@ -30,6 +30,29 @@ namespace Client.Services.Foundations.WorkDoctorService
                 throw new NoContentException("No delete data");
             }
             else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
+        public async Task DeleteJobDoctorByDoctor(string IdJob)
+        {
+            IdJob = System.Web.HttpUtility.UrlEncode(IdJob);
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            var httpRequest = new HttpRequestMessage(HttpMethod.Delete, $"/api/WorkDoctor/deleteInvitationJobByDoctor?IdJob={IdJob}");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            var result = await this.httpClient.SendAsync(httpRequest);
+
+
+            if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 throw new BadRequestException("Validation Error");
             }

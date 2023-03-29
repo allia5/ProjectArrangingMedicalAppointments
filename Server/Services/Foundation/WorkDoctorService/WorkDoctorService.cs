@@ -118,7 +118,7 @@ namespace Server.Services.Foundation.WorkDoctorService
                 {
                     var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalById(item.IdCabinet);
                     ValidateCabinetMedicalIsNull(Cabinet);
-                    var JobDoctorDto = MapperToJobsDoctorDto(item.Id, Cabinet);
+                    var JobDoctorDto = MapperToJobsDoctorDto(item, Cabinet);
                     jobsDoctorDtos.Add(JobDoctorDto);
                 }
                 return jobsDoctorDtos;
@@ -199,7 +199,25 @@ namespace Server.Services.Foundation.WorkDoctorService
                 await this.mailService.SendEmailNotification(mailRequest);
             });
 
-
+        public async Task DeleteInvitationWorkDoctorByDoctor(string Email, string jobId) =>
+            await TryCatch(async () =>
+            {
+                ValidateOnPostInvitationWorkDoctor(Email, jobId);
+                var UserDoctor = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(UserDoctor);
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(UserDoctor.Id);
+                ValidationDoctorIsNull(Doctor);
+                var JobInvitation = await this.workDoctorManager.SelectWorkDoctorByIdDoctorWithIdWorkDoctor(DecryptGuid(jobId), Doctor.Id);
+                ValidateWorkDoctorIsNull(JobInvitation);
+                var UsersAdmin = await this.userManager.SelectUsersAdminByIdCabinet(JobInvitation.IdCabinet);
+                ValidateListUsers(UsersAdmin);
+                await this.workDoctorManager.DeleteWorkDoctor(JobInvitation);
+                foreach (var item in UsersAdmin)
+                {
+                    var mailRequest = MapperToMailRequestWhenDeleteInvitationFromMedecin(UserDoctor, item);
+                    await this.mailService.SendEmailNotification(mailRequest);
+                }
+            });
 
 
     }

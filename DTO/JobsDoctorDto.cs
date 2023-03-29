@@ -15,5 +15,6 @@ namespace DTO
         public string timeJob { get; set; }
         public string Services { get; set; }
         public string IdJob { get; set; }
+        public StatusWorkDoctor StatusServiceDoctor { get; set; }
     }
 }

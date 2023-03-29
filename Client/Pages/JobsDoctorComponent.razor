@@ -32,15 +32,32 @@
                 </div>
             </div>
         </div>
-        <div class="align-self-end ml-auto "> <button @onclick="()=>UnAcceptedJob(item.IdJob)"  class="btn btn-danger">Delete Job
-                @if (Index == item.IdJob)
-                {
+            <div class="align-self-end ml-auto ">
+                @if(item.StatusServiceDoctor == DTO.StatusWorkDoctor.accepted){
+                    <button @onclick="()=>OnInAcceptJob(item.IdJob)" class="btn btn-danger">
+                        Delete Job
+                        @if (Index == item.IdJob)
+                        {
 
 
-                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    <span class="sr-only">Loading...</span>
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </button>
                 }
-        </button>
+                else @if (item.StatusServiceDoctor == DTO.StatusWorkDoctor.Notaccepted){
+                    <button @onclick="()=>OnBackJob(item.IdJob)" class="btn btn-primary">
+                        Back Job
+                        @if (Index == item.IdJob)
+                        {
+
+
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span class="sr-only">Loading...</span>
+                        }
+                    </button>
+                }
+               
         <a href="/JobSetting/@item.IdJob.Replace("/","*")"><button class="btn btn-success">Update Job</button></a></div>
     </div>
     </div>

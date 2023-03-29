@@ -20,7 +20,7 @@ namespace Server.Managers.Storages.CabinetMedicalManager
                           join Doctor in ServerDbContext.Doctors on user.Id equals Doctor.UserId
                           join admin in ServerDbContext.admins on Doctor.Id equals admin.IdDoctor
                           join Cabinet in ServerDbContext.cabinetMedicals on admin.IdCabinet equals Cabinet.Id
-                          select Cabinet).FirstAsync();
+                          select Cabinet).FirstOrDefaultAsync();
         }
 
         public async Task<CabinetMedical> UpdateCabinetMedical(CabinetMedical cabinetMedical)

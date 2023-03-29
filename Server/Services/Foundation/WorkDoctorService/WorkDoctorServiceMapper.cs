@@ -14,6 +14,17 @@ namespace Server.Services.Foundation.WorkDoctorService
 {
     public static class WorkDoctorServiceMapper
     {
+
+        public static MailRequest MapperToMailRequestWhenDeleteInvitationFromMedecin(User userDoctor, User userAdmin)
+        {
+            return new MailRequest
+            {
+                ToEmail = userAdmin.Email,
+                Subject = "Notification",
+                Body = " <h3> AliaMed.Com </h3> " +
+                                           $"<a> {userDoctor.Email} rejected Invitation </a>" + "<br/>"
+            };
+        }
         public static WorkDoctors MapperToWorkDoctor(Guid IdCabinet, Guid IdDoctor)
         {
             return new WorkDoctors
@@ -87,17 +98,18 @@ namespace Server.Services.Foundation.WorkDoctorService
             workDoctors.StatusWork = (StatusWork)updateStatusWorkDoctorDto.Status;
             return workDoctors;
         }
-        public static JobsDoctorDto MapperToJobsDoctorDto(Guid JobId, CabinetMedical cabinetMedical)
+        public static JobsDoctorDto MapperToJobsDoctorDto(WorkDoctors JobId, CabinetMedical cabinetMedical)
         {
             return new JobsDoctorDto
             {
                 Adress = cabinetMedical.Adress,
-                IdJob = EncryptGuid(JobId),
+                IdJob = EncryptGuid(JobId.Id),
                 Image = cabinetMedical.image,
                 nameCabinet = cabinetMedical.NameCabinet,
                 NumberPhone = cabinetMedical.numberPhone,
                 Services = cabinetMedical.Services,
-                timeJob = cabinetMedical.JobTime
+                timeJob = cabinetMedical.JobTime,
+                StatusServiceDoctor = (StatusWorkDoctor)JobId.StatusWork
             };
         }
         public static JobSettingDto MapperToJobSetting(WorkDoctors workDoctors)

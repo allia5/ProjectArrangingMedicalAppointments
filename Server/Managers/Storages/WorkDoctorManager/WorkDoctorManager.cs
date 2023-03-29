@@ -50,7 +50,7 @@ namespace Server.Managers.Storages.WorkDoctorManager
 
         public async Task<List<WorkDoctors>> SelectWorksDoctorActiveByIdDoctor(Guid DoctorId)
         {
-            return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId && Work.StatusWork == StatusWork.accepted select Work).ToListAsync();
+            return await (from Work in this.ServerDbContext.WorkDoctors where Work.IdDoctor == DoctorId && (Work.StatusWork == StatusWork.accepted || Work.StatusWork == StatusWork.Notaccepted) select Work).ToListAsync();
         }
 
         public async Task<WorkDoctors> DeleteWorkDoctor(WorkDoctors workDoctors)
