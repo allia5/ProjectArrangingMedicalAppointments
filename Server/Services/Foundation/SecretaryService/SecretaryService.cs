@@ -10,6 +10,7 @@ using Server.Managers.UserManager;
 using Server.Models.secretary;
 using Server.Models.UserAccount;
 using Server.Services.Foundation.MailService;
+using static Server.Utility.Utility;
 using static Server.Services.Foundation.SecretaryService.SecretaryMapperService;
 
 namespace Server.Services.Foundation.SecretaryService
@@ -86,6 +87,23 @@ namespace Server.Services.Foundation.SecretaryService
                 }
                 return resultList;
 
+            });
+
+        public async Task UpdateStatusSecretaryService(UpdateStatusSecretaryDto updateStatusSecretaryDto, string Email) =>
+            await _TryCatch(async () =>
+            {
+                ValidateOnUpdateStatusSecretary(Email, updateStatusSecretaryDto);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalByUserId(User.Id);
+                var Secretary = await this.secretaryManager.SelectSecretaryByIdAndIdCabinet(DecryptGuid(updateStatusSecretaryDto.SecretaryId), Cabinet.Id);
+                ValidateSecritayIsNull(Secretary);
+                var SecretaryUser = await this._userManager.FindByIdAsync(Secretary.IdUser);
+                ValidateUserIsNull(SecretaryUser);
+                var newSecretary = MapperToNewSecretary(updateStatusSecretaryDto, Secretary);
+                await this.secretaryManager.UpdateSecretary(newSecretary);
+                var mailRequest = MapperToMailRequest(SecretaryUser, Cabinet);
+                await this.mailService.SendEmailNotification(mailRequest);
             });
 
 

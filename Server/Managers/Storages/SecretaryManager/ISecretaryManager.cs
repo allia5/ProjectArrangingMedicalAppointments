@@ -10,5 +10,6 @@ namespace Server.Managers.Storages.SecretaryManager
         public Task<List<Secretarys>> SelectSecretayByIdUser(string UserId);
         public Task<Secretarys> UpdateSecretary(Secretarys secretarys);
         public Task<List<Secretarys>> SelectSecretaryByIdCabinet(Guid CabinetId);
+        public Task<Secretarys> SelectSecretaryByIdAndIdCabinet(Guid Id, Guid CabinetId);
     }
 }

@@ -93,5 +93,29 @@ namespace Client.Services.Foundations.SecretaryService
             }
 
         }
+
+        public async Task UpdateStatusSecretary(UpdateStatusSecretaryDto updateStatusSecretaryDto)
+        {
+            var Jwt = await this.LocalStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            var httpRequest = new HttpRequestMessage(HttpMethod.Patch, "/api/Secretary/UpdateStatusSecretary");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Jwt.Token);
+            var JsEmail = JsonSerializer.Serialize(updateStatusSecretaryDto);
+            httpRequest.Content = new StringContent(JsEmail, Encoding.UTF8, "application/json");
+            var result = await this.HttpClient.SendAsync(httpRequest);
+
+
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are not Authorize in this Action");
+            }
+            else if(result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
     }
 }

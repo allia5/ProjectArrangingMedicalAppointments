@@ -11,7 +11,9 @@ namespace Client.Pages
     {
         protected string ErrorMessage = null;
         protected string SuccessMessage = null;
-        protected string Index = null;
+        protected string IndexOne = null;
+        protected string IndexTwo = null;
+        protected string IndexThree = null;
         protected bool isLoding = true;
         protected string Email = null;
         protected bool ButtonAddIsLoding = false;
@@ -40,7 +42,39 @@ namespace Client.Pages
                 this.NavigationManager.NavigateTo("Login/AddSecretary");
             }
         }
-
+        public async Task OnDelete(string SecretaryId)
+        {
+            try
+            {
+                this.IndexOne = SecretaryId;
+                await this.sercretaryService.UpdateStatusSecretary(new UpdateStatusSecretaryDto { SecretaryId = SecretaryId, StatusSecritary = StatusSecritary.Deleted });
+                this.secritaryDtosActive = this.secritaryDtosActive.Where(e => e.IdSecritary != SecretaryId).ToList();
+                this.IndexOne = null;
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage = e.Message;
+            }
+        }
+        public async Task OnBack(string SecretaryId)
+        {
+            this.IndexThree = SecretaryId;
+            await this.sercretaryService.UpdateStatusSecretary(new UpdateStatusSecretaryDto { SecretaryId = SecretaryId, StatusSecritary = StatusSecritary.Active });
+            var itemActive = this.secritaryDtos.Where(e => e.IdSecritary == SecretaryId).First();
+            this.secritaryDtosActive.Add(itemActive);
+            this.secritaryDtosBlocked.Remove(itemActive);
+            this.IndexThree = null;
+        }
+        public async Task OnBlock(string SecretaryId)
+        {
+            this.IndexTwo = SecretaryId;
+            await this.sercretaryService.UpdateStatusSecretary(new UpdateStatusSecretaryDto { SecretaryId = SecretaryId, StatusSecritary = StatusSecritary.Block });
+            var itemBlocked = this.secritaryDtos.Where(e => e.IdSecritary == SecretaryId).First();
+            this.secritaryDtosBlocked.Add(itemBlocked);
+            this.secritaryDtosActive.Remove(itemBlocked);
+           
+            this.IndexTwo = null;
+        }
         public async Task AddSecretary()
         {
             try
@@ -50,34 +84,29 @@ namespace Client.Pages
                 this.secritaryDtosActive.Add(result);
                 this.ButtonAddIsLoding = false;
                 this.SuccessMessage = "Add Operation seccess ";
-                Thread.Sleep(1000);
-                this.SuccessMessage = null;
+
 
 
             }
             catch (BadRequestException Ex)
             {
                 this.ErrorMessage = Ex.Message;
-                Thread.Sleep(1000);
-                this.ErrorMessage = null;
+
             }
             catch (NotFoundException Ex)
             {
                 this.ErrorMessage = Ex.Message;
-                Thread.Sleep(1000);
-                this.ErrorMessage = null;
+
             }
             catch (ConflictException Ex)
             {
                 this.ErrorMessage = Ex.Message;
-                Thread.Sleep(1000);
-                this.ErrorMessage = null;
+
             }
             catch (Exception e)
             {
                 this.ErrorMessage = "Error Intern";
-                Thread.Sleep(1000);
-                this.ErrorMessage = null;
+
             }
         }
     }

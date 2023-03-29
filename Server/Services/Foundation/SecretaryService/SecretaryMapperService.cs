@@ -9,6 +9,11 @@ namespace Server.Services.Foundation.SecretaryService
 {
     public static class SecretaryMapperService
     {
+        public static Secretarys MapperToNewSecretary(UpdateStatusSecretaryDto updateStatusSecretaryDto, Secretarys secretarys)
+        {
+            secretarys.Status = (StatusSecretary)updateStatusSecretaryDto.StatusSecritary;
+            return secretarys;
+        }
         public static SecritaryDto MapperToSecretaryDto(User SecretaryUser, Secretarys secretarys)
         {
             return new SecritaryDto
@@ -31,7 +36,7 @@ namespace Server.Services.Foundation.SecretaryService
                 ToEmail = SecretaryUser.Email,
                 Subject = "Notification",
                 Body = " <h3> AliaMed.Com </h3> " +
-                                           $"<a> You Are added to the role Secretary By Cabinet:{cabinetMedical.NameCabinet}</a>" + "<br/>"
+                                           $"<a> You Are {SecretaryUser.Status.ToString()} to the role Secretary In Cabinet:{cabinetMedical.NameCabinet}</a>" + "<br/>"
             };
         }
 

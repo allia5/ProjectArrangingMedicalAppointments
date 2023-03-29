@@ -8,6 +8,7 @@ namespace Server.Services.Foundation.SecretaryService
     {
         public delegate Task<SecritaryDto> AddSecretaryReturningFunction();
         public delegate Task<List<SecritaryDto>> GetSecretaryReturningFunction();
+        public delegate Task UpdateSecretaryReturningFunction();
 
         public async Task<SecritaryDto> TryCatch(AddSecretaryReturningFunction addSecretaryReturningFunction)
         {
@@ -38,6 +39,18 @@ namespace Server.Services.Foundation.SecretaryService
             try
             {
                 return await getSecretaryReturningFunction();
+            }
+            catch (NullException Ex)
+            {
+                throw new ValidationException(Ex);
+            }
+
+        }
+        public async Task _TryCatch(UpdateSecretaryReturningFunction updateSecretaryReturningFunction)
+        {
+            try
+            {
+                await updateSecretaryReturningFunction();
             }
             catch (NullException Ex)
             {

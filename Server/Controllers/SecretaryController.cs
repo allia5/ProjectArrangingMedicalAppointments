@@ -74,6 +74,32 @@ namespace Server.Controllers
                 return Problem(e.Message);
             }
         }
+        [HttpPatch("UpdateStatusSecretary")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "ADMIN")]
+        public async Task<ActionResult> PatchStatusSecretary(UpdateStatusSecretaryDto updateStatusSecretaryDto)
+        {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
+            try
+            {
+                var emailAdmin = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.secretaryService.UpdateStatusSecretaryService(updateStatusSecretaryDto, emailAdmin);
+                transaction.Complete();
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+        }
+
 
     }
 }

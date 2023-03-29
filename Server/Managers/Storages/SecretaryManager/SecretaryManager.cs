@@ -41,9 +41,9 @@ namespace Server.Managers.Storages.SecretaryManager
             return await (from Secretary in this.ServerDbContext.Secretarys where Secretary.IdCabinetMedical == CabinetId select Secretary).ToListAsync();
         }
 
-
-
-
-
+        public async Task<Secretarys> SelectSecretaryByIdAndIdCabinet(Guid Id, Guid CabinetId)
+        {
+            return await (from Secretary in this.ServerDbContext.Secretarys where Secretary.IdCabinetMedical == CabinetId && Secretary.Id == Id select Secretary).FirstOrDefaultAsync();
+        }
     }
 }

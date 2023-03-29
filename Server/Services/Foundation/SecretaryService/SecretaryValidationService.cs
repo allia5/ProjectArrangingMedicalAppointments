@@ -1,4 +1,5 @@
-﻿using Server.Models.CabinetMedicals;
+﻿using DTO;
+using Server.Models.CabinetMedicals;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.secretary;
@@ -15,6 +16,15 @@ namespace Server.Services.Foundation.SecretaryService
                 throw new NullException(nameof(Entry));
             }
         }
+        public void ValidateOnUpdateStatusSecretary(string Email, UpdateStatusSecretaryDto updateStatusSecretaryDto)
+        {
+            ValidateEntry(Email);
+            if (updateStatusSecretaryDto == null)
+            {
+                throw new NullException(nameof(updateStatusSecretaryDto));
+            }
+
+        }
         public bool IsValideSecritary(Secretarys secretarys)
         {
             if (secretarys != null)
@@ -24,6 +34,15 @@ namespace Server.Services.Foundation.SecretaryService
             else
             {
                 return false;
+            }
+        }
+        public void ValidateSecritayIsNull(Secretarys secretarys)
+        {
+            if (secretarys == null)
+            {
+
+
+                throw new NullException(nameof(secretarys));
             }
         }
         public void ValidateSecritay(Secretarys secretarys)

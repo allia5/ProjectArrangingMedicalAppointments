@@ -6,5 +6,6 @@ namespace Client.Services.Foundations.SecretaryService
     {
         public Task<SecritaryDto> AddSecretary(string Email);
         public Task<List<SecritaryDto>> GetAllSecretary();
+        public Task UpdateStatusSecretary(UpdateStatusSecretaryDto updateStatusSecretaryDto);
     }
 }
