@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Net.Http.Headers;
+using Server.Models.CabinetMedicals;
+using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.UserAccount;
@@ -176,6 +178,22 @@ namespace Server.Services.UserService
                 return true;
             }
             return false;
+        }
+
+        public void ValidationDoctorIsNull(Doctors doctor)
+        {
+            if (doctor == null)
+            {
+                throw new NullException(nameof(doctor));
+
+            }
+        }
+        public void ValidateCabinetMedicalIsNull(CabinetMedical cabinetMedical)
+        {
+            if (cabinetMedical == null)
+            {
+                throw new NullException(nameof(cabinetMedical));
+            }
         }
 
     }

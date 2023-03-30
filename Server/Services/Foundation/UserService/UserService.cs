@@ -2,8 +2,13 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
+using Server.Managers.Storages.CabinetMedicalManager;
+using Server.Managers.Storages.DoctorManager;
 using Server.Managers.Storages.RolesManager;
+using Server.Managers.Storages.SpecialitiesManager;
 using Server.Managers.Storages.UserRoleManager;
+using Server.Managers.Storages.WorkDoctorManager;
+using Server.Managers.UserManager;
 using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Models.UserAccount;
@@ -21,13 +26,23 @@ namespace Server.Services.UserService
         public readonly IUserRoleManager userRoleManager;
         public readonly IRolesManager rolesManager;
         public readonly IJwtService jwtService;
-        public UserService(UserManager<User> _userManager, IMailService mailService, IUserRoleManager userRoleManager, IRolesManager rolesManager, IJwtService jwtService)
+        public readonly IUserManager userManager;
+        public readonly ICabinetMedicalManager cabinetMedicalManager;
+        public readonly IWorkDoctorManager workDoctorManager;
+        public readonly IDoctorManager doctorManager;
+        public readonly ISpecialitiesManager specialitiesManager;
+        public UserService(UserManager<User> _userManager, IMailService mailService, IUserRoleManager userRoleManager, IRolesManager rolesManager, IJwtService jwtService, IUserManager userManager, ICabinetMedicalManager cabinetMedicalManager, IWorkDoctorManager workDoctorManager, IDoctorManager doctorManager, ISpecialitiesManager specialitiesManager)
         {
             this._userManager = _userManager;
             this.mailService = mailService;
             this.userRoleManager = userRoleManager;
             this.rolesManager = rolesManager;
             this.jwtService = jwtService;
+            this.userManager = userManager;
+            this.cabinetMedicalManager = cabinetMedicalManager;
+            this.workDoctorManager = workDoctorManager;
+            this.doctorManager = doctorManager;
+            this.specialitiesManager = specialitiesManager;
         }
         public async Task<MessageResultDto> RegistreAccountAsync(RegistreAccountDto registreAccountDto) =>
             await TryCatch(async () =>
@@ -86,6 +101,8 @@ namespace Server.Services.UserService
                 ValidateUserIsNull(User);
                 var IdentityResult = await ValidateCompteUserService(User, Token);
                 ValidateIdentityToken(IdentityResult);
+                User.Status = UserStatus.Activated;
+                await this.userManager.UpdateUser(User);
                 var userRole = MaperToUserRole(User.Id, Guid.Parse("2B102F8F-079C-4AE1-B093-487BA70CF183"));
                 await this.userRoleManager.InsertUserRoleAsync(userRole);
                 return new MessageResultDto
@@ -130,10 +147,51 @@ namespace Server.Services.UserService
            }
            );
 
+        public async Task<List<DoctorSearchDto>> GetDoctorsAvailble()
+        {
+
+            List<DoctorSearchDto> ListdoctorSearchDtos = new List<DoctorSearchDto>();
+            List<CabinetSearchDto> ListcabinetSearchDtos = new List<CabinetSearchDto>();
+            List<string> ListSpecialities = new List<string>();
+            var ListUsersDoctor = await this.userManager.SelectAllUsersDoctor();
+            foreach (var userDoctor in ListUsersDoctor)
+            {
+
+                var Doctor = await this.doctorManager.SelectDoctorByIdUser(userDoctor.Id);
+                //  ValidationDoctorIsNull(Doctor);
+                if (Doctor != null)
+                {
+                    var ListJobsUser = await this.workDoctorManager.SelectWorksDoctorByIdDoctorActive(Doctor.Id);
+                    foreach (var job in ListJobsUser)
+                    {
+                        var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(job.IdCabinet);
+                        // ValidateCabinetMedicalIsNull(Cabinet);
+                        if (Cabinet != null)
+                        {
+                            var JobSearchDto = MapperToJobSearchDto(job);
+                            var CabinetSearchDto = MapperToCabinetSearch(JobSearchDto, Cabinet);
+                            ListcabinetSearchDtos.Add(CabinetSearchDto);
+                        }
 
 
+                    }
+                }
 
+                if (ListcabinetSearchDtos.Count() != 0)
+                {
+                    var Sepecialities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(Doctor.Id);
+                    ListSpecialities = Sepecialities.Select(e => e.NameSpecialite).ToList();
+                    var DoctorSearchDto = MapperToDoctorSearchDto(userDoctor, ListcabinetSearchDtos, ListSpecialities);
+                    ListdoctorSearchDtos.Add(DoctorSearchDto);
 
+                }
+
+                ListcabinetSearchDtos = new List<CabinetSearchDto>();
+                ListSpecialities = new List<string>();
+
+            }
+            return ListdoctorSearchDtos;
+        }
 
 
     }

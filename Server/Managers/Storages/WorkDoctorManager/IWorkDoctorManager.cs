@@ -12,6 +12,7 @@ namespace Server.Managers.Storages.WorkDoctorManager
         public Task<List<WorkDoctors>> SelectWorksDoctorActiveByIdDoctor(Guid DoctorId);
         public Task<WorkDoctors> DeleteWorkDoctor(WorkDoctors workDoctors);
         public Task<WorkDoctors> SelectWorkDoctorByIdAndIdCabinet(Guid Id, Guid IdCabinet);
+        public Task<List<WorkDoctors>> SelectWorksDoctorByIdDoctorActive(Guid DoctorId);
 
     }
 }

@@ -38,5 +38,21 @@ namespace Server.Managers.UserManager
                           join user in this.ServerDbContext.users on doctor.UserId equals user.Id
                           select user).ToListAsync();
         }
+
+        public async Task<List<User>> SelectAllUsersDoctor()
+        {
+            return await (from user in this.ServerDbContext.users
+                          where user.Status == UserStatus.Activated
+                          join doctor in this.ServerDbContext.Doctors on user.Id equals doctor.UserId
+                          where doctor.StatusDoctor == Models.Doctor.StatusDoctor.Activated
+                          select user).ToListAsync();
+        }
+
+        public async Task<User> UpdateUser(User user)
+        {
+            var result = this.ServerDbContext.users.Update(user);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }

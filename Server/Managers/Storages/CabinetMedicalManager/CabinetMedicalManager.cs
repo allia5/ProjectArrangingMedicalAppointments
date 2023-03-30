@@ -42,5 +42,10 @@ namespace Server.Managers.Storages.CabinetMedicalManager
         {
             return await this.ServerDbContext.cabinetMedicals.FirstAsync(e => e.Id == CabinetId);
         }
+
+        public async Task<CabinetMedical> SelectCabinetMedicalOpenById(Guid CabinetId)
+        {
+            return await (from cabinet in this.ServerDbContext.cabinetMedicals where cabinet.statusService == StatusService.Enline && cabinet.Id == CabinetId select cabinet).FirstOrDefaultAsync();
+        }
     }
 }

@@ -21,6 +21,7 @@ namespace Server.Models.MedicalOrder
         public string summary { get; set; }
         [Required]
         public StatuseOrdreMedical Status { get; set; }
+        public DateTime DateValidation { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
         public Doctors Doctors { get; set; }

@@ -1,0 +1,33 @@
+﻿@page "/"
+@inherits HomeComponentBase
+@layout UserLayout
+<div class="position-relative">
+    <img src="/oasis.jpg" class="w-100 h-auto" alt="...">
+    <div class="position-absolute w-50 top-50 start-50 translate-middle">
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+   
+<div class="card-group">
+    @foreach(var item in ListDoctorsAvailble){
+        <div class="card">
+            <img src="/Doctor.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">@item.FirstName @item.LastName</h5>
+                <p class="card-text">@item.Sexe</p>
+                 <p class="card-text">Specialities :
+                @foreach(var specialite in item.Specialities){
+                  @specialite <a-></a->
+                }
+                </p>
+
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    }
+   
+   
+</div>

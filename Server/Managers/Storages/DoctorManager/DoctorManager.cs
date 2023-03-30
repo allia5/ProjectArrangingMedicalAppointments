@@ -19,7 +19,7 @@ namespace Server.Managers.Storages.DoctorManager
 
         public async Task<Doctors> SelectDoctorByIdUser(string IdUser)
         {
-            return await (from DoctorItem in this.ServerDbContext.Doctors where DoctorItem.UserId == IdUser select DoctorItem).FirstAsync();
+            return await (from DoctorItem in this.ServerDbContext.Doctors where DoctorItem.UserId == IdUser select DoctorItem).FirstOrDefaultAsync();
         }
 
         public async Task<Doctors> SelectDoctorById(Guid IdDoctor)

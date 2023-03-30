@@ -7,5 +7,6 @@ namespace Server.Managers.Storages.CabinetMedicalManager
         public Task<CabinetMedical> SelectCabinetMedicalByUserId(string UserId);
         public Task<CabinetMedical> SelectCabinetMedicalById(Guid CabinetId);
         public Task<CabinetMedical> UpdateCabinetMedical(CabinetMedical cabinetMedical);
+        public Task<CabinetMedical> SelectCabinetMedicalOpenById(Guid CabinetId);
     }
 }

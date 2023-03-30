@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Server.Controllers;
 using Server.Data;
 using Server.Models.WorkDoctor;
 
@@ -65,6 +66,16 @@ namespace Server.Managers.Storages.WorkDoctorManager
         public async Task<WorkDoctors> SelectWorkDoctorByIdAndIdCabinet(Guid Id, Guid IdCabinet)
         {
             return await (from job in this.ServerDbContext.WorkDoctors where job.Id == Id && job.IdCabinet == IdCabinet select job).FirstAsync();
+        }
+
+        public async Task<List<WorkDoctors>> SelectWorksDoctorByIdDoctorActive(Guid DoctorId)
+        {
+            return await (from Work in this.ServerDbContext.WorkDoctors
+                          where Work.IdDoctor == DoctorId
+                          && Work.StatusWork == StatusWork.accepted
+                          && Work.statusServcie == StatusService.InService
+                          && Work.statusReservation == StatusReservation.Available
+                          select Work).ToListAsync();
         }
     }
 }

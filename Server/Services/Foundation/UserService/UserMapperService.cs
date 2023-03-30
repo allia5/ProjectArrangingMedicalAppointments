@@ -1,12 +1,54 @@
 ﻿using DTO;
+using Server.Models.CabinetMedicals;
 using Server.Models.UserAccount;
 using Server.Models.UserRoles;
+using Server.Models.WorkDoctor;
 using System.Runtime.CompilerServices;
+using static Server.Utility.Utility;
 
 namespace Server.Services.UserService
 {
     public static class UserMapperService
     {
+        public static DoctorSearchDto MapperToDoctorSearchDto(User user, List<CabinetSearchDto> cabinetSearchDtos, List<string> Specialities)
+        {
+            return new DoctorSearchDto
+            {
+                Id = EncryptGuid(Guid.Parse(user.Id)),
+                FirstName = user.Firstname,
+                LastName = user.LastName,
+                Sexe = (Sexe)user.Sexe,
+                Specialities = Specialities,
+                cabinetSearchDtos = cabinetSearchDtos
+
+
+            };
+        }
+
+        public static JobSearchDto MapperToJobSearchDto(WorkDoctors workDoctors)
+        {
+            return new JobSearchDto
+            {
+                EndTime = workDoctors.EndTime,
+                ReadyTime = workDoctors.ReadyTime,
+                NumberPatientAvailble = workDoctors.NbPatientAvailble,
+                Id = EncryptGuid(workDoctors.Id)
+            };
+        }
+        public static CabinetSearchDto MapperToCabinetSearch(JobSearchDto jobDto, CabinetMedical cabinetMedical)
+        {
+            return new CabinetSearchDto
+            {
+                Id = EncryptGuid(cabinetMedical.Id),
+                Adress = cabinetMedical.Adress,
+                Image = cabinetMedical.image,
+                Name = cabinetMedical.NameCabinet,
+                Services = cabinetMedical.Services,
+                JobSearchDto = jobDto
+
+            };
+        }
+
         public static User MaperToUser(this RegistreAccountDto registreAccountDto)
         {
             return new User
@@ -19,7 +61,7 @@ namespace Server.Services.UserService
                 NationalNumber = registreAccountDto.NationalNumber,
                 PhoneNumber = registreAccountDto.PhoneNumber,
                 DateOfBirth = registreAccountDto.DateOfBirth,
-                Status = UserStatus.Activated
+                Status = UserStatus.Deactivated
 
 
 

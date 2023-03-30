@@ -13,6 +13,7 @@ namespace Server.Services.UserService
         private delegate ValueTask<MessageResultDto> ReturningUserFunction();
         private delegate ValueTask<JwtDto> ReturningAuthenticationFunction();
 
+
         private async ValueTask<MessageResultDto> TryCatch(ReturningUserFunction returningUserFunction)
         {
             try
@@ -85,5 +86,6 @@ namespace Server.Services.UserService
 
             }
         }
+
     }
 }

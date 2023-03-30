@@ -2,8 +2,10 @@
 {
     public enum StatusPlaning
     {
-        missed = 0,
-        still = 1
-
+        rejected= -2,
+        absent =-1,
+        Still = 0,
+        passed = 1,
+        Delayed=2
     }
 }
