@@ -13,9 +13,7 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu" >
 
-    <div class="container">
-  <img src="/Logo.png" class="rounded" alt="...">
-</div>
+ 
     @if(IsLoding==true){
         <Client.Pages.WaitComponent></Client.Pages.WaitComponent>
     }
@@ -23,11 +21,7 @@
         <AuthorizeView>
 
             <Authorized>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link"  Match="NavLinkMatch.All">
-                     @context.User?.FindFirst(ClaimTypes.Name)?.Value
-            </NavLink>
-        </div>
+       
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                         Homes
@@ -97,16 +91,8 @@
         </AuthorizeView>
 
 
-        <AuthorizeView>
-
-            <Authorized>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="/Login/Home" Match="NavLinkMatch.All">
-                         <button class="btn btn-danger" @onclick="Logout">log out</button>
-                    </NavLink>
-                </div>
-            </Authorized>
-        </AuthorizeView>
+      
+        
             
     
     </nav>

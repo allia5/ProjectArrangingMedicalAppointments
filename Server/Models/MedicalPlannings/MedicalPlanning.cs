@@ -19,6 +19,7 @@ namespace Server.Models.MedicalPlannings
         public string AppointmentAdress { get; set; }
         [Required]
         public StatusPlaning Status { get; set; }
+        public StatusRequestPlanning StatusRequest { get; set; }
         [ForeignKey("User")]
         public string IdUser { get; set; }
         public User user { get; set; }

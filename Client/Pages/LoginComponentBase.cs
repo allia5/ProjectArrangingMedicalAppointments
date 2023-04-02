@@ -29,7 +29,7 @@ namespace Client.Pages
             var Stat = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
             if (Stat.User.Identity?.IsAuthenticated ?? false)
             {
-                this.navigationManager.NavigateTo(ReturnUrl);
+                this.navigationManager.NavigateTo(ReturnUrl, forceLoad: true);
             }
 
         }
@@ -38,7 +38,7 @@ namespace Client.Pages
             try
             {
                 await this.loginService.AuthentificationAccount(loginAccount);
-                navigationManager.NavigateTo("/Home");
+                navigationManager.NavigateTo("/Home", forceLoad: true);
             }
             catch (UnauthorizedException Ex)
             {

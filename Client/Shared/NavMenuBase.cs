@@ -18,7 +18,7 @@ namespace Client.Shared
         public NavigationManager NavigationManager { get; set; }
         protected override async Task OnInitializedAsync()
         {
-          
+
             await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
             this.IsLoding = false;
 
@@ -26,9 +26,6 @@ namespace Client.Shared
 
 
 
-        public async Task Logout()
-        {
-            await this.localStorages.RemoveItemAsync("JwtLocalStorage");
-        }
+
     }
 }
