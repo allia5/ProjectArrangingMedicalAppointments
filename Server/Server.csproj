@@ -27,8 +27,4 @@
     <ProjectReference Include="..\DTO\DTO.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Managers\Storages\PlanningAppoimentManager\" />
-  </ItemGroup>
-
 </Project>

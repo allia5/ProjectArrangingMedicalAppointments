@@ -8,6 +8,7 @@ using Microsoft.Net.Http.Headers;
 using Server.Data;
 using Server.Managers.Storages.CabinetMedicalManager;
 using Server.Managers.Storages.DoctorManager;
+using Server.Managers.Storages.PlanningAppoimentManager;
 using Server.Managers.Storages.RolesManager;
 using Server.Managers.Storages.SecretaryManager;
 using Server.Managers.Storages.SpecialitiesManager;
@@ -19,6 +20,7 @@ using Server.Services.Foundation.CabinetMedicalService;
 using Server.Services.Foundation.DoctorService;
 using Server.Services.Foundation.JwtService;
 using Server.Services.Foundation.MailService;
+using Server.Services.Foundation.PlanningAppoimentService;
 using Server.Services.Foundation.SecretaryService;
 using Server.Services.Foundation.WorkDoctorService;
 using Server.Services.UserService;
@@ -90,6 +92,8 @@ builder.Services.AddScoped<IDoctorService, DoctorService>();
 builder.Services.AddScoped<IWorkDoctorService, WorkDoctorService>();
 builder.Services.AddScoped<ISecretaryManager, SecretaryManager>();
 builder.Services.AddScoped<ISecretaryService, SecretaryService>();
+builder.Services.AddScoped<IPlanningAppoimentManager, PlanningAppoimentManager>();
+builder.Services.AddScoped<IPlanningAppoimentService, PlanningAppoimentService>();
 
 
 builder.Services.AddControllers();

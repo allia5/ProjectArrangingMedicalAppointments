@@ -38,7 +38,7 @@ namespace Client.Pages
             try
             {
                 await this.loginService.AuthentificationAccount(loginAccount);
-                navigationManager.NavigateTo("/Home", forceLoad: true);
+                navigationManager.NavigateTo(ReturnUrl, forceLoad: true);
             }
             catch (UnauthorizedException Ex)
             {

@@ -12,7 +12,7 @@ namespace Server.Models.MedicalPlannings
         public Guid Id { get; set; }
         [Required]
         public DateTime AppointmentDate { get; set; }
-       
+
         [Required]
         public int AppointmentCount { get; set; }
         [Required]
@@ -22,7 +22,7 @@ namespace Server.Models.MedicalPlannings
         public StatusRequestPlanning StatusRequest { get; set; }
         [ForeignKey("User")]
         public string IdUser { get; set; }
-        public User user { get; set; }
+        public User User { get; set; }
         [ForeignKey("Doctors")]
         public Guid IdDoctor { get; set; }
         public Doctors Doctors { get; set; }
