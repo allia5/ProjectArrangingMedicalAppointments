@@ -7,9 +7,9 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public partial class PlanningAppoimentService
     {
-        public delegate Task<AppointmentInformationDto> AppointmentInformationFunction();
+        public delegate Task<List<AppointmentInformationDto>> AppointmentInformationFunction();
 
-        public async Task<AppointmentInformationDto> TryCatch(AppointmentInformationFunction appointmentInformationFunction)
+        public async Task<List<AppointmentInformationDto>> TryCatch(AppointmentInformationFunction appointmentInformationFunction)
         {
             try
             {

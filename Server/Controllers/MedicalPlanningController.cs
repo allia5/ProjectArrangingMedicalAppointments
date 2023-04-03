@@ -23,7 +23,7 @@ namespace Server.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
-        public async Task<ActionResult<AppointmentInformationDto>> PostMedicalPlanningAppoiment(KeysReservationMedicalDto keysReservationMedicalDto)
+        public async Task<ActionResult<List<AppointmentInformationDto>>> PostMedicalPlanningAppoiment(KeysReservationMedicalDto keysReservationMedicalDto)
         {
             try
             {
@@ -51,6 +51,24 @@ namespace Server.Controllers
                 return Problem(e.Message);
             }
         }
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
 
+        public async Task<ActionResult<List<AppointmentInformationDto>>> GetListMedicalPlanningAppoiment()
+        {
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.planningAppoimentService.GetListPlanningAppoimentMedical(email);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
     }
 }

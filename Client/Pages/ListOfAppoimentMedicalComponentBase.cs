@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 namespace Client.Pages
 {
-    public class BookingMedicalInformationComponentBase : ComponentBase
+    public class ListOfAppoimentMedicalComponentBase : ComponentBase
     {
         protected string ErrorMessage = null;
         protected bool IsLoading = true;
@@ -29,8 +29,7 @@ namespace Client.Pages
                 var result = await this.AuthenticationStateProvider.GetAuthenticationStateAsync();
                 if (result.User.Identity?.IsAuthenticated ?? false)
                 {
-                    var KeysReservation = await this.localStorageServices.GetItemAsync<KeysReservationMedicalDto>("KeysReservationMedical");
-                    this.ListappointmentInformation = await this.medicalPlanningService.PostAppointmentInformationDto(KeysReservation);
+                    this.ListappointmentInformation = await this.medicalPlanningService.GetAppointmentInformationDto();
                     IsLoading = false;
                 }
                 else

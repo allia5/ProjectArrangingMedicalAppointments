@@ -1,8 +1,7 @@
-﻿@page "/PlanningMedicalInformation"
-
-@inherits BookingMedicalInformationComponentBase
-
-@if(ErrorMessage != null){
+﻿@page "/AppoimentsMedicalList"
+@inherits ListOfAppoimentMedicalComponentBase
+@if (ErrorMessage != null)
+{
     <ErrorRoutingMessage Message="@ErrorMessage"></ErrorRoutingMessage>
 }
 @foreach (var appointmentInformation in ListappointmentInformation)
@@ -44,13 +43,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-               
+
             </div>
         </div>
     </div>
 </div>
 
 
-@if(IsLoading==true){
+@if (IsLoading == true)
+{
     <WaitComponent></WaitComponent>
 }

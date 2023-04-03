@@ -43,9 +43,10 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             this.specialitiesManager = specialitiesManager;
             this.planningAppoimentManager = planningAppoimentManager;
         }
-        public async Task<AppointmentInformationDto> PostNewPlanningAppoimentMedical(string Email, KeysReservationMedicalDto keysReservationMedicalDto) =>
+        public async Task<List<AppointmentInformationDto>> PostNewPlanningAppoimentMedical(string Email, KeysReservationMedicalDto keysReservationMedicalDto) =>
             await TryCatch(async () =>
             {
+                List<AppointmentInformationDto> ListappointmentInformationDtos = new List<AppointmentInformationDto>();
                 ValidateEntryOnPostNewAppoimentPlanning(Email, keysReservationMedicalDto);
                 var User = await this._userManager.FindByEmailAsync(Email);
                 ValidateUserIsNull(User);
@@ -62,13 +63,23 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 var PlanningInformationModel = await GetDateReservation(Job, User);
                 var MedicalPlanning = mapperToMedicalPlanning(PlanningInformationModel, Doctor, Cabinet, User.Id);
                 await this.planningAppoimentManager.InsertMedicalPlanning(MedicalPlanning);
-                var ListSpecilities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(Doctor.Id);
-                var ListStringSpecialities = ListSpecilities.Select(e => e.NameSpecialite).ToList();
-                var UserDoctor = await this.userManager.SelectUserByIdDoctor(Doctor.Id);
-                ValidateUserIsNull(UserDoctor);
-                var DoctorAppoimentInformation = mapperToDoctorInformationAppointmentDto(User, ListStringSpecialities, Job);
-                var CabinetAppoimentInformation = MapperToCabinetInformationAppointmentDto(Cabinet);
-                return MapperToAppointmentInformationDto(DoctorAppoimentInformation, CabinetAppoimentInformation, MedicalPlanning);
+
+                var ListAllPlanningMedicalUser = await this.planningAppoimentManager.SelectMedicalPlanningByIdUser(User.Id);
+                foreach (var ItemPlanning in ListAllPlanningMedicalUser)
+                {
+                    var JobPlanning = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(ItemPlanning.IdDoctor, ItemPlanning.IdCabinet);
+                    var CabinetPlanning = await this.cabinetMedicalManager.SelectCabinetMedicalById(ItemPlanning.IdCabinet);
+                    var ListSpecilities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(ItemPlanning.IdDoctor);
+                    var ListStringSpecialities = ListSpecilities.Select(e => e.NameSpecialite).ToList();
+                    var UserDoctor = await this.userManager.SelectUserByIdDoctor(ItemPlanning.IdDoctor);
+                    ValidateUserIsNull(UserDoctor);
+                    var DoctorAppoimentInformation = mapperToDoctorInformationAppointmentDto(UserDoctor, ListStringSpecialities, JobPlanning);
+                    var CabinetAppoimentInformation = MapperToCabinetInformationAppointmentDto(CabinetPlanning);
+                    var result = MapperToAppointmentInformationDto(DoctorAppoimentInformation, CabinetAppoimentInformation, ItemPlanning);
+                    ListappointmentInformationDtos.Add(result);
+                }
+
+                return ListappointmentInformationDtos;
             });
 
 
@@ -79,7 +90,29 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 
 
 
+        public async Task<List<AppointmentInformationDto>> GetListPlanningAppoimentMedical(string Email) =>
+         await TryCatch(async () =>
+            {
+                List<AppointmentInformationDto> ListappointmentInformationDtos = new List<AppointmentInformationDto>();
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var ListAllPlanningMedicalUser = await this.planningAppoimentManager.SelectMedicalPlanningByIdUser(User.Id);
+                foreach (var ItemPlanning in ListAllPlanningMedicalUser)
+                {
+                    var JobPlanning = await this.workDoctorManager.SelectWorkDoctorByIdDoctorIdCabinetWithStatusActive(ItemPlanning.IdDoctor, ItemPlanning.IdCabinet);
+                    var CabinetPlanning = await this.cabinetMedicalManager.SelectCabinetMedicalById(ItemPlanning.IdCabinet);
+                    var ListSpecilities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(ItemPlanning.IdDoctor);
+                    var ListStringSpecialities = ListSpecilities.Select(e => e.NameSpecialite).ToList();
+                    var UserDoctor = await this.userManager.SelectUserByIdDoctor(ItemPlanning.IdDoctor);
+                    ValidateUserIsNull(UserDoctor);
+                    var DoctorAppoimentInformation = mapperToDoctorInformationAppointmentDto(UserDoctor, ListStringSpecialities, JobPlanning);
+                    var CabinetAppoimentInformation = MapperToCabinetInformationAppointmentDto(CabinetPlanning);
+                    var result = MapperToAppointmentInformationDto(DoctorAppoimentInformation, CabinetAppoimentInformation, ItemPlanning);
+                    ListappointmentInformationDtos.Add(result);
+                }
 
+                return ListappointmentInformationDtos;
+            });
 
 
 
@@ -91,11 +124,11 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             DateTime DateTimeEndTime = today.Add(EndTime);
             if (DateTime.Today > DateTimeEndTime)
             {
-                var ListPlanningMedicalConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now.AddDays(1), StatusRequestPlanning.Confirmed);
-                var ListPlanningMedicalNotConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now, StatusRequestPlanning.NotConfimed);
+                var ListPlanningMedicalConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now.AddDays(1));
+
                 if (ListPlanningMedicalConfirmed.Count() < workDoctors.NbPatientAvailble)
                 {
-                    ValidateUserIsNotInListAppoiment(user.Id, ListPlanningMedicalNotConfirmed);
+                    ValidateUserIsNotInListAppoiment(user.Id, ListPlanningMedicalConfirmed);
                     return new PlanningInformationModel { DateAppoiment = DateTime.Now.AddDays(1), CountOfPatient = ListPlanningMedicalConfirmed.Count() + 1 };
                 }
                 else
@@ -105,11 +138,11 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             }
             else
             {
-                var ListPlanningMedicalConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now, StatusRequestPlanning.Confirmed);
-                var ListPlanningMedicalNotConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now, StatusRequestPlanning.NotConfimed);
+                var ListPlanningMedicalConfirmed = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(workDoctors.IdCabinet, workDoctors.IdDoctor, DateTime.Now);
+
                 if (ListPlanningMedicalConfirmed.Count() < workDoctors.NbPatientAvailble)
                 {
-                    ValidateUserIsNotInListAppoiment(user.Id, ListPlanningMedicalNotConfirmed);
+                    ValidateUserIsNotInListAppoiment(user.Id, ListPlanningMedicalConfirmed);
                     return new PlanningInformationModel { DateAppoiment = DateTime.Now, CountOfPatient = ListPlanningMedicalConfirmed.Count() + 1 };
                 }
                 else
@@ -119,6 +152,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             }
 
         }
+
 
     }
 }

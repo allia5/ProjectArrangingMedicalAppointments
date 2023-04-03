@@ -4,6 +4,7 @@ namespace Client.Services.Foundations.MedicalPlanningService
 {
     public interface IMedicalPlanningService
     {
-        public Task<AppointmentInformationDto> GetAppointmentInformationDto(KeysReservationMedicalDto keysReservationMedicalDto);
+        public Task<List<AppointmentInformationDto>> PostAppointmentInformationDto(KeysReservationMedicalDto keysReservationMedicalDto);
+        public Task<List<AppointmentInformationDto>> GetAppointmentInformationDto();
     }
 }
