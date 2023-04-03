@@ -70,5 +70,28 @@ namespace Server.Controllers
                 return Problem(e.Message);
             }
         }
+        [HttpDelete("DeleteMedicalAppoiment")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
+        public async Task<ActionResult> DeleteMedicalAppoimentById(string IdMedicalAppoiment)
+        {
+            try
+            {
+                var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                await this.planningAppoimentService.DeleteMedicalPlanningAppoiment(email, IdMedicalAppoiment);
+                return Ok();
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest();
+            }
+            catch (ServiceException)
+            {
+                return StatusCode(412);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
     }
 }

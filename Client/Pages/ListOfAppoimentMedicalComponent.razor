@@ -18,7 +18,12 @@
             <p class="card-text">Time Ready : @appointmentInformation.DoctorInformation.TimeReady.TimeOfDay</p>
             <p class="card-text">Time End : @appointmentInformation.DoctorInformation.TimeEnd.TimeOfDay</p>
             <div class="d-flex">
-                <a href="#" class="btn btn-danger">Rejected</a><button @onclick="()=>OnUpdateAdressMap(appointmentInformation.CabinetInformation.AdressMap)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+               <button @onclick="()=>OnDeleteMedicalAppoiment(appointmentInformation.Id)" class="btn btn-danger">Delete Appoiment
+                   @if(Index == appointmentInformation.Id){
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">Loading...</span>
+                   }
+               </button ><button @onclick="()=>OnUpdateAdressMap(appointmentInformation.CabinetInformation.AdressMap)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     View Adress Map
                 </button>
             </div>

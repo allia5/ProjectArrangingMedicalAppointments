@@ -82,14 +82,6 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 return ListappointmentInformationDtos;
             });
 
-
-
-
-
-
-
-
-
         public async Task<List<AppointmentInformationDto>> GetListPlanningAppoimentMedical(string Email) =>
          await TryCatch(async () =>
             {
@@ -113,10 +105,6 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 
                 return ListappointmentInformationDtos;
             });
-
-
-
-
         private async Task<PlanningInformationModel> GetDateReservation(WorkDoctors workDoctors, User user)
         {
             DateTime today = DateTime.Today;
@@ -153,6 +141,34 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 
         }
 
+        public async Task DeleteMedicalPlanningAppoiment(string Email, string IdPlanning) =>
+            await TryCatch_(async () =>
+            {
+                List<string> ListEmail = new List<string>();
+                ValidateEntryOnDelete(Email, IdPlanning);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var PlanningMedical = await this.planningAppoimentManager.SelectPalnningMedicalByIdPlanningIdUser(DecryptGuid(IdPlanning), User.Id);
+                ValidatePlanningIsNull(PlanningMedical);
+                await this.planningAppoimentManager.DeletePlanningMedical(PlanningMedical);
+                var ListPlanningMedical = await this.planningAppoimentManager.SelectMedicalPlanningByIdDoctorIdCabinet(PlanningMedical.IdDoctor, PlanningMedical.IdCabinet);
+                ListPlanningMedical = ListPlanningMedical.OrderBy(o => o.AppointmentCount).ToList();
+                int k = 1;
+                foreach (var Item in ListPlanningMedical)
+                {
+                    var UserPatient = await this._userManager.FindByIdAsync(Item.IdUser);
+                    ValidateUserIsNull(UserPatient);
+                    var UserAccountDoctor = await this.userManager.SelectUserByIdDoctor(Item.IdDoctor);
+                    ValidateUserIsNull(UserAccountDoctor);
+                    var newPlanningMedical = MapperToNewMedicalPlanning(Item, k);
+                    await this.planningAppoimentManager.UpdatePlanningMedical(newPlanningMedical);
+                    var MailRequest = MapperMailRequestDeleteMedicalAppoiment(UserPatient, UserAccountDoctor, k);
+                    await this.mailService.SendEmailNotification(MailRequest);
+                    k = k + 1;
+
+
+                }
+            });
 
     }
 }

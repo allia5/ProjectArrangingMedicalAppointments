@@ -1,4 +1,5 @@
 ﻿using DTO;
+using MimeKit.Cryptography;
 using Server.Models.CabinetMedicals;
 using Server.Models.Doctor;
 using Server.Models.Doctor.Exceptions;
@@ -12,6 +13,19 @@ namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public partial class PlanningAppoimentService
     {
+        public void ValidateEntryOnDelete(string Email, string IdPlanning)
+        {
+            if (IsInvalid(Email))
+            {
+                throw new InvalidException(nameof(Email), Email, "User");
+            }
+            else if (IsInvalid(IdPlanning))
+            {
+                throw new InvalidException(nameof(IdPlanning), IdPlanning, "User");
+            }
+
+
+        }
         public void ValidateUserIsNotInListAppoiment(string userId, List<MedicalPlanning> medicalPlannings)
         {
             var result = medicalPlannings.Where(e => e.IdUser == userId).FirstOrDefault();
@@ -76,6 +90,13 @@ namespace Server.Services.Foundation.PlanningAppoimentService
             if (user == null)
             {
                 throw new NullException(nameof(user));
+            }
+        }
+        public void ValidatePlanningIsNull(MedicalPlanning medicalPlanning)
+        {
+            if (medicalPlanning == null)
+            {
+                throw new NullException(nameof(medicalPlanning));
             }
         }
         public static bool IsInvalid(string input) => String.IsNullOrWhiteSpace(input);

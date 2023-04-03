@@ -5,12 +5,29 @@ using Server.Models.MedicalPlannings;
 using Server.Models.UserAccount;
 using Server.Models.UtilityModel;
 using Server.Models.WorkDoctor;
+using System.ComponentModel;
 using static Server.Utility.Utility;
 
 namespace Server.Services.Foundation.PlanningAppoimentService
 {
     public static class PlanningAppoimentMapperService
     {
+
+        public static MailRequest MapperMailRequestDeleteMedicalAppoiment(User user, User DoctorUserAccount, int k)
+        {
+            return new MailRequest
+            {
+                ToEmail = user.Email,
+                Subject = "Notification",
+                Body = " <h3> AliaMed.Com </h3> " +
+                                $"<a>The order of your reservation number at the doctor {DoctorUserAccount.Firstname} {DoctorUserAccount.LastName} has been changed to {k}</a>" + "<br/>"
+            };
+        }
+        public static MedicalPlanning MapperToNewMedicalPlanning(MedicalPlanning medicalPlanning, int CountPatient)
+        {
+            medicalPlanning.AppointmentCount = CountPatient;
+            return medicalPlanning;
+        }
         public static MedicalPlanning mapperToMedicalPlanning(PlanningInformationModel planningInformationModel, Doctors doctors, CabinetMedical cabinetMedical, string UserId)
         {
             return new MedicalPlanning

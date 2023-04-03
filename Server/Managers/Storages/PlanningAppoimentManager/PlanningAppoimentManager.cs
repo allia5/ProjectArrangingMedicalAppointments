@@ -38,5 +38,29 @@ namespace Server.Managers.Storages.PlanningAppoimentManager
 
                           select planning).ToListAsync();
         }
+
+        public async Task<MedicalPlanning> DeletePlanningMedical(MedicalPlanning MedicalPlanning)
+        {
+            var result = this.ServerDbContext.medicalPlannings.Remove(MedicalPlanning);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
+
+        public async Task<MedicalPlanning> SelectPalnningMedicalByIdPlanningIdUser(Guid Id, string UserId)
+        {
+            return await (from planning in this.ServerDbContext.medicalPlannings where planning.Id == Id && planning.IdUser == UserId select planning).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<MedicalPlanning>> SelectMedicalPlanningByIdDoctorIdCabinet(Guid IdDoctor, Guid IdCabinet)
+        {
+            return await (from planning in this.ServerDbContext.medicalPlannings where planning.IdCabinet == IdCabinet && planning.IdDoctor == IdDoctor select planning).ToListAsync();
+        }
+
+        public async Task<MedicalPlanning> UpdatePlanningMedical(MedicalPlanning medicalPlanning)
+        {
+            var result = this.ServerDbContext.Update(medicalPlanning);
+            await this.ServerDbContext.SaveChangesAsync();
+            return result.Entity;
+        }
     }
 }

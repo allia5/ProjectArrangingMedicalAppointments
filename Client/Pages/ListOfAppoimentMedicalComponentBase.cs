@@ -11,6 +11,7 @@ namespace Client.Pages
         protected string ErrorMessage = null;
         protected bool IsLoading = true;
         public string AdressMap = null;
+        protected string Index = null;
         public List<AppointmentInformationDto> ListappointmentInformation = new List<AppointmentInformationDto>();
         [Inject]
         public AuthenticationStateProvider AuthenticationStateProvider { get; set; }
@@ -45,6 +46,21 @@ namespace Client.Pages
             }
 
 
+        }
+        protected async Task OnDeleteMedicalAppoiment(string IdAppoimentMedical)
+        {
+            try
+            {
+                this.Index = IdAppoimentMedical;
+                await this.medicalPlanningService.DeleteMedecalAppoiment(IdAppoimentMedical);
+                this.ListappointmentInformation = ListappointmentInformation.Where(e => e.Id != IdAppoimentMedical).ToList();
+                this.Index = null;
+            }
+            catch (Exception e)
+            {
+                this.ErrorMessage = e.Message;
+                this.Index = null;
+            }
         }
         protected async Task OnUpdateAdressMap(string addressMap)
         {

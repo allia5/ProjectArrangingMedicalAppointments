@@ -99,5 +99,28 @@ namespace Client.Services.Foundations.MedicalPlanningService
                 throw new ProblemException("Error Intern");
             }
         }
+
+        public async Task DeleteMedecalAppoiment(string IdMedicalAppoiment)
+        {
+            IdMedicalAppoiment = System.Web.HttpUtility.UrlEncode(IdMedicalAppoiment);
+            var jwt = await this.localStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            var httpRequest = new HttpRequestMessage(HttpMethod.Delete, $"/api/MedicalPlanning/DeleteMedicalAppoiment?IdMedicalAppoiment={IdMedicalAppoiment}");
+            httpRequest.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt.Token);
+            var result = await this.httpClient.SendAsync(httpRequest);
+
+
+            if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Validation Error");
+            }
+            else if (result.StatusCode == HttpStatusCode.PreconditionFailed)
+            {
+                throw new UnauthorizedException("precondition failed");
+            }
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
     }
 }
