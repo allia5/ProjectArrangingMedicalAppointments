@@ -10,7 +10,7 @@
     <br />
     <br />
         <form class="d-flex">
-            <input class="form-control me-2" style="border-radius: 25px;" type="search" placeholder="Search" aria-label="Search">
+            <input @bind="@Entry" @oninput="OnSearch" class="form-control me-2" style="border-radius: 25px;" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-success" style="border-radius: 25px;" type="submit">Search</button>
         </form>
     </div>
