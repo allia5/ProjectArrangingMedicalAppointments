@@ -26,7 +26,7 @@ namespace Server.Managers.Storages.SecretaryManager
 
         public async Task<List<Secretarys>> SelectSecretayByIdUser(string UserId)
         {
-            return await (from secreraty in this.ServerDbContext.Secretarys where secreraty.IdUser == UserId select secreraty).ToListAsync();
+            return await (from secreraty in this.ServerDbContext.Secretarys where secreraty.IdUser == UserId && secreraty.Status == StatusSecretary.Active select secreraty).ToListAsync();
         }
 
         public async Task<Secretarys> UpdateSecretary(Secretarys secretarys)
@@ -44,6 +44,14 @@ namespace Server.Managers.Storages.SecretaryManager
         public async Task<Secretarys> SelectSecretaryByIdAndIdCabinet(Guid Id, Guid CabinetId)
         {
             return await (from Secretary in this.ServerDbContext.Secretarys where Secretary.IdCabinetMedical == CabinetId && Secretary.Id == Id select Secretary).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Secretarys>> SelectAllSecretaryByIdUser(string UserId)
+        {
+            return await (from secretary in this.ServerDbContext.Secretarys
+                          where secretary.IdUser == UserId
+                          && secretary.Status == StatusSecretary.Active
+                          select secretary).ToListAsync();
         }
     }
 }

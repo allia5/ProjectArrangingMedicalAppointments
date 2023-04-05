@@ -8,6 +8,8 @@ using Server.Models.Doctor.Exceptions;
 using Server.Models.Exceptions;
 using Server.Services.Foundation.PlanningAppoimentService;
 using System.Security.Claims;
+using System.Transactions;
+using static Server.Utility.Utility;
 
 namespace Server.Controllers
 {
@@ -74,10 +76,12 @@ namespace Server.Controllers
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "PATIENT")]
         public async Task<ActionResult> DeleteMedicalAppoimentById(string IdMedicalAppoiment)
         {
+            TransactionScope transaction = CreateAsyncTransactionScope(IsolationLevel.ReadCommitted);
             try
             {
                 var email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
                 await this.planningAppoimentService.DeleteMedicalPlanningAppoiment(email, IdMedicalAppoiment);
+                transaction.Complete();
                 return Ok();
             }
             catch (ValidationException Ex)
@@ -91,6 +95,10 @@ namespace Server.Controllers
             catch (Exception e)
             {
                 return Problem(e.Message);
+            }
+            finally
+            {
+                transaction.Dispose();
             }
         }
     }

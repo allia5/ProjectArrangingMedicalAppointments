@@ -23,15 +23,71 @@ namespace Server.Services.Foundation.SecretaryService
         public readonly IUserManager userManager;
         public readonly ISecretaryManager secretaryManager;
         public readonly IUserRoleManager userRoleManager;
+        public readonly IWorkDoctorManager workDoctorManager;
+        public readonly ISpecialitiesManager specialitiesManager;
 
-        public SecretaryService(UserManager<User> _userManager, ICabinetMedicalManager cabinetMedicalManager, IMailService mailService, ISecretaryManager secretaryManager, IUserRoleManager userRoleManager)
+        public SecretaryService(IUserManager userManager, ISpecialitiesManager specialitiesManager, UserManager<User> _userManager, ICabinetMedicalManager cabinetMedicalManager, IMailService mailService, ISecretaryManager secretaryManager, IUserRoleManager userRoleManager, IWorkDoctorManager workDoctorManager)
         {
+            this.userManager = userManager;
             this._userManager = _userManager;
             this.cabinetMedicalManager = cabinetMedicalManager;
             this.mailService = mailService;
             this.secretaryManager = secretaryManager;
             this.userRoleManager = userRoleManager;
+            this.workDoctorManager = workDoctorManager;
+            this.specialitiesManager = specialitiesManager;
         }
+
+
+
+
+
+
+        public async Task<List<SecretaryCabinetInformationDto>> GetAllCabinetInformationAppoiment(string Email) =>
+            await TrycCatchFour(async () =>
+            {
+                List<DoctorInformationAppointmentDto> ListdoctorInformation = new List<DoctorInformationAppointmentDto>();
+                List<SecretaryCabinetInformationDto> ListsecretaryCabinetInformationDtos = new List<SecretaryCabinetInformationDto>();
+                ValidateEntry(Email);
+                var User = await this._userManager.FindByEmailAsync(Email);
+                ValidateUserIsNull(User);
+                var ListSecritary = await this.secretaryManager.SelectSecretayByIdUser(User.Id);
+                foreach (var secretary in ListSecritary)
+                {
+                    var Cabinet = await this.cabinetMedicalManager.SelectCabinetMedicalOpenById(secretary.IdCabinetMedical);
+                    if (Cabinet != null)
+                    {
+                        var CabinetInformation = MapperToCabinetInformationAppointmentDto(Cabinet);
+                        var Jobs = await this.workDoctorManager.SelectAllWorkDoctorWithStatusActiveByIdCabinet(Cabinet.Id);
+                        foreach (var job in Jobs)
+                        {
+                            var UserDoctor = await this.userManager.SelectUserByIdDoctor(job.IdDoctor);
+                            if (UserDoctor != null)
+                            {
+                                var ListResult = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(job.IdDoctor);
+                                var ListSpecialities = ListResult.Select(e => e.NameSpecialite).ToList();
+                                var DoctorInformation = mapperToDoctorInformationAppointmentDto(UserDoctor, ListSpecialities, job);
+                                ListdoctorInformation.Add(DoctorInformation);
+                            }
+                        }
+                        var SecretaryCabinetInformation = MapperToSecretaryCabinetInformationDto(ListdoctorInformation, CabinetInformation);
+                        ListsecretaryCabinetInformationDtos.Add(SecretaryCabinetInformation);
+                        ListdoctorInformation = new List<DoctorInformationAppointmentDto>();
+
+
+                    }
+                }
+                return ListsecretaryCabinetInformationDtos;
+
+            });
+
+
+
+
+
+
+
+
         public async Task<SecritaryDto> AddSecretaryService(string EmailSecretary, string EmailAdmin) =>
             await TryCatch(async () =>
             {
@@ -67,6 +123,8 @@ namespace Server.Services.Foundation.SecretaryService
                 return MapperToSecretaryDto(SecretaryUser, newSecretary);
 
             });
+
+
 
         public async Task<List<SecritaryDto>> GetAllSecretary(string Email) =>
             await TryCatch_(async () =>

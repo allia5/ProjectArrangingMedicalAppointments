@@ -86,5 +86,15 @@ namespace Server.Managers.Storages.WorkDoctorManager
                           && Work.statusReservation == StatusReservation.Available
                           select Work).FirstOrDefaultAsync();
         }
+
+        public async Task<List<WorkDoctors>> SelectAllWorkDoctorWithStatusActiveByIdCabinet(Guid IdCabinet)
+        {
+            return await (from job in this.ServerDbContext.WorkDoctors
+                          where job.IdCabinet == IdCabinet
+                          && job.statusServcie == StatusService.InService
+                          && job.StatusWork == StatusWork.accepted
+                          && job.statusReservation == StatusReservation.Available
+                          select job).ToListAsync();
+        }
     }
 }

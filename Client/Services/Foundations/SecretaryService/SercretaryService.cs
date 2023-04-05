@@ -112,7 +112,39 @@ namespace Client.Services.Foundations.SecretaryService
             {
                 throw new UnauthorizedException("You Are not Authorize in this Action");
             }
-            else if(result.StatusCode == HttpStatusCode.InternalServerError)
+            else if (result.StatusCode == HttpStatusCode.InternalServerError)
+            {
+                throw new ProblemException("Error Intern");
+            }
+        }
+
+        public async Task<List<SecretaryCabinetInformationDto>> GetAllCabinetSecretaryInformation()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/Secretary/GetInformationCabinetAppoiment");
+            var JwtBearer = await this.LocalStorageServices.GetItemAsync<JwtDto>("JwtLocalStorage");
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", JwtBearer.Token);
+            var result = await HttpClient.SendAsync(request);
+            if (result.StatusCode == HttpStatusCode.OK)
+            {
+                if (result.Content.Headers.ContentLength != 0)
+                {
+                    return await result.Content.ReadFromJsonAsync<List<SecretaryCabinetInformationDto>>();
+                }
+                else
+                {
+                    throw new NullException("Empty Data");
+                }
+
+            }
+            else if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                throw new UnauthorizedException("You Are Not Authorize In this Action");
+            }
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequestException("Request Is Invalide");
+            }
+            else
             {
                 throw new ProblemException("Error Intern");
             }

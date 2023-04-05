@@ -13,10 +13,13 @@ namespace Server.Managers.UserManager
         }
         public async Task<User> SelectUserByIdDoctor(Guid IdDoctor)
         {
+
             return await (from doctor in this.ServerDbContext.Doctors
-                          where doctor.Id == IdDoctor
+                          where doctor.Id == IdDoctor && doctor.StatusDoctor == Models.Doctor.StatusDoctor.Activated
                           join user in this.ServerDbContext.users on doctor.UserId equals user.Id
-                          select user).FirstAsync();
+                          select user).FirstOrDefaultAsync();
+
+
         }
 
         public async Task<User> SelectUserByIdCabinet(Guid IdCabinet)

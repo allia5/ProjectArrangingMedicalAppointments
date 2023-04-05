@@ -18,6 +18,7 @@
             <p class="card-text">FullName Doctor :@appointmentInformation.DoctorInformation.FirstName @appointmentInformation.DoctorInformation.LastName</p>
             <p class="card-text">Time Ready : @appointmentInformation.DoctorInformation.TimeReady.TimeOfDay</p>
             <p class="card-text">Time End : @appointmentInformation.DoctorInformation.TimeEnd.TimeOfDay</p>
+            <p class="card-text">Time End : @appointmentInformation.DoctorInformation.NumberPatientAccepted</p>
             <div class="d-flex">
                 <a href="#" class="btn btn-danger">Rejected</a><button @onclick="()=>OnUpdateAdressMap(appointmentInformation.CabinetInformation.AdressMap)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     View Adress Map

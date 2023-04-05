@@ -17,6 +17,7 @@
             <p class="card-text">FullName Doctor :@appointmentInformation.DoctorInformation.FirstName @appointmentInformation.DoctorInformation.LastName</p>
             <p class="card-text">Time Ready : @appointmentInformation.DoctorInformation.TimeReady.TimeOfDay</p>
             <p class="card-text">Time End : @appointmentInformation.DoctorInformation.TimeEnd.TimeOfDay</p>
+            <p class="card-text">Number Patient Accepted : @appointmentInformation.DoctorInformation.NumberPatientAccepted</p>
             <div class="d-flex">
                <button @onclick="()=>OnDeleteMedicalAppoiment(appointmentInformation.Id)" class="btn btn-danger">Delete Appoiment
                    @if(Index == appointmentInformation.Id){

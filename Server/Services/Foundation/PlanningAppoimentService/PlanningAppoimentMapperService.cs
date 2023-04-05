@@ -69,7 +69,8 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 Specialities = Specialities,
                 TimeEnd = workDoctors.EndTime,
                 TimeReady = workDoctors.ReadyTime,
-                Id = EncryptGuid(Guid.Parse(user.Id))
+                Id = EncryptGuid(Guid.Parse(user.Id)),
+                NumberPatientAccepted=workDoctors.NbPatientAvailble
             };
         }
         public static AppointmentInformationDto MapperToAppointmentInformationDto(DoctorInformationAppointmentDto doctors, CabinetInformationAppointmentDto cabinetMedical, MedicalPlanning medicalPlanning)

@@ -3,12 +3,51 @@ using Server.Models.CabinetMedicals;
 using Server.Models.secretary;
 using Server.Models.UserAccount;
 using Server.Models.UserRoles;
+using Server.Models.WorkDoctor;
 using static Server.Utility.Utility;
 
 namespace Server.Services.Foundation.SecretaryService
 {
     public static class SecretaryMapperService
     {
+        public static SecretaryCabinetInformationDto MapperToSecretaryCabinetInformationDto(List<DoctorInformationAppointmentDto> ListdoctorInformation, CabinetInformationAppointmentDto cabinetInformation)
+        {
+            return new SecretaryCabinetInformationDto
+            {
+                CabinetInformation = cabinetInformation,
+                ListDoctorInformation = ListdoctorInformation
+            };
+        }
+
+        public static CabinetInformationAppointmentDto MapperToCabinetInformationAppointmentDto(CabinetMedical cabinetMedical)
+        {
+            return new CabinetInformationAppointmentDto
+            {
+                Id = EncryptGuid(cabinetMedical.Id),
+                Adress = cabinetMedical.Adress,
+                AdressMap = cabinetMedical.MapAdress,
+                Image = cabinetMedical.image,
+                Name = cabinetMedical.NameCabinet,
+                NumberPhone = cabinetMedical.numberPhone,
+                Services = cabinetMedical.Services
+
+
+            };
+        }
+        public static DoctorInformationAppointmentDto mapperToDoctorInformationAppointmentDto(User user, List<string> Specialities, WorkDoctors workDoctors)
+        {
+            return new DoctorInformationAppointmentDto
+            {
+                FirstName = user.Firstname,
+                LastName = user.LastName,
+                Sexe = (Sexe)user.Sexe,
+                Specialities = Specialities,
+                TimeEnd = workDoctors.EndTime,
+                TimeReady = workDoctors.ReadyTime,
+                Id = EncryptGuid(Guid.Parse(user.Id)),
+                NumberPatientAccepted = workDoctors.NbPatientAvailble
+            };
+        }
         public static Secretarys MapperToNewSecretary(UpdateStatusSecretaryDto updateStatusSecretaryDto, Secretarys secretarys)
         {
             secretarys.Status = (StatusSecretary)updateStatusSecretaryDto.StatusSecritary;

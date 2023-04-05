@@ -21,7 +21,7 @@ namespace DTO
     public enum StatusReservationDoctor
     {
         Ready = 1,
-        NotReady = -1
+        NotReady = 0
     }
     public enum StatusServiceDoctor
     {

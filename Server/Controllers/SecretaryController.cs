@@ -21,6 +21,32 @@ namespace Server.Controllers
         {
             this.secretaryService = secretaryService;
         }
+
+        [HttpGet("GetInformationCabinetAppoiment")]
+        [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "SECRITAIRE")]
+        public async Task<ActionResult<List<SecretaryCabinetInformationDto>>> GetAllCabinetInformationAppoiments()
+        {
+            try
+            {
+                var Email = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Name)?.Value;
+                return await this.secretaryService.GetAllCabinetInformationAppoiment(Email);
+            }
+            catch (ValidationException Ex)
+            {
+                return BadRequest(Ex.InnerException);
+            }
+            catch (Exception e)
+            {
+                return Problem(e.Message);
+            }
+        }
+
+
+
+
+
+
+
         [HttpPost("AddSecretary")]
         [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme, Roles = "ADMIN")]
         public async Task<ActionResult<SecritaryDto>> PostNewSecretary([FromBody] string EmailSecritary)
