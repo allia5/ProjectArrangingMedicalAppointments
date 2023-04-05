@@ -92,6 +92,7 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                 throw new NullException(nameof(user));
             }
         }
+
         public void ValidatePlanningIsNull(MedicalPlanning medicalPlanning)
         {
             if (medicalPlanning == null)

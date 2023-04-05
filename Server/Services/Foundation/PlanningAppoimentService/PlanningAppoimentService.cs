@@ -72,11 +72,15 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                     var ListSpecilities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(ItemPlanning.IdDoctor);
                     var ListStringSpecialities = ListSpecilities.Select(e => e.NameSpecialite).ToList();
                     var UserDoctor = await this.userManager.SelectUserByIdDoctor(ItemPlanning.IdDoctor);
-                    ValidateUserIsNull(UserDoctor);
-                    var DoctorAppoimentInformation = mapperToDoctorInformationAppointmentDto(UserDoctor, ListStringSpecialities, JobPlanning);
-                    var CabinetAppoimentInformation = MapperToCabinetInformationAppointmentDto(CabinetPlanning);
-                    var result = MapperToAppointmentInformationDto(DoctorAppoimentInformation, CabinetAppoimentInformation, ItemPlanning);
-                    ListappointmentInformationDtos.Add(result);
+                    //  ValidateUserIsNull(UserDoctor);
+                    //  ValidateWorkDoctorIsNull(JobPlanning);
+                    if (JobPlanning != null && UserDoctor != null && CabinetPlanning != null)
+                    {
+                        var DoctorAppoimentInformation = mapperToDoctorInformationAppointmentDto(UserDoctor, ListStringSpecialities, JobPlanning);
+                        var CabinetAppoimentInformation = MapperToCabinetInformationAppointmentDto(CabinetPlanning);
+                        var result = MapperToAppointmentInformationDto(DoctorAppoimentInformation, CabinetAppoimentInformation, ItemPlanning);
+                        ListappointmentInformationDtos.Add(result);
+                    }
                 }
 
                 return ListappointmentInformationDtos;
@@ -96,11 +100,15 @@ namespace Server.Services.Foundation.PlanningAppoimentService
                     var ListSpecilities = await this.specialitiesManager.SelectSpecialitiesByIdDoctor(ItemPlanning.IdDoctor);
                     var ListStringSpecialities = ListSpecilities.Select(e => e.NameSpecialite).ToList();
                     var UserDoctor = await this.userManager.SelectUserByIdDoctor(ItemPlanning.IdDoctor);
-                    ValidateUserIsNull(UserDoctor);
-                    var DoctorAppoimentInformation = mapperToDoctorInformationAppointmentDto(UserDoctor, ListStringSpecialities, JobPlanning);
-                    var CabinetAppoimentInformation = MapperToCabinetInformationAppointmentDto(CabinetPlanning);
-                    var result = MapperToAppointmentInformationDto(DoctorAppoimentInformation, CabinetAppoimentInformation, ItemPlanning);
-                    ListappointmentInformationDtos.Add(result);
+                    // ValidateUserIsNull(UserDoctor);
+                    if (JobPlanning != null && UserDoctor != null && CabinetPlanning != null)
+                    {
+                        var DoctorAppoimentInformation = mapperToDoctorInformationAppointmentDto(UserDoctor, ListStringSpecialities, JobPlanning);
+                        var CabinetAppoimentInformation = MapperToCabinetInformationAppointmentDto(CabinetPlanning);
+                        var result = MapperToAppointmentInformationDto(DoctorAppoimentInformation, CabinetAppoimentInformation, ItemPlanning);
+                        ListappointmentInformationDtos.Add(result);
+                    }
+
                 }
 
                 return ListappointmentInformationDtos;
